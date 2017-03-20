@@ -1,0 +1,185 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	COPYRIGHT THEO WINDEBANK
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,a4paper,fleqn]{article}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{graphicx}	        	% figures
+\usepackage[titles]{tocloft}        % TOC formatting
+\usepackage{subfig}			        % subfigures
+\usepackage{wrapfig}		        % wrap text around figs
+\graphicspath{{assets/figs/}}
+\usepackage{pdfpages}               % import declaration
+\usepackage{setspace}
+\usepackage{bold-extra}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{blindtext}              % lorem ipsum
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\usepackage[
+	backend=biber,
+	citestyle=numeric,
+	bibstyle=ieee,
+	sorting=none,
+	doi=false,
+	isbn=false,
+	url=false,
+]{biblatex}
+\addbibresource{mendeley.bib}
+
+%----------------------------------------------------------------------------------------
+%	FORMATTING
+%----------------------------------------------------------------------------------------
+\def \doublespaceheight {2.0}
+\def \singlespaceheight {1.0}
+\linespread{\doublespaceheight}
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\renewcommand{\thepart}{\textbf{Section \Roman{part}:}\ }
+\titleformat{\part}[block]{\LARGE\bfseries}{\thepart}{0pt}{}
+
+
+%----------------------------------------------------------------------------------------
+%	CUSTOM COMMANDS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\specialcell}[2][c]{%
+	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
+\newcommand{\addsubsec}[2]{%
+    \graphicspath{{#1/figs/}}
+    \IfFileExists{sections/#1/#2.tex}{\input{sections/#1/#2.tex}}
+    
+    }
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\newcommand*{\titleGP}{\begingroup % Create the command for including the title page in the document
+	\centering % Center all text
+	\linespread{\singlespaceheight}
+	\uppercase
+	{\huge Department of Engineering Science \\ University of Oxford \\ \vspace{0.5cm} Fourth Year Project \par} % Editor affiliation
+	\vspace{1cm}
+	
+	\includegraphics[width=0.4\textwidth]{ox_logo.eps}
+	\vspace{1cm}
+	
+	\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt} % Thick horizontal line
+	\rule{\textwidth}{0.4pt}\\[0.5\baselineskip] % Thin horizontal line
+	
+	% TITLE
+	{\setstretch{2.0} \LARGE ENERGY AWARE SENSOR SYSTEMS FOR BIOACOUSTICS MONITORING}
+	
+	\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal line
+	\rule{\textwidth}{1.6pt}\\[\baselineskip] % Thick horizontal line
+
+	{\large AUTHOR \\ \Large THEO WINDEBANK \\\vspace{0.5cm} \large SUPERVISOR \Large \\ STEVE ROBERTS\par} % Editor list
+	
+
+	\vspace{0.5cm}
+	\endgroup}
+
+%----------------------------------------------------------------------------------------
+% DOCUMENT
+%----------------------------------------------------------------------------------------
+
+\begin{document} 	
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%% TITLE %%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    \newgeometry{left=3cm,right=3cm,top=3cm,bottom=3cm} 
+    \pagenumbering{gobble}
+	\titleGP % This command includes the title page
+	\clearpage
+   
+    \restoregeometry
+	
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%% DECLARATION %%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    \pagenumbering{roman}
+	\addsubsec{}{declaration}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%% ABSTRACT+ACK %%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%
+    \addsubsec{}{abstract}	
+	\clearpage
+	\addsubsec{}{acknowledgements}
+	\clearpage
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%% CONTENTS TABLE %%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \renewcommand{\baselinestretch}{\singlespaceheight}\normalsize
+    \tableofcontents
+    \clearpage
+    \pagenumbering{arabic}
+    \renewcommand{\baselinestretch}{\doublespaceheight}\normalsize
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%% SEC1: BACKGROUND %%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \part{Background}
+    \label{part:background}
+        \addsubsec{background}{introduction}
+    	\addsubsec{background}{litreview}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%% SEC2: PIPELINE %%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \part{Pipeline}
+    \label{part:pl}
+        each subsection here is 1-2 pages, resulting in 20 pages max
+        \addsubsec{pipeline}{overview}
+    	\addsubsec{pipeline}{data}
+    	\addsubsec{pipeline}{gen_features}
+    	\addsubsec{pipeline}{feat_preproc}
+    	\addsubsec{pipeline}{classification}
+    	\addsubsec{pipeline}{postprocessing}
+    	\addsubsec{pipeline}{aggregation}
+    	\addsubsec{pipeline}{testing}
+    	\addsubsec{pipeline}{software_summary}
+    	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%% SEC3: EXPERIMENTS  %%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \part{Experiments}
+    \label{part:exp}
+        20 pages max
+        structure this section by first showing baseline results of classifiers then how at each stage of the pipeline the results can be improved (in terms of f2 score, roc, computation time etc. - define these as important metrics first)
+        \addsubsec{exp}{overview}
+        \addsubsec{exp}{specs}
+        \addsubsec{exp}{rf}
+        \addsubsec{exp}{nb}
+        \addsubsec{exp}{svm}
+        \addsubsec{exp}{agg}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%% SEC4: RESULTS  %%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\part{Results}
+	\label{part:res}
+	    \addsubsec{res}{best}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%% SEC5: FURTHER WORK  %%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\part{Further Work and Conclusions}
+	\label{part:conc}
+	    \addsubsec{conc}{further}
+	    \addsubsec{conc}{conclusion}
+	
+	\linespread{1.0}
+	\printbibliography
+	
+\end{document}
