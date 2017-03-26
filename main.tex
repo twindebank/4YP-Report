@@ -24,15 +24,7 @@
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-\usepackage[
-	backend=biber,
-	citestyle=numeric,
-	bibstyle=ieee,
-	sorting=none,
-	doi=false,
-	isbn=false,
-	url=false,
-]{biblatex}
+\usepackage[backend=biber,citestyle=numeric,bibstyle=ieee,sorting=none,doi=false,isbn=false,url=false]{biblatex}
 \addbibresource{mendeley.bib}
 
 %----------------------------------------------------------------------------------------
@@ -45,7 +37,10 @@
 \setcounter{secnumdepth}{4}
 \renewcommand{\thepart}{\textbf{Section \Roman{part}:}\ }
 \titleformat{\part}[block]{\LARGE\bfseries}{\thepart}{0pt}{}
-
+% SPACING
+\titlespacing{\part}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\section}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsection}{0pt}{4pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 
 %----------------------------------------------------------------------------------------
 %	CUSTOM COMMANDS
@@ -55,7 +50,7 @@
 	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
 
 \newcommand{\addsubsec}[2]{%
-    \graphicspath{{#1/figs/}}
+    \graphicspath{{./sections/#1/figs/}}
     \IfFileExists{sections/#1/#2.tex}{\input{sections/#1/#2.tex}}
     
     }
@@ -77,7 +72,7 @@
 	\rule{\textwidth}{0.4pt}\\[0.5\baselineskip] % Thin horizontal line
 	
 	% TITLE
-	{\setstretch{2.0} \LARGE ENERGY AWARE SENSOR SYSTEMS FOR BIOACOUSTICS MONITORING}
+	{\setstretch{2.0} \LARGE DECISION ANALYTICS FOR BIOACOUSTIC MONITORING}
 	
 	\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt} % Thin horizontal line
 	\rule{\textwidth}{1.6pt}\\[\baselineskip] % Thick horizontal line
@@ -116,7 +111,6 @@
 	\clearpage
 	\addsubsec{}{acknowledgements}
 	\clearpage
-	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%% CONTENTS TABLE %%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -125,7 +119,6 @@
     \clearpage
     \pagenumbering{arabic}
     \renewcommand{\baselinestretch}{\doublespaceheight}\normalsize
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%% SEC1: BACKGROUND %%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
