@@ -1,0 +1,39 @@
+\section{MozzPy}
+\label{sec:pl-mozzpy}
+    
+    \subsection{Purpose}
+    \label{subsec:pl-mozzpy-purp}
+        \begin{sitemize}
+            \item{have detailed the steps of the pipeline, this package provides a framework to now carry out research}
+            \item{advantages of it are: easy to configure new experiments to run, easy to tweak any details within the pipeline from the config file, etc}
+        \end{sitemize}
+    
+    \subsection{Structure}
+    \label{subsec:pl-mozzpy-struc}
+        \input{sections/pipeline/figs/dataflow.tex}
+        
+        Figure \ref{fig:pl-mozzpy-struc-dataflow} depicts how data is passed through the MozzPy package. Two classification pipelines are shown in this simplified example, in which they both use different sets of features and labels combined using different methods described in \ref{subsec:pl-data-audiolbls}. The diagram is simplified for the purpose of clarity, the full composition/inheritance relationship is shown in figure \ref{fig:pl-mozzpy-struc-inhercomp}.
+        
+        \input{sections/pipeline/figs/structure.tex}
+        
+        explain what inherits from what and why this design
+    
+        \begin{sitemize}
+            \item{tikz diagram of class structure}
+            \item{explain why this way and the many variations of pipeline it can support}
+        \end{sitemize}
+    
+    \subsection{Usage}
+    \label{subsec:pl-mozzpy-usage}
+        \begin{sitemize}
+            \item{show code snippet of how to run a exp and explain how will be detailed in this section}
+            \item{explain how to configure a pipeline and how simple it is to run multiple experiments}
+        \end{sitemize}
+   
+        
+    \subsection{Limitations}
+    \label{subsec:pl-mozzpy-limit}
+        \begin{sitemize}
+            \item{current limitations: written in 2.7 not 3.5 - can be ported, wrote tailored to mozz problem so limited for use in other contexts to binary time series classification, functionality could be extended with some refactoring}
+        \end{sitemize}
+

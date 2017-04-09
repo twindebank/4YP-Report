@@ -1,25 +1,28 @@
 \section{Testing}
 \label{sec:pl-test}
-
+    The desired output is restricted to the binary domain, restricting/defining how analysis metrics will be calculated.
     \subsection{Standard Machine Learning Metrics}
     \label{subsec:pl-test-stan}
-        \begin{itemize}
-            \item{confusion mat, roc, prec-rec, f1 score, crossval}
+        \begin{sitemize}
+            \item{confusion mat, roc, prec-rec, f1 score [harmonic mean, makes more sense for ratios and rates], crossval}
+            %https://www.quora.com/What-is-an-intuitive-explanation-of-F-score
             \item{explain what each describes and its relevancy in this context}
-        \end{itemize}
+            \item{explain significance of areas as well and how they can give good condensed idea of graph}
+        \end{sitemize}
         
     \subsection{Less-Common Machine Learning Metrics}
     \label{subsec:pl-test-less}
-        \begin{itemize}
+        \begin{sitemize}
             \item{rejection ratio, acc-rej plot, f1-rej plot, binary asymmetrical rejection matrix,median-f1,etc}
             \item{explain what each describes and its relevancy in this context}
-        \end{itemize}
+        \end{sitemize}
     
     \subsection{Software Implementation}
     \label{subsec:pl-test-software}
-        \begin{itemize}
+        \begin{sitemize}
             \item{testing only on binary labels as that is how problem is formed}
-            \item{plotting}
+            \item{plotting
+            These objects are stored in a \code{WavSet} object which implements a \code{plot()} method which calls the abstract meth\code{subplot()}, talk about the polymorphism here}
             \item{rejection plot overlay, gaussian normalised spikes}
             \item{presenting results}
-        \end{itemize}
+        \end{sitemize}

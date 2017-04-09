@@ -1,0 +1,27 @@
+\newcommand{\optnode}[5]{
+    % supernode id, find content, assume content, found content, position 
+    \node (#1-find) [smallamber,minimum height=0.1cm ,text width=1.8cm,minimum width = 2cm #5] {\specialcell{#2}};
+    \node (#1-assume) [smalldarkbyzantium,minimum height=0.1cm, text width=1.8cm, minimum width = 2cm, below=0.15cm of #1-find] {\specialcell{#3}};
+    \node (#1-found) [smallazure,minimum height=0.1cm, text width=1.8cm, minimum width = 2cm, below=0.15cm of #1-assume] {\specialcell{#4}};
+    \begin{pgfonlayer}{background}
+        \node(#1)[bigblush] [fit = (#1-find) (#1-found)] {};
+    \end{pgfonlayer}
+}
+\def\dist{0.3cm}
+\begin{tikzfig}{fig:exp-clf-overview-opt}{Optimisation and iteration of pre-classification pipeline.}{\tiny}
+    \optnode{balance}{balance classes}{all features\\conf labels\\classifier params}{normalise audio\\normalise features}{}
+    \optnode{feats}{choose features}{conf labels\\classifier params}{normalise audio\\normalise features\\balance classes}{, right=\dist of balance-find}
+    \optnode{labels}{choose labels}{classifier params}{normalise audio\\normalise features\\balance classes\\chosen features}{, right=\dist of feats-find}
+    \optnode{clf}{classifier params}{none}{normalise audio\\normalise features\\balance classes\\chosen features}{, right=\dist of labels-find}
+    \optnode{done}{none}{none}{normalise audio\\normalise features\\balance classes\\chosen features\\chosen labels\\classifier params}{, right=\dist of clf-find}
+    
+    \optnode{key}{optimising}{assumed}{chosen/estimated}{, left=0.8cm of balance-find}
+
+    \draw[arrow](balance)--(feats);
+    \draw[arrow](feats)--(labels);
+    \draw[arrow](labels)--(clf);
+    \draw[arrow](clf)--(done);
+    \draw [arrow] (done-found.east) -| (10.7,-3.1) |- (-1.4,-3.1)  node[near end,above]{iterate}-| (-1.4,-2) |- (balance-assume.west);
+
+    
+\end{tikzfig}

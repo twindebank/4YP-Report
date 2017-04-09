@@ -1,0 +1,58 @@
+\begin{tikzfig}{fig:pl-mozzpy-struc-inhercomp}{Composition and inheritance of MozzPy.}{\tiny}
+    \node (humset) [smallazure] {HumSet};
+    \node (featureset) [smallcadmiumgreen, below=0.5cm of humset] {FeatureSet};
+    \node (wavset) [smallcadmiumgreen, left=0.5cm of featureset] {WavSet};
+    \node (labelset) [smallcadmiumgreen, right=0.5cm of featureset] {LabelSet};
+    \node (dataset) [smallcadmiumgreen, below=0.5cm of featureset] {DataSet};
+    \node (predset) [smallazure, right=0.5cm of labelset] {PredSet};
+    \node (classiset) [smallcadmiumgreen, below left=0.5cm and -0.3cm of predset] {ClassiSet};
+    \node (aggset) [smallcadmiumgreen, right=0.5cm of classiset] {AggSet};
+    \node (resultset) [smallcadmiumgreen, below left=0.5cm and -0.3cm of aggset] {ResultSet};
+    % arrows
+    \draw [orangearrow] (humset.south) |- (0,-0.5) -| (wavset.north);
+    \draw [orangearrow] (humset.south) |- (0,-0.5) -| (featureset.north);
+    \draw [orangearrow] (humset.south) |- (0,-0.5) -| (labelset.north);
+    \draw [orangearrow] (humset.south) |- (0,-0.5) -| (predset.north);
+    \draw [orangearrow] (humset.south) |- (-2.5,-0.5) -| (-2.5,-1) |- (dataset.west);
+    \draw [orangearrow] (humset.south) |- (5,-0.5) -| (5,-2) |- (resultset.east);
+    
+    \draw [purplearrow] (featureset) -- (dataset);
+    \draw [purplearrow] (wavset.south) |- (0,-1.6) -| (dataset.north);
+    \draw [purplearrow] (labelset.south) |- (0,-1.6) -| (dataset.north);
+    
+    \draw [orangearrow] (predset.south) |- (3.5,-1.6) -| (classiset.north);
+    \draw [orangearrow] (predset.south) |- (3.5,-1.6) -| (aggset.north);
+    
+    \draw [purplearrow] (classiset) -- (aggset);
+    \draw [purplearrow] (dataset) -- (classiset);
+    
+    \draw [purplearrow] (classiset.south) |- (3.5,-2.7) -| (resultset.north);
+    \draw [purplearrow] (aggset.south) |- (3.5,-2.7) -| (resultset.north);
+    
+    % key
+    \node (keytitle) [blank,left=5cm of humset] {Key};
+    \node (key1a) [blankdot, below left=2mm and -1.5mm of keytitle] {};
+    \node (key1b) [blankdot, right=0.3cm of key1a] {~~Composition (has-a)};
+    \draw [purplearrow] (key1a) -- (key1b);
+    
+    \node (key2a) [blankdot, below=0.2cm of key1a] {};
+    \node (key2b) [blankdot, right=0.3cm of key2a] {~~Inheritance (is-a)};
+    \draw [orangearrow] (key2a) -- (key2b);
+    
+    \node (key3) [smallazure, below right=0.2cm and 0cm of key2a, scale=0.8] {Abstract Base Class};
+
+    \node (key4) [smallcadmiumgreen, below right=0.8cm and 0cm of key2a, scale=0.8] { Regular Class};
+    \begin{pgfonlayer}{background}
+        \node(key)[bigcaribbeangreen] [fit = (key1b) (key4)] {};
+    \end{pgfonlayer}
+    
+    % signal
+    \node (signal) [smallcadmiumgreen, right=7cm of humset] {Signal};
+    \node (wav) [smallcadmiumgreen, below=0.5cm of signal] {Wav};
+    \node (label) [smallcadmiumgreen, left=0.5cm of wav] {Label};
+    \node (prediction) [smallcadmiumgreen, right=0.5cm of wav] {Prediction};
+    \draw [orangearrow] (signal.south) |- (8,-0.5) -| (wav.north);
+    \draw [orangearrow] (signal.south) |- (8,-0.5) -| (prediction.north);
+    \draw [orangearrow] (signal.south) |- (8,-0.5) -| (label.north);
+    
+\end{tikzfig}

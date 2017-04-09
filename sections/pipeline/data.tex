@@ -3,19 +3,40 @@
 
     \subsection{Audio and Labels}
     \label{subsec:pl-data-audiolbls}
-        \begin{itemize}
-            \item{microphones easy - lots of data}
-            \item{database of audio signals and labels}
-            \item{summarise datasets}
-            \item{justify choice of culex set}
-        \end{itemize}
-    
+        Microphones are versatile and inexpensive, allowing large amounts of data of many different species to be collected. A database of recordings and labels for over 20 species of mosquito has been collated by Kew(???) in partnership with the HumBug project, providing the ideal foundation for this research. All 22 sets of data are labelled to varying degrees of accuracy, two of which have multiple labels from more than one person. Of these two sets, the Culex \textit{quinquefasciatus} is the largest collection of recordings, totalling $\sim$1 hour with labels from four people. Pipeline development throughout the report will be based on results from this set of recordings and labels.
+        
     \subsection{Software Implementation}
     \label{subsec:pl-data-software}
-        \begin{itemize}
-            \item{importing audio and labels}
-            \item{preprocessing audio}
-            \item{combination of labels - different methods}
-            \item{storage in wavset, labelset and dataset}
-            \item{splitting method}
-        \end{itemize}
+        Audio and label files are stored within \code{Wav} and \code{Label} objects respectively, which inherit from the \code{Signal} object, shown in figure \ref{fig:pl-mozzpy-struc-inhercomp}. Within these objects, the signal as well as sampling rate, number of samples, file name, duration and file index are stored. Available methods allow for windowing, resampling and nullifying the signal throughout the pipeline. 
+        
+        \code{Wav} and \code{Label} objects are aggregated in \code{WavSet} and \code{LabelSet} objects respectively. These objects inherit from the abstract base class \code{HumSet} which handles part of the plotting process, explained further in \ref{subsec:pl-test-software}, and declares abstract methods \code{split()}, \code{merge()} and \code{subplot()}.
+        
+        Usage of these objects is shown in the code snippet in section \ref{subsec:pl-mozzpy-usage}. The WavSet object is initialised by specifying the directory of \code{.wav} files to import and optional file indices if only a subset of files is desired. The signals can then be preprocessed using any of the implemented modules. At the time of writing, there is a \code{normalise} module which normalises the signal to zero mean by subtraction and unit variance by division, and a \code{resample} module that resamples the signal using the \code{resampy} package \cite{BrianMcFee}, other options being \code{scipy.signal.resample} \cite{ScipyCommunity} which leaves a high frequency artifact near the cutoff frequency and \code{scikit.samplerate} \cite{DavidCournapeau} which performs the best but requires installation of an external library, increasing the complexity of using MozzPy on different operating systems \cite{Thiemann}. [IF TIME HERE THEN DO RESAMPLING EXPERIMENT SELF ON CDC AUDIO SIGNALS]
+        
+        \begin{wraptable}{r}{0.52\textwidth}
+            \scriptsize
+            \singlespacing
+            \centering
+            \begin{tabular}{ |l|l|c| } 
+             \hline
+             Method & Description & Rejection\\ 
+             \hline
+             "0\_5\_ignore" & \specialcell{Exclude labels in which\\ positives/negatives are 50/50.} & \checkmark\\ 
+             \hline
+             "conf" & \specialcell{Exclude labels where there\\ is any disagreement.} & \checkmark\\ 
+             \hline
+             \specialcell{"consensus-\\\_0\_5\_ismozz"} & \specialcell{Positive when agreement\\ is 50/50.}  &\\ 
+             \hline
+             \specialcell{"consensus-\\\_0\_5\_notmozz"} & \specialcell{Negative when agreement\\ is 50/50.} &\\ 
+             \hline
+             "multiclass" & \specialcell{Treat each level of \\agreement as a class e.g.\\ $[0/4, 1/4, 2/4, 3/4, 4/4]$ maps\\ to classes $[0,1,2,3,4]$} &\\ 
+             \hline
+             "sensitive" & \specialcell{If at least one positive then\\ treat as positive.} &\\ 
+             \hline
+            \end{tabular}
+            \caption{Techniques for utilising multiple label sets for a single set of signals, where positive indicates mosquito presence and negative indicates no mosquito presence.}
+            \label{fig:pl-data-audiolbls-comb}
+        \end{wraptable}
+        The associated labels are stored in a number of different ways due to the data being from different sources. For the Culex dataset, all 57 labels are stored in a matrix in a text file where each row corresponds to a file and each column corresponds to a sample, where the resolution is \SI{0.1}{\s} per sample. MozzPy can handle this format as well as text files with start/stop times and Excel spreadsheets with start/stop times. On import, the labels are resampled to match the frequency of the audio signals to simplify further processing, at the expense of more memory usage. As there are four labels, there are multiple ways to utilise them. A uniform prior is assumed over each persons labels, giving them equal importance for classification purposes, therefore it makes sense to label sections by consensus. MozzPy has 7 methods of combination implemented, shown in table \ref{fig:pl-data-audiolbls-comb}, as well as the ability to use a single set of labels.   
+        
+        Labels with rejected samples can only be used for training classifiers, for testing a classifier there must be a complete set of labels. With multi-class labels the same applies, they can not be used for testing and evaluation purposes. Although it is possible to use metrics for evaluation of a multi-class output, in this context it is not sensible as performance of pipelines must be assessed and optimised for a binary positive/negative output. The classifier output will contain 5 classes which must then be converted back to a binary output, this is done as described in section \ref{subsec:pl-clf-software}.

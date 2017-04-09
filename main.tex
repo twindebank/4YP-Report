@@ -19,7 +19,11 @@
 \usepackage{titlesec}
 \usepackage{titletoc}
 \usepackage{blindtext}              % lorem ipsum
-
+\usepackage{tikz}
+\usepackage{environ}
+\usepackage{fontspec}
+\usepackage{siunitx}
+\usepackage{pifont}                 % ticks and crosses
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
@@ -41,12 +45,37 @@
 \titlespacing{\part}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\section}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\subsection}{0pt}{4pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
+\titlespacing{\subsubsection}{0pt}{2pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 
+\setlength{\textfloatsep}{5.0pt plus 2.0pt minus 4.0pt}
+\setlength{\intextsep}{5.0pt plus 2.0pt minus 2.0pt}
+
+%----------------------------------------------------------------------------------------
+%	DIAGRAM FORMATS
+%----------------------------------------------------------------------------------------
+\usetikzlibrary{positioning,arrows,backgrounds,fit}
+\definecolor{azure}{rgb}{0.0, 0.5, 1.0}
+\definecolor{amber}{rgb}{1.0, 0.49, 0.0}
+\definecolor{blush}{rgb}{0.87, 0.36, 0.51}
+\definecolor{cadmiumgreen}{rgb}{0.0, 0.42, 0.24}
+\definecolor{caribbeangreen}{rgb}{0.0, 0.8, 0.6}
+\definecolor{darkbyzantium}{rgb}{0.36, 0.22, 0.33}
+\definecolor{darkmagenta}{rgb}{0.55, 0.0, 0.55}
+\definecolor{darktangerine}{rgb}{1.0, 0.66, 0.07}
+\tikzstyle{green} = [rectangle, rounded corners,text centered,  draw=green!50, fill=green!20,text=black,inner sep = 0.2cm]
+\tikzstyle{blue} = [rectangle, rounded corners, text centered, draw=azure!70, fill=azure!50,inner sep = 0.2cm]
+\tikzstyle{grey} = [rectangle, rounded corners, text centered, draw=black!50, fill=black!20,inner sep = 0.2cm]
+\tikzstyle{orange} = [rectangle, rounded corners, text centered, draw=amber!50, fill=amber!40,inner sep = 0.2cm]
+\tikzstyle{blank} = [rectangle, rounded corners, text centered,inner sep = 0.5mm]
+\tikzstyle{blankdot} = [rectangle, rounded corners, text centered,inner sep = 0cm]
+\tikzstyle{arrow} = [thin,->,>=stealth,draw=black!50]
+\tikzstyle{orangearrow} = [thin,->,>=stealth,draw=amber!70]
+\tikzstyle{purplearrow} = [thin,->,>=stealth,draw=darkmagenta!50]
 %----------------------------------------------------------------------------------------
 %	CUSTOM COMMANDS
 %----------------------------------------------------------------------------------------
 
-\newcommand{\specialcell}[2][c]{%
+\newcommand{\specialcell}[2][l]{%
 	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
 
 \newcommand{\addsubsec}[2]{%
@@ -54,6 +83,38 @@
     \IfFileExists{sections/#1/#2.tex}{\input{sections/#1/#2.tex}}
     
     }
+    
+\newcommand{\checkmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+    
+\newenvironment{sitemize}
+{ \begin{itemize}
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}     }
+{ \end{itemize}                  }
+
+
+\NewEnviron{tikzfig}[3]{
+\begin{figure}[ht]
+    \linespread{\singlespaceheight}
+    \begin{centering}
+        \small
+    	\begin{tikzpicture}[font=#3\sffamily]
+            \BODY\
+        \end{tikzpicture}
+        \caption{#2}
+        \label{#1}
+    \end{centering}
+\end{figure}
+}
+
+\newcommand{\code}[1]{\texttt{#1}}
+% \NewDocumentEnvironment{tikzfig}{m}{%
+%  %
+% }{%     
+%           }
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -132,8 +193,8 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \part{Pipeline}
     \label{part:pl}
-        each subsection here is 1-2 pages, resulting in 20 pages max
         \addsubsec{pipeline}{overview}
+        \addsubsec{pipeline}{mozzpy}
     	\addsubsec{pipeline}{data}
     	\addsubsec{pipeline}{gen_features}
     	\addsubsec{pipeline}{feat_preproc}
@@ -141,21 +202,18 @@
     	\addsubsec{pipeline}{postprocessing}
     	\addsubsec{pipeline}{aggregation}
     	\addsubsec{pipeline}{testing}
-    	\addsubsec{pipeline}{software_summary}
     	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%% SEC3: EXPERIMENTS  %%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \part{Experiments}
     \label{part:exp}
-        20 pages max
-        structure this section by first showing baseline results of classifiers then how at each stage of the pipeline the results can be improved (in terms of f2 score, roc, computation time etc. - define these as important metrics first)
         \addsubsec{exp}{overview}
         \addsubsec{exp}{specs}
-        \addsubsec{exp}{rf}
-        \addsubsec{exp}{nb}
-        \addsubsec{exp}{svm}
-        \addsubsec{exp}{agg}
+        \addsubsec{exp}{classification}
+        % \addsubsec{exp}{nb}
+        % \addsubsec{exp}{svm}
+        % \addsubsec{exp}{agg}
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%% SEC4: RESULTS  %%%%%%%%%%%%%%%%

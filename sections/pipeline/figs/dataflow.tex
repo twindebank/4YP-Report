@@ -1,0 +1,143 @@
+\newcommand{\mozzpyset}[7]{
+    % start (int), stop (int), title (str), position (str), colour (str), elipses (bool), unique id (str)
+    \node (#7#3set) [blank,#4]{#3Set};
+    \node (#7n#1) [small#5,below=0.15cm of #7#3set]{#3\textsubscript{#1}};
+    
+    \pgfmathsetmacro\diff{int(#2 - #1)}
+    \pgfmathsetmacro\startloop{int(#1 + 1)}
+    \pgfmathsetmacro\elipses{#6}
+    % \node (l#2) [smallblue,below=0.1cm of l#1]{Labels\textsubscript{#2}};
+    
+    \pgfmathparse{(\diff>0)?1:0}\ifdim\pgfmathresult pt>0pt%
+        \foreach \i in {\startloop,...,#2}
+            \pgfmathsetmacro\prev{\i - 1}
+            \node (#7n\i) [small#5,below left=0.4cm and 0cm of #7n\prev]{#3\textsubscript{\i}};
+    \fi
+    
+    \pgfmathparse{(\elipses>0)?1:0}\ifdim\pgfmathresult pt>0pt%
+        \node (#7last) [blank,below=0.1cm of #7n#2]{...}; 
+    
+        \begin{pgfonlayer}{background}
+            \node(#7)[big#5] [fit = (#7n#1) (#7last)] {};
+        \end{pgfonlayer}
+    \fi
+    
+    \pgfmathparse{(\elipses==0)?1:0}\ifdim\pgfmathresult pt>0pt%
+        \begin{pgfonlayer}{background}
+            \node(#7)[big#5] [fit = (#7n#1) (#7n#2)] {};
+        \end{pgfonlayer}
+    \fi
+}
+
+\def\normspacing{0.6cm}
+\def\bigspacing{0.8cm} 
+\def\largespacing{1.3cm} 
+
+\begin{tikzfig}{fig:pl-mozzpy-struc-dataflow}{Data-flow diagram of MozzPy.}{\tiny}
+    \node (audio) [smallazure] {\specialcell{Audio\\Files}};
+    \mozzpyset{1}{2}{Wav}{above right=0.5cm and \bigspacing of audio}{darkmagenta}{1}{wavset1}
+    \node (labels) [smallblush, below=1.5cm of audio] {\specialcell{Label\\Files}};
+    
+    % labelset
+    \mozzpyset{1}{2}{Label}{above right=0.5cm and \bigspacing of labels}{cadmiumgreen}{1}{labelset1}
+    % featureset
+    \mozzpyset{1}{2}{Feature}{above right=0cm and \largespacing of wavset1}{darkbyzantium}{1}{featureset1}
+    
+    % dataset
+    \def\setname{ds1}
+    \node (\setname-title) [blank,below right=-1.5cm and \largespacing of featureset1]{DataSet};
+    \node (\setname-wavset) [smalldarkmagenta, below=0.15cm of \setname-title] {WavSet};
+    \node (\setname-featureset) [smalldarkbyzantium, below=0.15cm of \setname-wavset] {FeatureSet};
+    \node (\setname-labelset) [smallcadmiumgreen, below=0.15cm of \setname-featureset] {\hspace*{1mm}LabelSet\hspace*{1mm}};
+    \begin{pgfonlayer}{background}
+        \node(\setname)[bigred] [fit = (\setname-wavset) (\setname-labelset)] {};
+    \end{pgfonlayer}
+    
+    % dataset train
+    \node (ds2) [smallred, above right=-0.9cm and \bigspacing of ds1] {\specialcell{DataSet\\Train}};
+    
+    % dataset test
+    \node (ds3) [smallred, below=0.6cm of ds2] {\specialcell{DataSet\\Test}};
+    
+    % classiset rf
+    \def\setname{rf}
+    \node (\setname-title) [blank,above right=4.4cm and \normspacing of ds2]{\specialcell{ClassiSet \\ Random Forest}};
+    \node (\setname-spacer) [blank,below=0.5mm of \setname-title]{\hspace*{1.2cm}};
+    \mozzpyset{2}{2}{Feature}{below=-1.5mm of \setname-spacer}{darkbyzantium}{0}{\setname-featureset}
+    \mozzpyset{1}{1}{Label}{below=0.1cm of \setname-featureset}{cadmiumgreen}{0}{\setname-labelset}
+    \node (\setname-clf) [smallamber, below=0.15cm of \setname-labelset] {\specialcell{RF\\ Classifier}};
+    \node (\setname-output) [smallcaribbeangreen, below=0.15cm of \setname-clf] {Output\textsubscript{1}};
+    \node (\setname-results) [smallazure, below=0.15cm of \setname-output] {\specialcell{Test\\Results\textsubscript{1}}};
+    \begin{pgfonlayer}{background}
+        \node(\setname)[bigblue] [fit = (\setname-spacer) (\setname-results)] {};
+    \end{pgfonlayer}
+    
+   % classiset svm
+    \def\setname{svm}
+    \node (\setname-title) [blank,below=0.2cm of rf]{\specialcell{ClassiSet \\SVM}};
+    \node (\setname-spacer) [blank,below=0.5mm of \setname-title]{\hspace*{1.2cm}};
+    \mozzpyset{1}{1}{Feature}{below=-1.5mm of \setname-spacer}{darkbyzantium}{0}{\setname-featureset}
+    \mozzpyset{2}{2}{Label}{below=0.1cm of \setname-featureset}{cadmiumgreen}{0}{\setname-labelset}
+    \node (\setname-clf) [smallamber, below=0.15cm of \setname-labelset] {\specialcell{SVM \\Classifier}};
+    \node (\setname-output) [smallcaribbeangreen, below=0.15cm of \setname-clf] {Output\textsubscript{2}};
+    \node (\setname-results) [smallazure, below=0.15cm of \setname-output] {\specialcell{Test\\Results\textsubscript{2}}};
+    \begin{pgfonlayer}{background}
+        \node(\setname)[bigblue] [fit = (\setname-spacer) (\setname-results)] {};
+    \end{pgfonlayer}
+    
+    % aggset
+    \def\setname{as}
+    \node (\setname-title) [blank,above right=1.8cm and \largespacing of svm]{\specialcell{AggSet}};
+    \node (\setname-output1) [smallcaribbeangreen, below=0.1cm of \setname-title] {Output\textsubscript{1}};
+    \node (\setname-output2) [smallcaribbeangreen, below=0.15cm of \setname-output1] {Output\textsubscript{2}};
+    \node (\setname-outputagg) [smalldarktangerine, below=0.15cm of \setname-output2] {Output\textsubscript{agg}};
+    \node (\setname-results) [smallazure, below=0.15cm of \setname-outputagg] {\specialcell{Test\\Results\textsubscript{agg}}};
+    \begin{pgfonlayer}{background}
+        \node(\setname)[bigcaribbeangreen] [fit = (\setname-output1) (\setname-results)] {};
+    \end{pgfonlayer}
+    
+    % resultset
+    \def\setname{rs}
+    \node (\setname-title) [blank,above right=-2mm and \largespacing of as]{ResultSet};
+    \node (\setname-results1) [smallazure, below=0.15cm of \setname-title] {\specialcell{Test\\Results\textsubscript{1}}};
+    \node (\setname-results2) [smallazure, below=0.15cm of \setname-results1] {\specialcell{Test\\Results\textsubscript{2}}};
+    \node (\setname-resultsagg) [smallazure, below=0.15cm of \setname-results2] {\specialcell{Test\\Results\textsubscript{agg}}};
+    \begin{pgfonlayer}{background}
+        \node(\setname)[bigazure] [fit = (\setname-results1) (\setname-resultsagg)] {};
+    \end{pgfonlayer}
+    
+    \node(plot)[blank, below=0.6cm of rs]{plot};
+    
+    
+    % arrows
+    \draw [arrow] (audio) -- (wavset1) node[midway,above]{import};
+    \draw [arrow] (labels) -- (labelset1) node[midway,above]{import};
+    \draw [arrow] (wavset1) -- (featureset1) node[midway,below]{\specialcell{generate \\all features}};
+    \draw [arrow] (wavset1.north) |- (2,2) -| (ds1-wavset.north);
+    \draw [arrow] (featureset1.east) -| (5,-0.5) |- (ds1-featureset.west);
+    \draw [arrow] (labelset1.east) -| (5,-2) |- (ds1-labelset.west);
+    \draw [arrow] (ds1.east) -|  node[midway,above]{split\hspace*{0.6cm}} (7.7,-0.5) |- (ds2.west);
+    \draw [arrow] (ds1.east) -|  (7.7,-1.5) |- (ds3.west);
+    \draw [arrow] (ds2.north) |-  (8.5,3.69) node[near end,above]{pre-process features} -- (rf-featureset.west);
+    \draw [arrow] (ds2.north) |-  (8.5,2.45) node[near end,above]{resample lables} -- (rf-labelset.west);
+    \draw [arrow] (rf-featureset.east) -|  (12,2.3) node[near start,above]{\hspace*{1cm} train classifier} |- (rf-clf.east);
+    \draw [arrow] (rf-labelset.east) -|  (12,2.3)  |- (rf-clf.east);
+    \draw [arrow] (rf-clf) -- (rf-output);
+    \draw [arrow] (rf-output) -- (rf-results);
+    \draw[arrow] (rf-output.east) -| (11.7,0.5) |- (as-output1);
+    \draw [arrow] (ds3.east) -| (9,1) |- node[midway,above]{\hspace{1mm} test classifier}  (rf-clf);
+    \draw [arrow] (ds2.east) -| (9.3,-2) |- (svm-labelset.west);
+    \draw [arrow] (ds2.east) -| (9.3,-2) |- (svm-featureset.west);
+    \draw[arrow] (svm-featureset.east) -| (11.4,-3) |- (svm-clf.east);
+    \draw[arrow] (svm-labelset.east) -| (11.4,-3.5) |- (svm-clf.east);
+    \draw[arrow] (svm-clf) -- (svm-output);
+    \draw[arrow] (svm-output) -- (svm-results);
+    \draw[arrow] (svm-output.east) -| (11.7,-3) |- (as-output2);
+    \draw[arrow] (as-output1.east) -| (14,0) |- (as-outputagg.east);
+    \draw[arrow] (as-output2.east) -| (14,0) |- (as-outputagg.east);
+    \draw[arrow] (as-outputagg) -- (as-results);
+    \draw[arrow] (rf-results.east) -| (11.4,1) |- (16.4,1) |- (rs-results1);
+    \draw[arrow] (svm-results.east) -| (16.4,-2) |- (rs-results2.east);
+    \draw[arrow] (as-results) -| (14,-2.2) |- (rs-resultsagg);
+    \draw[arrow] (rs) -- (plot);
+\end{tikzfig}

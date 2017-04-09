@@ -1,20 +1,56 @@
 \section{Contributions of this Section}
 \label{sec:pl-overview}
-    
+
     \subsection{General Pipeline}
     \label{subsec:pl-overview-general}
-        \begin{itemize}
-            \item{briefly summarise available inputs and desired outputs}
-            \item{show tikz diagram of possible pipelines, briefly explain key elements and details}
-            \item{explain how this section will build up a (general) pipeline relevant to this problem}
-        \end{itemize}
-    
+        Detection of a mosquito in an audio signal requires a processing pipeline. The general pipeline is shown in figure \ref{fig:pl-overview-general-diag}, where every intermediate node is modular. 
+        \begin{tikzfig}{fig:pl-overview-general-diag}{General structure of mosquito detection pipeline.}{\small}
+    			\node (start) [orange] {\specialcell{Import \\ Files}};
+    			\node (n1) [blue, right=0.5cm of start] {\specialcell{Process\\Files}};
+    			\node (n2) [blue, right=0.5cm of n1] {\specialcell{Generate\\Features}};
+    			\node (n3) [blue, right=0.5cm of n2] {\specialcell{Pre-Process\\Features}};
+    			\node (n4) [blue, right=0.5cm of n3] {\specialcell{Classification}};
+    			\node (n5) [blue, right=0.5cm of n4] {\specialcell{Result\\Post-Processing}};
+    			\node (n55) [blue, right=0.5cm  of n5] {\specialcell{Aggregation}};
+    			\node (n6) [blue, below=0.5cm of n5] {\specialcell{Result\\Testing}};
+    			\node (n7) [green, left=0.5cm of n6] {\specialcell{Plotting}};
+    			\draw [arrow] (start) -- (n1);
+    			\draw [arrow] (n1) -- (n2);
+    			\draw [arrow] (n2) -- (n3);
+    			\draw [arrow] (n3) -- (n4);
+    			\draw [arrow] (n4) -- (n5);
+    			\node (n55top) [blank, above right=-0.5cm and 0.5cm of n5]{};
+    			\node (n55bottom) [blank, below right=-0.5cm and 0.5cm of n5]{};
+    			\draw [arrow] (n5) -- (n55top);
+    			\draw [arrow] (n55bottom) -- (n5);
+    			\draw [arrow] (n5) -- (n6);
+    			\draw [arrow] (n6) -- (n7);
+    	\end{tikzfig}
+        Each node of the pipeline will be detailed in this section, expanding on both the theory and software implementation. The desired output is a vector of zeros or ones, indicating the presence of mosquito or no mosquito respectively in the initial input audio signal. 
+        
+        The result of this section will be a \textit{general} pipeline, meaning that the tools have been laid out but configuration and optimisation, specific to the problem of mosquito detection, are still required and left to section \textbf{III}.
+
     \subsection{Software Package}
     \label{subsec:pl-overview-software}
-        \begin{itemize}
-            \item{present need for automated modular solution}
-            \item{explain how package can deal with the pipelines above and provide whats needed as a base for the research project}
-            \item{easily extended as designed to be modular so potential uses of the software goes beyond scope of 4yp}
-        \end{itemize}
-    
-    
+        \newcommand{\defboxes}[1]{
+            \tikzstyle{big#1} = [draw=#1!40, rounded corners, rectangle, inner sep=1mm,row sep=1mm]
+            \tikzstyle{small#1} = [minimum size=0.6cm, rounded corners,rectangle, fill=#1!20]
+        }
+        \defboxes{blue}
+        \defboxes{azure}
+        \defboxes{amber}
+        \defboxes{blush}
+        \defboxes{cadmiumgreen}
+        \defboxes{caribbeangreen}
+        \defboxes{darkbyzantium}
+        \defboxes{darkmagenta}
+        \defboxes{red}
+        \defboxes{green}
+        \defboxes{darktangerine}
+        
+        Within the context of this problem, there are virtually unlimited methods that could be applied. By imposing the framework set in section \ref{subsec:pl-overview-general}, a vast amount of methods can still be used but they must now conform to given structure. This presents the need for a software solution for which each node is treated as a discrete element of the pipeline, allowing modules to be added at each stage without affecting or depending other nodes. 
+        
+        'MozzPy' is a utility written in Python 2.7 to complement this project, with features allowing configurations of multiple unique pipelines to be run simultaneously and compared side-by-side. For example, the performance of a supervised classifier with 20 input features could be compared directly to the performance of an autoregressive spectral peak detection algorithm using any of the implemented testing modules. Each node has a standard interface with clearly specified inputs and outputs, providing an easily expandable framework with uses beyond the scope of this project, demonstrated in section \ref{sec:conc-future}. Details of the software are provided throughout this section, concluding with an in depth analysis of the program structure in section \ref{sec:pl-mozzpy}.
+        
+       
+        
