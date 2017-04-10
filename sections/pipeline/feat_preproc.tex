@@ -12,6 +12,12 @@
         \begin{sitemize}
             \item{methods of feature selection}
             \item{some maths}
+            The degree of dimensional reduction is determined by iterating these algorithms using a random forest. The random forest classifier many times faster than the SVM and also performs considerabley better than the naive Bayes classifier. Using the feature importance attribute, RFE iterates and removes features of least importance etc...
+            
+            done own implementation rather than sklearn so can graph output and svm too slow on this dataset
+            for svm to be reasonable it has to take steps of 30ish features at a time, rf performance muchbeyyer also other methods wont give much more performance improvement, 
+            %Granitto2006 - original RF-RFE
+            %Guyon2002 - original SVM-RFE, more traditional
         \end{sitemize}
         
     
