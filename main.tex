@@ -14,7 +14,7 @@
 \usepackage{wrapfig}		        % wrap text around figs
 \graphicspath{{assets/figs/}}
 \usepackage{pdfpages}               % import declaration
-\usepackage{setspace}
+\usepackage[nodisplayskipstretch]{setspace} % smaller equation spacing
 \usepackage{bold-extra}
 \usepackage{titlesec}
 \usepackage{titletoc}
@@ -24,6 +24,8 @@
 \usepackage{fontspec}
 \usepackage{siunitx}
 \usepackage{pifont}                 % ticks and crosses
+\usepackage{amsmath}
+\usepackage[draft]{todonotes}       % for fun todo notes  
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
@@ -42,13 +44,18 @@
 \renewcommand{\thepart}{\textbf{Section \Roman{part}:}\ }
 \titleformat{\part}[block]{\LARGE\bfseries}{\thepart}{0pt}{}
 % SPACING
+% title headings
 \titlespacing{\part}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\section}{0pt}{0pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\subsection}{0pt}{4pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\subsubsection}{0pt}{2pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 
+% figs
 \setlength{\textfloatsep}{5.0pt plus 2.0pt minus 4.0pt}
 \setlength{\intextsep}{5.0pt plus 2.0pt minus 2.0pt}
+
+% table padding
+\renewcommand{\arraystretch}{1.2}
 
 %----------------------------------------------------------------------------------------
 %	DIAGRAM FORMATS
@@ -75,8 +82,20 @@
 %	CUSTOM COMMANDS
 %----------------------------------------------------------------------------------------
 
+% FUN TODO NOTES
+\makeatletter
+\renewcommand{\todo}[2][]{%
+    \@todo[caption={#2}, #1]{\begin{spacing}{0.5}#2\end{spacing}}%
+} 
+\makeatother
+
+\newcommand{\twN}[1]{\todo[inline, size=\small, color=green!30]{[tw] #1}}
+\newcommand{\twn}[1]{\todo[color=green!30]{[tw] #1}}
+
+% NEW LINES IN TABLE CELLS/TIKZ NODES
 \newcommand{\specialcell}[2][l]{%
 	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
 
 \newcommand{\addsubsec}[2]{%
     \graphicspath{{./sections/#1/figs/}}
