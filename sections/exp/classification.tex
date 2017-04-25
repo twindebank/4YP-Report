@@ -1,5 +1,6 @@
 \section{Classification}
 \label{sec:exp-clf}
+    \twN{reduce section about different contexts for classifier - narrow down focus to one goal or save until agg/rej stuff}
     \subsection{Overview}
     \label{subsec:exp-clf-overview}
         In this section, parameters that alter the training set of data and those which affect the training process itself will be experimentally optimised to produce near-optimum performance. An exhaustive grid search, without consideration of post-processing, would require training and testing of each classifier hundreds of thousands of times, taking tens of thousands of days of computing time. Instead, an iterative approach will be taken, depicted in figure \ref{fig:exp-clf-overview-opt}. 
@@ -15,7 +16,14 @@
      
     \subsection{Classifier Selection}
     \label{subsec:exp-clf-select}
-        Of the implemented classifiers [naive bayes, gaussian mixture model, knn, gaussian processes, svm, random forest, decision tree]
+        Of the implemented classifiers listed in section \ref{subsec:pl-clf-sup}, three are chosen to develop for this mosquito identification pipeline. Initial experiments are ran with the assumptions listed in section \ref{subsec:exp-clf-ass}. As a simple initial test, the data is randomly divided into a training set and a test set and each of the classifiers is trained and applied.
+        
+        Results are shown in table X. mention each one and say why/why not chose
+        
+        % red for bad green for blue in table
+        
+        A naive Bayes classifier is chosen as it. cant crossval as some classifiers take too much time, fine to test on held out data as only using it to select classifiers not tune them
+        [naive bayes, gaussian mixture model, knn, svm, random forest, decision tree]
         kNN - too long, lazy classifier computed at runtime - using 8 cores took 3 hours with results as good as rf
         naive bayes - simple, easy, no params, likely weak but very fast and good for testing, will optimise along pipeline
         gmm - very similar but worse performance than bayes, more params, slower %https://stats.stackexchange.com/questions/105140/gaussian-naive-bayes-really-equivalent-to-gmm-with-diagonal-covariance-matrices
@@ -82,15 +90,16 @@
             \begin{wrapfigure}{r}{0.3\textwidth}
                 \centering
                 \includegraphics[width=0.2\textwidth]{label_example}
-                \caption{An example of talking where there is disagreement between people.}
+                \caption{An example of noise where there is $50/50$ disagreement between labellers.}
                 \label{fig:exp-clf-known-tstlbls-exmp}
             \end{wrapfigure}
-            All the possible training/testing pairs are shown in table \ref{tbl:exp-clf-known-tstlbls-tbl}. Although there are $18$ aggregation policies in total, it would be incorrect to optimise the pipeline by varying the test labels as this introduces a bias of being able to choose how correct a set of prediction are. Instead, where possible, the same aggregation policy should be applied for both training and test labels. Where not possible, i.e. where some samples are rejected for training, a universal test label should be chosen that reflects the actual data as close as possible. For these experiments, '05\_notmozz' will be selected, representing a majority vote where at least 3/4 of votes are needed for a positive label. This is based on inspection of many areas of the recordings in which there is irregular noise, such as talking over the sound of a mosquito. Often, two people will class this as positive and two negative, as shown in figure \ref{fig:exp-clf-known-tstlbls-exmp}. In terms of classification, it is desirable to treat this as a negative example to prevent voices being classed as positive, hence why requiring a majority vote is desirable.
+            All the possible training/testing pairs are shown in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl}; details of which are given in section \ref{subsec:pl-data-software}. Although there are $24$ aggregation policies in total, it would be incorrect to optimise the pipeline by varying the test labels as this introduces a bias of being able to choose how correct a set of prediction are. Instead, a universal test label should be chosen that reflects the actual data as close as possible. For these experiments, '05\_notmozz' will be selected, representing a majority vote where at least 3/4 of votes are needed for a positive label. This is based on inspection of many areas of the recordings in which there is irregular noise, such as talking over the sound of a mosquito. Often, two people will class this as positive and two negative, as shown in figure \ref{fig:exp-clf-known-tstlbls-exmp}. In terms of classification, it is desirable to treat this as a negative example to prevent voices being classed as positive, hence why requiring a majority voting policy will be chosen.
             
-            \begin{wraptable}{r}{0.5\textwidth}
+            \begin{table}
                 \scriptsize
                 \singlespacing
                 \centering
+                \subfloat[][Binary Labelling Policies]{
                     \begin{tabular}{ |l|l|c| } 
                         \hline
                         Train Label & Test Label & Use\\
@@ -98,11 +107,11 @@
                         '0\_5\_notmozz'&'0\_5\_notmozz'& \checkmark \\
                         '0\_5\_notmozz'&'0\_5\_ismozz'& \xmark\\
                         '0\_5\_notmozz'&'sensitive'& \xmark\\
-                        '0\_5\_ismozz'&'0\_5\_ismozz'& \checkmark \\
-                        '0\_5\_ismozz'&'0\_5\_notmozz'& \xmark\\
+                        '0\_5\_ismozz'&'0\_5\_ismozz'& \xmark \\
+                        '0\_5\_ismozz'&'0\_5\_notmozz'& \checkmark\\
                         '0\_5\_ismozz'&'sensitive'& \xmark\\
-                        'sensitive'&'sensitive'& \checkmark\\
-                        'sensitive'&'0\_5\_notmozz'& \xmark \\
+                        'sensitive'&'sensitive'& \xmark\\
+                        'sensitive'&'0\_5\_notmozz'& \checkmark \\
                         'sensitive'&'0\_5\_ismozz'& \xmark\\
                         'conf'&'0\_5\_notmozz'& \checkmark \\
                         'conf'&'0\_5\_ismozz'& \xmark\\
@@ -110,25 +119,52 @@
                         '0\_5\_ignore'&'0\_5\_notmozz'& \checkmark \\
                         '0\_5\_ignore'&'0\_5\_ismozz'& \xmark\\
                         '0\_5\_ignore'&'sensitive'& \xmark\\
-                        'multiclass'&'0\_5\_notmozz'& \checkmark \\
-                        'multiclass'&'0\_5\_ismozz'& \xmark\\
-                        'multiclass'&'sensitive'& \xmark\\
                         \hline
                     \end{tabular}
-                \caption{Training and testing label pairing.}
-                \label{tbl:exp-clf-known-tstlbls-tbl}
-            \end{wraptable}
+                    % \caption{Training and testing label pairing for binary labels.}
+                    \label{tbl:exp-clf-known-tstlbls-bintbl}
+                }
+                \qquad
+                \subfloat[][Multi-class Labeling Policies.]{
+                    \begin{tabular}{ |l|l|l|c| } 
+                        \hline
+                        Train Label & Test Label & Uncertain Votes & Use\\
+                        \hline
+                        'multiclass'&'0\_5\_notmozz'& 'ismozz' &\checkmark \\
+                        'multiclass'&'0\_5\_ismozz'&'ismozz'& \xmark\\
+                        'multiclass'&'sensitive' & 'ismozz' & \xmark\\
+                        'multiclass'&'0\_5\_notmozz' & 'notmozz' &  \checkmark \\
+                        'multiclass'&'0\_5\_ismozz'& 'notmozz' & \xmark\\
+                        'multiclass'&'sensitive'& 'notmozz' & \xmark\\
+                        'multiclass'&'0\_5\_notmozz'& 'reject' &  \checkmark \\
+                        'multiclass'&'0\_5\_ismozz'& 'reject' & \xmark\\
+                        'multiclass'&'sensitive'& 'reject' & \xmark\\
+                        \hline
+                    \end{tabular}
+                    % \caption{Training and testing label pairing for multi-class labels.}
+                    \label{tbl:exp-clf-known-tstlbls-multitbl}
+                }
+                \caption{All possible training and testing label pairs.}
+                \label{tbl:exp-clf-known-tstlbls-tbls}
+            \end{table}
+            
+            % \begin{wraptable}{r}{0.6\textwidth}
+            %     \scriptsize
+            %     \singlespacing
+            %     \centering
+                    
+            % \end{wraptable}
             
             
-    \section{Initially Assumed Parameters}
+    \subsection{Parameter Assumptions}
     \label{subsec:exp-clf-ass}
         \subsubsection{Balanced Classes}
         \label{subsubsec:exp-clf-ass-bal}
-            The first assumption made is to balance the classes of the training data. For the Culex \textit{q.} data-set, training data begins with $80024$ and $24695$ samples for classes 0 and 1 respectively; both classes are balanced to contain $24695$ samples. Initial experiments have shown this is a sufficient sample size and often leads to better performance and dramatically faster classification times; however, more thorough experimentation will be carried out in this section.
+            The first assumption made is to balance the classes of the training data. For the Culex \textit{q.} data-set, training data begins with $80024$ and $24695$ samples for classes $0$ and $1$ respectively; both classes are balanced to contain $24695$ samples. Initial experiments have shown this is a sufficient sample size and often leads to better performance and dramatically faster classification times; however, more thorough experimentation will be carried out in this section.
     
         \subsubsection{Audio Normalisation}
         \label{subsubsec:exp-clf-ass-aud}
-            The Culex \textit{q.} data set has been recorded using the same device in the same location for each of the 57 recordings, therefore mosquitoes flying into and out of the microphone range will have consistent volumes. Some sections of the recordings contain highly irregular noise that is considas an outsider all I wanna do is erably louder than the mosquitoes; an example noisy signal is shown in figure \ref{fig:exp-clf-audio-noisy} where the first thirty seconds contain human voices.
+            The Culex \textit{q.} data set has been recorded using the same device in the same location for each of the 57 recordings, therefore mosquitoes flying into and out of the microphone range will have consistent volumes. Some sections of the recordings contain highly irregular noise that is considerably louder than the mosquitoes; an example noisy signal is shown in figure \ref{fig:exp-clf-audio-noisy} where the first thirty seconds contain human voices.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{raw_with_noise}
@@ -137,7 +173,7 @@
             \end{figure}
             Usually, normalising on a signal-by-signal basis is bad practise for many audio-based machine learning problems due to the time-dependency of the signal as its using information that is 'from the future' for classification, leading to unpredictable consequences. However, this is acceptable in some cases in which the classifier will be used on many samples at a time rather than live sample-by-sample. These acceptable situations include an automated tagging system REF TABLE, a data logger with a buffer REF TABLE or swarm tracking REF TABLE. 
             \twN{update this section with references to use cases}
-            For on-line applications such as the solar lamp REF or smartphone REF, there is scope for use of more sophisticated algorithms to achieve normalisation such as Automatic Gain Control (AGC), which has been shown to improve robustness and performance of speech recognition with deep neural networks \cite{Prabhavalkar2015}. However, this will be left for further research due to the complexities of implementation. Both zero-mean and unit-variance normalisation will be assumed at first, then the best performing combination will be determined experimentally. For the on-line case where this is technically incorrect, it will be assumed that a similar level performance could be achieved using more sophisticated normalisation algorithms, should normalisation in this way provide better performance than no normalisation. 
+            For on-line applications such as the solar lamp REF or smartphone REF, there is scope for use of more sophisticated algorithms to achieve normalisation such as Automatic Gain Control (AGC), which has been shown to improve robustness and performance of speech recognition with deep neural networks \cite{Prabhavalkar2015}. However, this will be left for further research due to the complexities of implementation. Both zero-mean and unit-variance normalisation will be assumed at first, then the best performing combination will be determined experimentally. For the on-line case where this is technically incorrect, it will be assumed that a similar level performance could be achieved using more sophisticated normalisation algorithms, should normalisation in this way provide better performance than no normalisation. Initially, there will be no audio normalisation applied.
 
         \subsubsection{Training Labels}
         \label{subsubsec:exp-clf-ass-trnlabel}
@@ -155,28 +191,28 @@
                 \caption{Disagreement between four people labelling the same data-set.}
                 \label{fig:exp-clf-ass-label-agree}
             \end{wraptable}
-            Analysis of these labels, shown in table \ref{fig:exp-clf-ass-label-agree}, emphasises the difficulty of this problem. Of the four people labelling the data, there is only complete agreement $77\%$ of the time, the rest of the time there is at least one person who disagrees with the others.
-            Without knowing the details of each persons labelling methodology, a uniform prior must be applied to assign them equal importance for classification use. Therefore, it can be reasoned that it is most appropriate to take a consensus vote to use information from all sets of labels. 
+            Analysis of these labels, shown in table \ref{fig:exp-clf-ass-label-agree}, emphasises the difficulty of this problem. Of the four people labelling the data, there is only complete agreement $77\%$ of the time, the rest of the time there is at least one person who disagrees with the others. Without knowing the details of each persons labelling methodology, a uniform prior must be applied to assign them equal importance for classification use. Therefore, it can be reasoned that it is most appropriate to take a consensus vote to use information from all sets of labels. 
             
-            As discussed in section \ref{fig:pl-data-audiolbls-comb}, there are six methods to create a binary consensus label. The 'conf' label set will be assumed initially because it is least likely to contain miss-labelled samples; for a sample to be miss-labelled all four people must label incorrectly. 
+            As discussed in section \ref{fig:pl-data-audiolbls-comb}, there are six methods to create a binary consensus label. The \code{'conf'} label set will be assumed initially because it is least likely to contain miss-labelled samples; for a sample to be miss-labelled all four people must label incorrectly. 
             
-        \subsubsection{Classifier Parameters}
+        \subsubsection{Classifier Hyperparameters}
         \label{subsubsec:exp-clf-ass-param}
-            All parameters, bar the exception of one150 trees, rest default
-            do using gridsearchcv
+            Classifiers have internal parameters that determine certain aspects of their behaviour. A detailed breakdown is given in section \ref{subsec:pl-clf-sup}. An intuition derived from he data and experiments on the data provide a basis for determining these parameters. At this stage, there is minimal intuition developed so parameters will be left at the default settings, with the exception of the \code{'n\_estimators'} parameter that defines the number of decision trees that make up the random forest classifier. Increasing the number of trees in a random forest \textit{rarely} overfits the data \cite{Breiman2001}. The default value of $10$ trees is only adequate for very small sets of data, a value of $150$ trees will instead be assumed based on the research by \textcite{Oshiro2012a}.
         
     \subsection{Optimisation}
     \label{subsec:exp-clf-opt}
     
         \subsubsection{Feature Selection}
         \label{subsubsec:exp-clf-opt-featsel}
-            Feature design, as detailed in section \ref{sec:pl-feats}, and selection are crucial to any machine learning problem using traditional classifiers. It is chosen as the first stage to reduce computational load of subsequent cross-validation experiments. In isolation, a classifier trained on one feature will perform better than another; for example, the set of mel-frequency cepstral coefficients (\code{MFCC}s) features will outperform the zero-crossing rate (\code{ZCR}). The former describes the frequency structure of the signal, which is crucial for mosquito detection; the latter a proxy to audio pitch. However, the use of the \code{ZCR} in combination with a range of other features may provide performance boosts. There also exists a high redundancy between some features, an example being the spectrogram slices (\code{spec}) and the \code{MFCC}s, which both encode forms of the frequency spectrum. These two factors provide reasoning to start feature selection with the complete collection of features and eliminating them based on a metric of how informative they are. 
+            Feature design, as detailed in section \ref{sec:pl-feats}, and selection are crucial to any machine learning problem using traditional classifiers. Initially, there are a collection of ten features with a dimension of $304$, denoted as $\{F_{N}\in\mathbb{R}^{D_{N}},N\in\{0,...,9\}\}\in\mathbb{R}^{304}$ where $N$ corresponds with a select feature and $D_N$ is its respective dimension in the feature space. Reducing the dimension of the input features is chosen as the first stage to reduce computational load of subsequent cross-validation experiments.
+            
+            In isolation, a classifier trained on one feature may perform better than a classifier trained on another; for example, the set of mel-frequency cepstral coefficients will outperform the zero-crossing rate. The former describes the frequency structure of the signal, which is crucial for mosquito detection; the latter a proxy to audio pitch. However, the use of the zero-crossing rate in combination with a range of other features may provide performance boosts. There also exists a high redundancy between some features, an example being the spectrogram slices and the mel-frequency cepstral coefficients, which both encode representations of the frequency spectrum. These two factors provide reasoning to start feature selection with the complete collection of features and eliminating them based on a metric of how informative they are. 
             
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=0.9\textwidth]{feat_elim}
                 \caption{F1 Score as dimensionality is varied using Recursive Feature Elimination and Principal Component Analysis.}
-                \label{fig:exp-clf-opt-featsel}
+                \label{fig:exp-clf-opt-featsel-grph}
             \end{figure}
             \begin{wraptable}{r}{0.3\textwidth}
                 \scriptsize
@@ -196,7 +232,7 @@
                 \label{fig:exp-clf-opt-featsel-elim}
             \end{wraptable}
             
-            Feature selection will be performed in three stages. Firstly, we apply two methods of cross-validated feature elimination: principal component analysis, \code{PCA}, with truncation; and recursive feature elimination, \code{RFE}. With current implementations, only the random forest classifier is able to recursively eliminate features, this is reasoned in \ref{subsec:pl-test-stan}. Figure REF shows F$1$-Scores as the number of dimensions are truncated over an exponential scale beginning from the number of features and  halving  until  there  are  only  a  small  number  of  features  left, with the features determined as least informative being removed first. The exponential scale reflects our expectation of the total collection of features containing a high degree of redundant information, implying there will be more variance at lower dimensions. Identical plots for the other metrics listed in section \ref{subsec:exp-clf-overview} are also generated. The degree of dimensional reduction determined most optimal is shown in table \ref{fig:exp-clf-opt-featsel-elim} with consideration of all discussed metrics; some results with a high F$1$ Score also suffer from highly skewed predictions where the true positive rate may be very high but the true negative rate is less than a half.
+            Feature selection will be performed in three stages. Firstly, we apply two methods of cross-validated feature elimination: principal component analysis, \code{PCA}, with truncation; and recursive feature elimination, \code{RFE}. With current implementations, only the random forest classifier is able to recursively eliminate features, this is reasoned in \ref{subsec:pl-test-stan}. Figure \ref{fig:exp-clf-opt-featsel-grph} shows F$1$-Scores as the number of dimensions are truncated, for RFE the reduction is carried out in linear steps of $8$; for PCA the scale is exponential, beginning from the number of features and halving until there  are only a small number of features left, with the features determined as least informative being removed first. The exponential scale reflects our expectation of the total collection of features containing a high degree of redundant information, implying there will be more significant effect on performance at lower dimensions. Identical plots for the other metrics listed in section \ref{subsec:exp-clf-overview} are also generated. The degree of dimensional reduction determined most optimal is shown in table \ref{fig:exp-clf-opt-featsel-elim} with consideration of all discussed metrics; some results with a high F$1$ Score also suffer from highly skewed predictions where the true positive rate may be very high but the true negative rate is less than a half.
             
             \begin{wraptable}{l}{0.7\textwidth}
                 \scriptsize
@@ -207,18 +243,18 @@
                         Classifier & Features & F1 & AUC-ROC & AUC-PR & TPR & TNR \\ 
                         \hline
                         \hline
-                        NB & \code{RFE}$_{88}$ & $0.484$ & $0.732$ & $0.414$ & $0.514$& $0.825$ \\
+                        NB & \code{MFCC}$\in\mathbb{R}^{13}$ & $0.601$ & $0.843$ & $0.626$ & $0.634$& $0.864$ \\
                         \hline
-                        RF & \code{RFE}$_{88}$ & $0.710$ & $0.920$ & $0.800$ & $0.676$ & $0.934$\\
+                        RF & \code{RFE}$\in\mathbb{R}^{88}$ & $0.710$ & $0.920$ & $0.800$ & $0.676$ & $0.934$\\
                         \hline
-                        SVM &\code{RFE}$_{88}$& \boldmath$0.745$ & \boldmath$0.928$ & \boldmath$0.831$ & \boldmath$0.728$& \boldmath$0.935$ \\
+                        SVM &\code{RFE}$\in \mathbb{R}^{88}$& \boldmath$0.745$ & \boldmath$0.928$ & \boldmath$0.831$ & \boldmath$0.728$& \boldmath$0.935$ \\
                         \hline
                     \end{tabular}
                 \caption{Results of feature selection.}
                 \label{tbl:exp-clf-opt-feat-res}
             \end{wraptable}
             
-            The second stage is feature selection. For each classifier, we cross-validate performance over the following configurations: each feature in isolation; all the features combined; the optimal \code{PCA}-reduced feature set, specific to each classifier; and the the \code{RFE}-reduced feature set, as determined by the random forest. The best performing configuration is then tested on the held-out set, where results are shown in table \ref{tbl:exp-clf-opt-feat-res}. Again it is emphasised that no decisions will be made based on test-set evaluations, only on cross-validation performance; they are included as an informative view on the progression of optimisation.
+            The second stage is feature selection. For each classifier, we cross-validate performance over the following configurations: each feature in isolation; all the features combined; the optimal \code{PCA}-reduced feature set, specific to each classifier; and the the \code{RFE}-reduced feature set, as determined by the random forest. The best performing configuration is then tested on the held-out set, where results are shown in table \ref{tbl:exp-clf-opt-feat-res}. Again it is emphasised that no decisions are made based on test-set evaluations, only on cross-validation performance; they are included as an informative view on the progression of optimisation.
             
             %Granitto2006 - original RF-RFE
             %Guyon2002 - original SVM-RFE, more traditiona
@@ -233,7 +269,7 @@
                         Classifier & \code{winlen} & \code{winstep} & F1 & AUC-ROC & AUC-PR & TPR & TNR \\ 
                         \hline
                         \hline
-                        NB      &$0.089$&$0.0445$&$0.526$&$0.740$&$0.428$&$0.581$&$0.820$\\
+                        NB      &$0.089$&$0.0445$&$0.642$&$0.873$&$0.680$&$0.636$&$0.901$\\
                         \hline
                         RF      &$0.058$&$0.029$ &$0.759$&$0.942$&$0.847$&$0.728$&$0.945$\\
                         \hline
@@ -262,93 +298,86 @@
         \label{subsubsec:exp-clf-opt-param}
             Subsequent to selection of optimal features, classifier hyperparameters are determined. Computational load reduction from the partial feature set allows a more comprehensive grid search of parameters to be carried out. Cross-validated grid search will be applied over the random forest and SVM classifiers; the naive Bayes implementation only has the option to vary class priors which should be determined from the data.
             
-            Cross-validated grid search over the random forest hyperparameters must first be done \textit{very} coarsely, then refined in areas where performance is promising. For example, the \code{max features} parameter describing the number of features to consider when splitting the data can take an integer anywhere between 1 and the number of features. There are six such parameters that take a range of integers, meaning if we search over five values for each that results in $5^5$ runs for each fold. 
-            In the first round, the classifier is trained/tested $192$ times for each fold. Results show that increasing any of the parameters \code{max\_samples\_split}, \code{min\_samples\_leaf}, \code{max\_leaf\_nodes} resulted in poor metrics; these will be left at default. Use of the decision criterion \code{"entropy"} showed consistently better performance over \code{"gini"}. The rest of the hyperparameters had more subtle effects so they are searched over a more comprehensive space. 
-            \twN{More details on parameters - provide in implementation section}
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=0.9\textwidth]{hyperparameter_xval}
-                \caption{F$1$ Scores as hyperparameter combinations are cross-validated.}
+                \caption{F$1$ Scores as random forest hyperparameter combinations are cross-validated.}
                 \label{fig:exp-clf-opt-hyp}
             \end{figure}
             
-            Figure \ref{fig:exp-clf-opt-hyp} shows the cross-validation results; where each number corresponds to a particular configuration. The best performing configurations have the highest number of trees, $300$. Setting \code{max\_depth} only reduces performance, whereas tuning \code{max\_features} to a value around $60$ improves over the default value of $\sqrt{ \text{N}_{Features}}=9$. The final fine-grained cross-validation done over the number of trees and \code{max\_features} ensures the best performance is reached, results of which are presented in table REF; details of parameter grids are located at the end of this section in table REF.        
+            Cross-validated grid search over the classifier hyperparameters must first be done \textit{very} coarsely, then refined in areas where performance is promising. For example, the \code{'max\_features'} parameter, describing the number of features to consider when splitting samples at a node of a random forest, can take an integer anywhere between $1$ and the dimension of the feature matrix, $F_{10} \in \mathbb{R}^{304}$; many of these parameters exist so combinations can reach into the millions. Grid search is executed three times over the random forest and twice over the SVM, where each iteration refines the bounds of the search. Results show straying from default parameters, which often involved restricting a previously unbound value such as \code{'max\_depth'} of the random forest, negated performance. An example cross-validated hyperparameter search output is shown in figure \ref{fig:exp-clf-opt-hyp}, where the experiment is the second grid-search over the random forest. On the $x$ axis are each possible combination of hyperparameters in the defined grid, where the number corresponds to a particular combination. There are clear trends within the data corresponding to particularly influential parameters such as \code{'n\_estimators'}, which is the only parameter to be updated in this section; the rest remain unchanged for both the random forest and the SVM. Details of search grids are presented in table REF at the end of this section. No significant changes were observed in performance over the test set.
             
+            \twN{reference table at end}
+            
+            % In the first round, the classifier is trained/tested $192$ times for each fold. Results show that increasing any of the parameters \code{max\_samples\_split}, \code{min\_samples\_leaf}, \code{max\_leaf\_nodes} resulted in poor metrics; these will be left at default. Use of the decision criterion \code{"entropy"} showed consistently better performance over \code{"gini"}. The rest of the hyperparameters had more subtle effects so they are searched over a more comprehensive space. 
+            % \twN{More details on parameters - provide in implementation section}
+            
+            
+            % Figure \ref{fig:exp-clf-opt-hyp} shows the cross-validation results; where each number corresponds to a particular configuration. The best performing configurations have the highest number of trees, $300$. Setting \code{max\_depth} only reduces performance, whereas tuning \code{max\_features} to a value around $60$ improves over the default value of $\sqrt{ \text{N}_{Features}}=9$. The final fine-grained cross-validation done over the number of trees and \code{max\_features} ensures the best performance is reached, results of which are presented in table REF; details of parameter grids are located at the end of this section in table REF.        
+            
+            % SVM: gridsearch over C and gamma showed that c=10, gamma=auto (1/nfeats) provided best performance, shrinking off massively faster convergence
    
 
         \subsubsection{Class Balancing}
         \label{subsubsec:exp-clf-opt-class}
+            Subsequent from this section, cross-validation will be over ten folds, increasing from five due to the smaller number of parameters that need to be found and the decreased training times from reduced feature dimensions. Cross-validated tests show that balancing classes results in marginally improved performance for the naive Bayes classifier and marginally reduced performance for the SVM and random forest in terms of the F$1$-score. True positive and true negative rates are influenced by the training data class proportions; training on a higher proportion of non-mosquito signals will result in a less sensitive classifier. To maximise generalisability of the classifier, classes in the training data should equally represented. This experiment reveals the reduction of samples for class-balancing NUMBERS HERE does not significantly hinder classifier performance and allows a classifier to be trained with minimal bias from the proportions of the training data. Should the reduction of samples significantly affect performance, then weightings could be applied to training samples, with the over-represented class having a reduced influence over the classification decision. Many techniques exist for learning from imbalanced data, random undersampling is sufficient for this particular problem; more advanced techniques are summarised by \textcite{He2009}.
             
-            [ASSUME BALANCED FOR NOW AND SKIP THIS TEST]
+            \twN{numbers to add in here}
+            % Table \ref{fig:exp-clf-opt-class-res} shows how balancing the training data can affect the results.
+            % \begin{wraptable}{r}{0.45\textwidth}
+            %     \scriptsize
+            %     \singlespacing
+            %     \centering
+            %         \begin{tabular}{ |l|c|c|c|c| } 
+            %             \hline
+            %             Classifier & F1 & ROC Area & TPR & TNR \\ 
+            %             \hline
+            %             \hline
+            %             NB          & $0.$ & $0.$  & $0.$ & $0.$\\
+            %             NB balanced & $0.$ & $0.$ & $0.$ & $0.$\\
+            %             \hline
+            %             RF          & $0.$ & $0.$ & $0.$ & $0.$\\
+            %             RF balanced & $0.$ & $0.$ & $0.$ & $0.$\\
+            %             \hline
+            %             SVM          & $0.$ & $0.$ & $0.$ & $0.$\\
+            %             SVM balanced & $0.$ & $0.$ & $0.$ & $0.$\\
+            %             \hline
+                    
+            %         \end{tabular}
+            %     \caption{Results of testing balanced training data against non-balanced training data.}
+            %     \label{fig:exp-clf-opt-class-res}
+            % \end{wraptable}
+            % In all three cases, classifiers with balanced training data outperform those with imbalanced training data. 
             
-            Table \ref{fig:exp-clf-opt-class-res} shows how balancing the training data can affect the results.
-            \begin{wraptable}{r}{0.45\textwidth}
+            % Although overall performance is better, it is interesting to note how balancing classes skews the TPR and TNR to, rather intuitively, increase the former and decrease the latter; a potential technique to tune the classifier at later stages. Further experiments will balance the training data to maximise performance.
+        
+        \subsubsection{Audio Normalisation}
+        \label{subsubsec:exp-clf-opt-normaud}
+            \begin{wraptable}{r}{0.7\textwidth}
                 \scriptsize
                 \singlespacing
                 \centering
-                    \begin{tabular}{ |l|c|c|c|c| } 
+                    \begin{tabular}{ |l||c|c|c|c|c|c|c| } 
                         \hline
-                        Classifier & F1 & ROC Area & TPR & TNR \\ 
+                        Classifier & \specialcell{Audio\\Normalised} & F1 & AUC-ROC & AUC-PR & TPR & TNR \\ 
                         \hline
                         \hline
-                        NB          & $0.$ & $0.$  & $0.$ & $0.$\\
-                        NB balanced & $0.$ & $0.$ & $0.$ & $0.$\\
+                        NB      &\checkmark &$0.642$&$0.873$&$0.680$&$0.636$&$0.901$\\
+                        NB      &\xmark     &$0.684$&$0.906$&$0.733$&$0.730$&$0.884$\\
                         \hline
-                        RF          & $0.$ & $0.$ & $0.$ & $0.$\\
-                        RF balanced & $0.$ & $0.$ & $0.$ & $0.$\\
-                        \hline
-                        SVM          & $0.$ & $0.$ & $0.$ & $0.$\\
-                        SVM balanced & $0.$ & $0.$ & $0.$ & $0.$\\
-                        \hline
-                    
                     \end{tabular}
-                \caption{Results of testing balanced training data against non-balanced training data.}
-                \label{fig:exp-clf-opt-class-res}
+                \caption{Comparing predictive performance with and without audio normalisation.}
+                \label{tbl:exp-clf-opt-normaud-res}
             \end{wraptable}
-            In all three cases, classifiers with balanced training data outperform those with imbalanced training data. 
-            
-            Although overall performance is better, it is interesting to note how balancing classes skews the TPR and TNR to, rather intuitively, increase the former and decrease the latter; a potential technique to tune the classifier at later stages. Further experiments will balance the training data to maximise performance.
-        
-        \subsubsection{Normalise Audio}
-        \label{subsubsec:exp-clf-opt-normaud}
-            boop boop
-        
+            Running cross validated tests over features generated from audio signals with different normalisation applied shows that predictions made by both the random forest and and SVM classifiers are unaffected by audio normalisation; the naive Bayes classifier, however, performs better without any audio normalisation. Results on the held out test set are shown in table \ref{tbl:exp-clf-opt-normaud-res}.
         \subsubsection{Label Selection}
         \label{subsubsec:exp-clf-opt-label}
-            easy all testies on reduced feature set, multiclass as well
-            
-        \subsubsection{Summary}
-        \label{subsubsec:exp-clf-opt-summ}
-            \twN{remove tables throughput and present final results here?}
-            \begin{wraptable}{l}{0.3\textwidth}
-                \scriptsize
-                \singlespacing
-                \centering
-                    \begin{tabular}{ |l|c|c|c|c| } 
-                        \hline
-                        \textbf{Naive Bayes} & Parameter Grid & Chosen Parameter & TPR & TNR \\ 
-                        \hline
-                        \hline
-                        Feature Elimination & $0.$ & $0.$  & $0.$ & $0.$\\
-                        NB balanced & $0.$ & $0.$ & $0.$ & $0.$\\
-                        \hline
-                        RF          & $0.$ & $0.$ & $0.$ & $0.$\\
-                        RF balanced & $0.$ & $0.$ & $0.$ & $0.$\\
-                        \hline
-                        SVM          & $0.$ & $0.$ & $0.$ & $0.$\\
-                        SVM balanced & $0.$ & $0.$ & $0.$ & $0.$\\
-                        \hline
-                    
-                    \end{tabular}
-                \caption{Results of testing balanced training data against non-balanced training data.}
-                \label{fig:exp-clf-opt-summ-tbl}
-            \end{wraptable}
-            
-    \subsection{Iteration}
-    \label{subsec:exp-clf-iter}
-        just list params that change then list final results
+            For each classifier, all selected combinations in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl} are tested. For the multi-class labelling scheme, the 'one vs. rest' transformation strategy is tested as well as the classifiers native multi-class implementation for the random forest and SVM classifiers. Top performing combinations are chosen based on cross-validation tests, results of which are shown in table X.
+            SVM slight better performance at cost of $20$-fold increase in computation time, so the conf labelling policy is chosen.
 
-        once done then x-val, can txval all as too much processing required
+            
+       
+
 
 
 %     start with most detail for random forest, then can tell similar story for the other classifiers in less detail

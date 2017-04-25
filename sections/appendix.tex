@@ -1,0 +1,332 @@
+
+    \begin{landscape}
+    \section{Cross-Validation Results}
+    \label{sec:appdx-xvalres}
+        \begin{table}[ht]
+            \ssmall
+            \singlespacing
+            \centering
+                \begin{tabular}{ |l|l|l|l|c|c|c|c|c|c|c|c| } 
+                    \hline
+                    \specialcell{Optimisation\\Stage} & Initial Value &  Parameter Grid &  \specialcell{Selected\\ Parameter} & F$1$ & \specialcell{AUC\\ROC} & \specialcell{AUC\\PR} & TPR & TNR & \specialcell{Train\\Time} & \specialcell{Apply\\Time} & \specialcell{\% \\ Rej.}\\ 
+                    \hline
+                    \hline
+                         Start & -- &\specialcell{Gaussian Mixture Model (\code{GMM}), Naive Bayes (\code{NB}),\\ Random Forest \code{RF}, Support Vector Machine (\code{SVM}),\\ Decision Tree (\code{DT}), $k$-Nearest-Neighbours (\code{kNN})}&\specialcell{
+                        \code{NB} \\
+                        \code{RF} \\
+                        \code{SVM} \\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            \SI{}{}\\
+                            \SI{}{}\\
+                            \SI{}{}\\
+                        }&\specialcell{
+                            \SI{}{}\\
+                            \SI{}{}\\
+                            \SI{}{}\\
+                        }--&\\
+                    \hline
+                        \specialcell{
+                        Feature\\Selection
+                        }&\specialcell{
+                            $\{F_{N}\in\mathbb{R}^{D_{N}},$\\$N\in\{0,...,9\}\}\in\mathbb{R}^{304}$
+                        }&\specialcell{
+                            $\{F_{N}\in\mathbb{R}^{D_{N}},N\in\{0,...,9\}\}\in\mathbb{R}^{304}$\\
+                            $F_{N}, N\in\{0,...,9\}$\\
+                            $F_{\text{PCA}}\in\mathbb{R}^N,N\in0.8^n\times304,n\in\{0,1,...,12\}$\\
+                            $F_{\text{RFE}}\in\mathbb{R}^N,N\in304-8n,n\in\{0,1,...,35\}$
+                        }&\specialcell{
+                            \code{NB}: $F_{\text{MFCC}}\in \mathbb{R}^{13}$\\
+                            \code{RF}: $F_{\text{RFE}}\in\mathbb{R}^{88}$\\
+                            \code{SVM}: $F_{\text{RFE}}\in\mathbb{R}^{88}$
+                        }&\specialcell{
+                            $0.601$\\
+                            $0.710$\\
+                            $0.745$\\
+                        }&\specialcell{
+                            $0.843$\\
+                            $0.920$\\
+                            $0.928$\\
+                        }&\specialcell{
+                            $0.626$\\
+                            $0.800$\\
+                            $0.831$\\
+                        }&\specialcell{
+                            $0.634$\\
+                            $0.676$\\
+                            $0.728$\\
+                        }&\specialcell{
+                            $0.864$\\
+                            $0.934$\\
+                            $0.935$\\
+                        }&\specialcell{
+                            \SI{20.1}{\milli\second}\\
+                            \SI{17.4}{\second}\\
+                            \SI{21.2}{\minute}\\
+                        }&\specialcell{
+                            \SI{9.6}{\milli\second}\\
+                            \SI{2.49}{\second}\\
+                            \SI{7.78}{\minute}\\
+                        }--&\\
+                    \hline
+                        \specialcell{
+                            Feature\\Window\\Parameters
+                        } &\specialcell{
+                            \code{winlen}, $W=0.025$\\
+                            \code{winstep}, $S=0.01$
+                        }&\specialcell{
+                            $W\in{0.32-0.015^{n},n\in\{0,1,...,7\}}$\\
+                            $S\in{0.16-0.015^{n},n\in\{0,1,...,7\}}$
+                        }&\specialcell{
+                            \code{NB}: $W=0.089, S=0.0445$ \\
+                            \code{RF}: $W=0.058, S=0.029$\\
+                            \code{SVM}: $W=0.058, S=0.029$ 
+                        }&\specialcell{
+                            $0.684$\\
+                            $0.727$\\
+                            $0.756$\\
+                        }&\specialcell{
+                            $0.906$\\
+                            $0.898$\\
+                            $0.917$\\
+                        }&\specialcell{
+                            $0.733$\\
+                            $0.747$\\
+                            $0.827$\\
+                        }&\specialcell{
+                            $0.730$\\
+                            $0.704$\\
+                            $0.736$\\
+                        }&\specialcell{
+                            $0.884$\\
+                            $0.933$\\
+                            $0.939$\\
+                        }&\specialcell{
+                            \SI{4.6}{\milli\second}\\
+                            \SI{4.05}{\second}\\
+                            \SI{98.5}{\second}\\
+                        }&\specialcell{
+                            \SI{20.2}{\milli\second}\\
+                            \SI{956}{\milli\second}\\
+                            \SI{43.6}{\second}\\
+                        }--&\\
+                    \hline
+                        \specialcell{
+                            Classifier\\Hyperparams.
+                        }&\specialcell{
+                            \code{RF}: \code{n\_estimators} $=150$,\\
+                            \code{criterion} $=\text{'gini'}$,\\ 
+                            \code{max\_features} $=\sqrt{304}$,\\
+                            \code{max\_depth} $=\text{None}$, \\
+                            \code{min\_samples\_split} $=2$,\\ 
+                            \code{min\_samples\_leaf} $=1$,\\
+                            \code{leaf\_nodes} $=\text{None}$\\
+                            
+                            \code{SVM:} \code{C} $=1$, \code{gamma}$=1/304$\\ \code{shrinking} $=\text{True}$
+                            
+                        }&\specialcell{
+                            \code{RF}: \code{n\_estimators} $\in\{50,150,200,250,300,$\\$350,400\}$\\
+                            \code{criterion} $\in\{\text{'entropy','gini'}\}$,\\ 
+                            \code{max\_features} $\in\{10,30,50,70,88\}$,\\
+                            \code{max\_depth} $\in\text{None},20,30,40$, \\
+                            \code{min\_samples\_split} $\in\{2,44\}$,\\ 
+                            \code{min\_samples\_leaf} $\in\{1,44\}1$,\\
+                            \code{leaf\_nodes} $\in\{\text{None},2000\}$\\
+                            
+                            \code{SVM:} \code{C} $\in\{1,10,100,1000\}$, \\
+                            \code{gamma} $\in\{0.1,0.01,0.001,0.0001\}$\\ 
+                            \code{shrinking}$\in\{\text{True, False}\}$
+                        }&\specialcell{
+                            \code{NB}: \textit{Initial Values}\\
+                            \code{RF}: \code{n\_estimators}$=200$\\
+                            \code{SVM}: \textit{Initial Values} 
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            $0.899$\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            \SI{5.05}{\second}\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            \SI{1.03}{\second}\\
+                            ''
+                        }--&\\
+                    \hline
+                        \specialcell{
+                            Balancing\\Classes
+                        }&\specialcell{
+                            \code{bal\_cls} $=\text{True}$
+                        }&\specialcell{
+                            \code{bal\_cls} $\in\{\text{True, False}\}$
+                        }&\specialcell{
+                            \code{NB}: $=\text{True}$\\
+                            \code{RF}: $=\text{True}$\\
+                            \code{SVM}: $=\text{True}$
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }--&\\
+                    \hline
+                        \specialcell{
+                            Audio\\Normalisation
+                        }&\specialcell{
+                            \code{zero\_mean} $=\text{False}$\\
+                            \code{unit\_var} $=\text{False}$
+                        }&\specialcell{
+                            \code{zero\_mean} $\in\{\text{True, False}\}$\\
+                            \code{unit\_var} $\in\{\text{True, False}\}$
+                        }&\specialcell{
+                            \code{NB}: \code{zero\_mean} $=\text{False}$,\\
+                            \code{unit\_var} $=\text{False}$\\
+                            \code{RF}: \code{zero\_mean} $=\text{False}$,\\
+                            \code{unit\_var} $=\text{False}$\\
+                            \code{SVM}: \code{zero\_mean} $=\text{False}$,\\
+                            \code{unit\_var} $=\text{False}$\\
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }&\specialcell{
+                            ''\\
+                            ''\\
+                            ''
+                        }--&\\
+                    \hline
+                        \specialcell{
+                            Training Label\\Selection
+                        }&\specialcell{
+                            \code{lbls} $= \text{'0\_5\_notmozz'}$
+                        }&\specialcell{
+                            \code{lbls} $\in$ \{\code{'0\_5\_ismozz', '0\_5\_notmozz',}\\
+                            \code{'sensitive', 'conf', '0\_5\_ignore',}\\
+                            \code{'multiclass'}\}\\
+                            \code{uncert\_votes} $\in$ \{\code{'ismozz',}\\
+                            \code{'notmozz', 'reject', None}\}
+                        }&\specialcell{
+                            \code{NB}: \code{lbls} $=$ \code{'multiclass'}\\
+                            \code{uncert\_votes} $=$ \code{'reject'}\\
+                            \code{RF}: \code{lbls} $=$ \code{'multiclass'}\\
+                            \code{uncert\_votes} $=$ \code{'reject'}\\
+                            \code{SVM}: \code{lbls} $=$ \code{'conf'}\\
+                            \code{uncert\_votes} $=$ \code{None}
+                        }&\specialcell{
+                            $0.655$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            $0.$\\
+                            $0.$\\
+                            $0.$\\
+                        }&\specialcell{
+                            \SI{}{}\\
+                            \SI{}{}\\
+                            \SI{}{}\\
+                        }&\specialcell{
+                            \SI{}{}\\
+                            \SI{}{}\\
+                            \SI{}{}\\
+                        }&\specialcell{
+                            bla
+                        }\\
+                    \hline
+                
+                
+                \end{tabular}
+            \caption{Parameter selection grids and corresponding evaluation scores for each stage of optimisation.}
+            \label{fig:exp-clf-opt-summ-tbl}
+        \end{table}
+    \end{landscape}

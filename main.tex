@@ -23,9 +23,17 @@
 \usepackage{environ}
 \usepackage{fontspec}
 \usepackage{siunitx}
+\sisetup{
+    mode = math,
+    math-rm=\mathsf
+  }               % sans serif font
 \usepackage{pifont}                 % ticks and crosses
 \usepackage{amsmath}
+\usepackage{amssymb}                % maths symbols
 \usepackage[draft]{todonotes}       % for fun todo notes  
+\usepackage[toc,page]{appendix}     % appendix
+\usepackage{pdflscape}               % sideways table
+\usepackage[11pt]{moresize}         % ssmall font size
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
@@ -36,6 +44,17 @@
 %----------------------------------------------------------------------------------------
 %	FORMATTING
 %----------------------------------------------------------------------------------------
+% fonts
+\setmainfont[%
+Path=assets/fonts/,%
+Extension = .ttf,%
+UprightFont = *,%
+BoldFont = *_Bold,%
+ItalicFont = *_Italic,%
+BoldItalicFont = *_Bold_Italic%
+]{Arial}
+
+% general doc stuff
 \def \doublespaceheight {2.0}
 \def \singlespaceheight {1.0}
 \linespread{\doublespaceheight}
@@ -103,7 +122,7 @@
     
     }
     
-\newcommand{\checkmark}{\ding{51}}%
+%\newcommand{\checkmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
     
 \newenvironment{sitemize}
@@ -248,8 +267,14 @@
 	\label{part:conc}
 	    \addsubsec{conc}{further}
 	    \addsubsec{conc}{conclusion}
-	
+
+	\begin{appendices}
+	\label{part:appdx}
+	    \addsubsec{}{appendix}
+	\end{appendices}
+
 	\linespread{1.0}
+	\twN{ok to single space bib?}
 	\printbibliography
 	
 \end{document}
