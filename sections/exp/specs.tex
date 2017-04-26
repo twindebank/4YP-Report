@@ -1,27 +1,60 @@
 \section{Detector Performance Specification}
 \label{sec:exp-spec}
-    restructure this and define cases 1,2,3,etc with differnet needs - say power isnt priprity at this stage, mostly about performance of detector, reference cases specified in intro
-    \subsection{Smartphone Usage}
-    \label{subsec:exp-spec-phone}
-        \begin{sitemize}
-            \item{annoyance if too sensitive}
-            \item{want fairly high time res}
-            \item{etc}
-            \item{therefore specs are ...}
-        \end{sitemize}
-    
-    \subsection{Light-Trap Sound Recording}
-    \label{subsec:exp-spec-trap}
-        \begin{sitemize}
-            \item{purpose to get recordings of mozz when it comes close to trap}
-            \item{therefore want sensitivity high as less cost of false positives}
-            \item{time res doesnt have to be as high, can detect over time window of a minute then decide if theres a mosquito and record}
-        \end{sitemize}
+    The use-cases of a audio-based mosquito detection algorithm given in section \ref{subsec:bg-intro-resinterests} can be broken down and grouped into two broad categories. Numerical specifications are shown in tables \ref{tbl:exp-spec-hirej-tbl} and \ref{tbl:exp-spec-lowrej-tbl}. Power usage is not included in specification design as the primary focus of this report is development of detection algorithms. 
+    \subsection{High Accuracy - High Rejection}
+    \label{subsec:exp-spec-hirej}
+        \begin{wraptable}{r}{0.3\textwidth}
+            \scriptsize
+            \singlespacing
+            \centering
+                \begin{tabular}{ |l||c| } 
+                    \hline
+                    Property & Value \\ 
+                    \hline
+                    \hline
+                    True Positive Rate & $0.99$ \\
+                    True Negative Rate & $0.99$ \\
+                    Rejection & $<30\%$\\
+                    Resolution & \SI{0.1}{\second}\\
+                    \hline
+                \end{tabular}
+            \caption{High accuracy - high rejection specifications.}
+            \label{tbl:exp-spec-hirej-tbl}
+        \end{wraptable}
+        There are some cases where accuracy is more important than the proportion of signals labelled. For example, given a task where the goal is to label a large set of recordings, an automated solution would be of great use if it could classify a majority proportion of the signals with very low uncertainty, and leave the remaining small proportion of the data for manual labelling. Due to the difficult nature of this problem, a classifier is unlikely to ever achieve $100\%$ accuracy based on the fact that four separate label sets for the same signals only agree $77\%$ of the time, this is discussed further in section \ref{subsubsec:exp-clf-ass-trnlabel}. From this, a loose estimate is made that approximately $30\%$ of the predictions from the classifier will be incorrect. If the remaining $70\%$ of the data is classified with a very high certainty, then this reduces the labelling job and therefore the time dedicated to it by $70\%$. Swarm-tracking and data-logging may also benefit from this scheme if chunks of \SI{30}{\second} were recorded onto a cyclic buffer then analysed for a for mosquito presence, if a high-certainty positive sample is contained within the window then data-logging, alerts, or physical trapping mechanisms could be activated. The minimum time resolution required is set to \SI{0.1}{\second} as this is the resolution the labels were provided at.  
         
-    \subsection{Solar Lamp Warning System}
-    \label{subsec:exp-spec-lamp}
-        \begin{sitemize}
-            \item{cant be too many false positives as would be irritating for the user}
-            \item{want to get lowest false negatives as possible}
-            \item{etc. specs are ...}
-        \end{sitemize}
+    \subsection{Good Accuracy - Low Rejection}
+    \label{subsec:exp-spec-lowrej}
+        \begin{wraptable}{r}{0.3\textwidth}
+            \scriptsize
+            \singlespacing
+            \centering
+                \begin{tabular}{ |l||c| } 
+                    \hline
+                    Property & Value \\ 
+                    \hline
+                    \hline
+                    True Positive Rate & $0.95$ \\
+                    True Negative Rate & $0.95$ \\
+                    Rejection & $<10\%$ \\
+                    Resolution & \SI{0.5}{\second}\\
+                    \hline
+                \end{tabular}
+            \caption{Good accuracy - low rejection specifications.}
+            \label{tbl:exp-spec-lowrej-tbl}
+        \end{wraptable} 
+        In the case of the smartphone and solar lamp detection implementations, it is desirable to minimise false positives to preserve user patience. False negatives are also a concern as an undetected mosquito could be dangerous depending on the level of trust placed onto the device by the user. Very high accuracies are not capable low levels of rejection, therefore both the desired true positive rate and true negative rate will be set at $0.95$, and rejection at $<10\%$. Rejected samples could be indicated on the device to warn the user that mosquito presence is uncertain and urge them to be in a higher state of awareness. Time resolution should be half a second at the minimum, any less and the delay becomes noticeable and reduces the usefulness of the device.
+    % \label{subsec:exp-spec-trap}
+    %     \begin{sitemize}
+    %         \item{purpose to get recordings of mozz when it comes close to trap}
+    %         \item{therefore want sensitivity high as less cost of false positives}
+    %         \item{time res doesnt have to be as high, can detect over time window of a minute then decide if theres a mosquito and record}
+    %     \end{sitemize}
+        
+    % \subsection{Solar Lamp Warning System}
+    % \label{subsec:exp-spec-lamp}
+    %     \begin{sitemize}
+    %         \item{cant be too many false positives as would be irritating for the user}
+    %         \item{want to get lowest false negatives as possible}
+    %         \item{etc. specs are ...}
+    %     \end{sitemize}
