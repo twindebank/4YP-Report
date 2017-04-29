@@ -3,9 +3,14 @@
 
     \subsection{Over Classifiers}
     \label{subsec:exp-agg-clf}
-        comparison of methods and results here
+        To increase predictive performance further, the classifiers are combined using simple methods to aggregate results across the respective output probabilities, detailed further in REF. Three methods, \code{max}, \code{mean}, and \code{median}, are trialed, with results shown in appendix \ref{sec:appdx-agg}. Of the three methods tested, taking the mean probabilities over the the three sets of probabilities provides the best results, with resultant performance of the aggregated classifiers on par with the performance of the SVM before any post-processing. 
     
     \subsection{Over Time and Classifiers}
     \label{subsec:exp-agg-time}
-        comparison of methods and results here
+        To improve results further, probabilities are aggregated over time as well as classifiers, much like the moving average filtering discussed in section \ref{subsec:exp-postproc-filt}. A range of kernel sizes are tested and the best kernel size is determined. Compared to the SVM, the smoothed aggregated results are again very similar.
+        
+    \subsection{Over Time and Classifiers with Rejection}
+    \label{subsec:exp-agg-rej} 
+        Up to now, aggregation has shown no real advantage over using the SVM alone. However, performing rejection of uncertain results on the aggregated set of predictions, after combining over time, substantially outperforms the rejection on the classifiers in isolation. Performing rejection individually then combining the results does not provide any gains. In order to meet accuracy specifications, the rejection threshold has exceeded specifications I and II by $2.9\%$ and $5.7\%$ respectively. 
    
+  \twN{probably need citations for existing combination classifiers - use the similar paper which also combines\\can show how smoothed rejection differs to unsmoothed, big chunks etc}

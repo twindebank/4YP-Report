@@ -325,13 +325,13 @@
                             \specialcell{
                                 Training Label\\Selection
                             }&\specialcell{
-                                \code{lbls} $= \text{'0\_5\_notmozz'}$
+                                \code{lbls} $= \text{'0\_5\_not\text{mozz}'}$
                             }&\specialcell{
-                                \code{lbls} $\in$ \{\code{'0\_5\_ismozz', '0\_5\_notmozz',}\\
+                                \code{lbls} $\in$ \{\code{'0\_5\_is\text{mozz}', '0\_5\_not\text{mozz}',}\\
                                 \code{'sensitive', 'conf', '0\_5\_ignore',}\\
                                 \code{'multiclass'}\}\\
-                                \code{uncert\_votes} $\in$ \{\code{'ismozz',}\\
-                                \code{'notmozz', 'reject', None}\}
+                                \code{uncert\_votes} $\in$ \{\code{'is\text{mozz}',}\\
+                                \code{'not\text{mozz}', 'reject', None}\}
                             }&\specialcell{
                                 \code{NB}: \code{lbls} $=$ \code{'multiclass'}\\
                                 \code{uncert\_votes} $=$ \code{'reject'}\\
@@ -376,7 +376,7 @@
                     \end{tabular}
                 }
             \caption{Parameter selection grids and corresponding evaluation scores for each stage of optimisation.}
-            \label{fig:exp-clf-opt-summ-tbl}
+            \label{app:exp-clf-opt-summ-tbl}
         \end{table}
     \end{landscape}
     
@@ -397,7 +397,9 @@
                         }&\specialcell{
                             --
                         }&\specialcell{
-                            --
+                            \code{NB}:\\
+                            \code{RF}:\\
+                            \code{SVM}:
                         }&\specialcell{
                             $0.655$\\
                             $0.695$\\
@@ -421,18 +423,20 @@
                         }&\specialcell{
                             $4.62$\\
                             $5.46$\\
-                            $0$
+                            $0.00$
                         }\\
                     \hline
                         \specialcell{
-                            Probability\\Moving\\Average
+                            Probability\\
+                            Moving\\
+                            Average
                         }&\specialcell{
                             $K_{\text{f}}\in1001 - 0.65^n,n\in\{0,1,...,14\},$\\
                             $f\in\{\text{mean,med}\}$\\
                         }&\specialcell{
                             \code{NB}: $K_{\text{mean}}=179$\\
                             \code{RF}: $K_{\text{med}}=275$\\
-                            \code{SVM}: $K_{\text{med}}=179$\\
+                            \code{SVM}: $K_{\text{med}}=179$
                         }&\specialcell{
                             $0.772$\\
                             $0.771$\\
@@ -454,45 +458,229 @@
                             $0.949$\\
                             $0.964$
                         }&\specialcell{
-                            $0$\\
-                            $0$\\
-                            $0$
+                            $0.00$\\
+                            $0.00$\\
+                            $0.00$
                         }\\
                     \hline
                         \specialcell{
-                            Start
+                            Asymmetrical\\
+                            Rejection
                         }&\specialcell{
-                            --
+                            $\{T_{\text{mozz}},T_{\text{nomozz}}\}\in0.5+0.1\times n,n\in\{0,1,...,10\}$
                         }&\specialcell{
-                            --
+                            \code{NB}$_{\text{I}}$: $T_{\text{nomozz}} = 0.75,T_{\text{mozz}} = 0.70$\\
+                            \code{NB}$_{\text{II}}$: $T_{\text{nomozz}} = 0.60,T_{\text{mozz}} = 0.50$\\
+                            \code{RF}$_{\text{I}}$: $T_{\text{nomozz}} = 0.65,T_{\text{mozz}} = 0.65$\\
+                            \code{RF}$_{\text{II}}$: $T_{\text{nomozz}} = 0.55,T_{\text{mozz}} = 0.50$\\
+                            \code{SVM}$_{\text{I}}$: $T_{\text{nomozz}} = 0.95,T_{\text{mozz}} = 0.80$\\
+                            \code{SVM}$_{\text{II}}$: $T_{\text{nomozz}} = 0.75,T_{\text{mozz}} = 0.65$\\
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $0.766$\\
+                            $0.686$\\
+                            $0.811$\\
+                            $0.736$\\
+                            $0.878$\\
+                            $0.811$
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $0.935$\\
+                            $0.905$\\
+                            $0.950$\\
+                            $0.921$\\
+                            $0.940$\\
+                            $0.925$
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $0.754$\\
+                            $0.709$\\
+                            $0.844$\\
+                            $0.793$\\
+                            $0.888$\\
+                            $0.849$
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $0.791$\\
+                            $0.754$\\
+                            $0.789$\\
+                            $0.741$\\
+                            $0.879$\\
+                            $0.790$
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $0.942$\\
+                            $0.882$\\
+                            $0.963$\\
+                            $0.924$\\
+                            $0.967$\\
+                            $0.958$
                         }&\specialcell{
-                            $0.$\\
-                            $0.$\\
-                            $0.$
+                            $28.6$\\
+                            $9.67$\\
+                            $27.9$\\
+                            $9.46$\\
+                            $29.4$\\
+                            $9.33$
+                        }\\
+                    \hline
+                        \specialcell{
+                            Moving\\
+                            Average with\\
+                            Rejection
+                        }&\specialcell{
+                            $\{T_{\text{mozz}},T_{\text{nomozz}}\}\in0.5+0.1\times n,n\in\{0,1,...,10\}$
+                        }&\specialcell{
+                            \code{NB}$_{\text{I}}$: $T_{\text{nomozz}} = 0.75,T_{\text{mozz}} = 0.60$\\
+                            \code{NB}$_{\text{II}}$: $T_{\text{nomozz}} = 0.60,T_{\text{mozz}} = 0.50$\\
+                            \code{RF}$_{\text{I}}$: $T_{\text{nomozz}} = 0.70,T_{\text{mozz}} = 0.55$\\
+                            \code{RF}$_{\text{II}}$: $T_{\text{nomozz}} = 0.60,T_{\text{mozz}} = 0.50$\\
+                            \code{SVM}$_{\text{I}}$: $T_{\text{nomozz}} = 0.95,T_{\text{mozz}} = 0.80$\\
+                            \code{SVM}$_{\text{II}}$: $T_{\text{nomozz}} = 0.80,T_{\text{mozz}} = 0.60$\\
+                        }&\specialcell{
+                            $0.890$\\
+                            $0.806$\\
+                            $0.886$\\
+                            $0.806$\\
+                            $0.920$\\
+                            $0.869$
+                        }&\specialcell{
+                            $0.975$\\
+                            $0.955$\\
+                            $0.967$\\
+                            $0.939$\\
+                            $0.977$\\
+                            $0.960$
+                        }&\specialcell{
+                            $0.879$\\
+                            $0.831$\\
+                            $0.889$\\
+                            $0.834$\\
+                            $0.950$\\
+                            $0.915$
+                        }&\specialcell{
+                            $0.981$\\
+                            $0.857$\\
+                            $0.948$\\
+                            $0.807$\\
+                            $0.911$\\
+                            $0.855$
+                        }&\specialcell{
+                            $0.949$\\
+                            $0.924$\\
+                            $0.944$\\
+                            $0.944$\\
+                            $0.981$\\
+                            $0.969$
+                        }&\specialcell{
+                            $29.8$\\
+                            $7.00$\\
+                            $28.9$\\
+                            $8.75$\\
+                            $25.3$\\
+                            $8.68$
                         }\\
                     \hline
                 \end{tabular}
             }
         \caption{Parameter selection grids and corresponding evaluation scores for each stage of optimisation.}
-        \label{tbl:exp-postproc}
+        \label{tbl:app-postproc}
+    \end{table}
+    \twN{embolden results that meet spec}
+\section{Aggregation}
+\label{sec:appdx-agg}
+    \begin{table}[ht]
+        \ssmall
+        \singlespacing
+        \centering
+            \scalebox{0.8}{
+                \begin{tabular}{|l|l|l|c|c|c|c|c|c|} 
+                    \hline
+                    \specialcell{Post-Processing\\Stage} &  \specialcell{Parameter Grid} & Selected Parameter & F$_1$ & \specialcell{AUC\\ROC} & \specialcell{AUC\\PR} & TPR & TNR & \specialcell{\% \\ Rej.}\\ 
+                    \hline
+                    \hline
+                        \specialcell{
+                            Aggregation\\
+                            Method
+                        }&\specialcell{
+                            Method, $M\in\{\text{\code{mean}, \code{median}, \code{max}}\}$
+                        }&\specialcell{
+                            $M=$ \code{mean}
+                        }&\specialcell{
+                            $0.754$
+                        }&\specialcell{
+                            $0.932$
+                        }&\specialcell{
+                            $0.830$
+                        }&\specialcell{
+                            $0.731$
+                        }&\specialcell{
+                            $0.941$
+                        }&\specialcell{
+                            $0.00$
+                        }\\
+                    \hline
+                    \specialcell{
+                            Aggregation\\
+                            Kernel Size
+                        }&\specialcell{
+                            $K_{\text{mean}}\in3+14*n,n\{0,1,...,14\}$
+                        }&\specialcell{
+                            $K_{\text{mean}}=155$
+                        }&\specialcell{
+                            $0.807$
+                        }&\specialcell{
+                            $0.961$
+                        }&\specialcell{
+                            $0.901$
+                        }&\specialcell{
+                            $0.763$
+                        }&\specialcell{
+                            $0.963$
+                        }&\specialcell{
+                            $0.00$
+                        }\\
+                    \hline
+                        \specialcell{
+                            Aggregation\\
+                            and Rejection
+                        }&\specialcell{
+                            $K_{\text{mean}}=155$\\
+                            $\{T_{\text{mozz}},T_{\text{nomozz}}\}\in0.5+0.1\times n,n\in\{0,1,...,10\}$
+                        }&\specialcell{
+                            % spec$_{I}$: $T_{\text{nomozz}}=0.80, T_{\text{mozz}}=0.60$\\
+                            % spec$_{II}$: $T_{\text{nomozz}}=0.65, T_{\text{mozz}}=0.50$
+                            spec$_{I}$: $T_{\text{nomozz}}=0.80, T_{\text{mozz}}=0.65$\\
+                            spec$_{II}$: $T_{\text{nomozz}}=0.72, T_{\text{mozz}}=0.50$
+                        }&\specialcell{
+                            % $0.956$\\
+                            % $0.858$
+                            $0.973$\\
+                            $0.878$
+                        }&\specialcell{
+                            % $0.997$\\
+                            % $0.977$
+                            $0.998$\\
+                            $0.989$
+                        }&\specialcell{
+                            % $0.987$\\
+                            % $0.935$
+                            $0.997$\\
+                            $0.954$
+                        }&\specialcell{
+                            % $0.993$\\
+                            % $0.860$
+                            $0.993$\\
+                            $0.900$
+                        }&\specialcell{
+                            % $0.977$\\
+                            % $0.959$
+                            $0.988$\\
+                            $0.957$
+                        }&\specialcell{
+                            % $31.0$\\
+                            % $10.3$
+                            $32.9$\\
+                            $15.7$
+                        }\\
+                    \hline
+                \end{tabular}
+            }
+        \caption{Parameter selection grids and corresponding evaluation scores for each stage of optimisation.}
+        \label{tbl:app-agg}
     \end{table}
