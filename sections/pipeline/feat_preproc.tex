@@ -1,24 +1,98 @@
-\section{Pre-processing Features}
+\section{Pre-Processing Features}
 \label{sec:pl-featpreproc}
+    Before using the features for classification input, there are a number of techniques that can be employed to increase both the speed and quality of predictions. Discussion and evaluation, in regards to mosquito detection, of the methods detailed in this section, are left to section \ref{sec:exp-clf}.
 
     \subsection{Normalisation}
     \label{subsec:pl-featpreproc-norm}
-        \begin{sitemize}
-            \item{importance of normalisation and reusing constants etc}
-        \end{sitemize}
+        Normalisation, also known as feature (re)scaling or standardisation, can be carried out in a range of ways. It is important for some classification algorithms that make decisions based on a distance metric in the feature domain; if one feature is on a larger scale to another, then the smaller-scale feature may have less influence in classification decisions, depending on the classifier.     
+        The simplest and most common method is to apply an affine transform which 'centres' and 'whitens' each column of the feature matrix, meaning the mean is transformed to zero and the variance is scaled to unit variance.
+        
+        This process comes with a caveat; if the whole feature matrix is normalised, then split into training and testing sets, then information from the test set 'leaks' into the training set. Applying the scaling individually to the training and test set is also incorrect as the transformations applied to each matrix will be different, depending on the data, leading to high sensitivity of outliers. Instead, the training feature matrix should be normalised, then the means and variances reused for the test set, meaning the same transformation is applied and scaling is correct.
+        \twN{Need to show algorithm/maths?}
 
     \subsection{Feature Selection}
     \label{subsec:pl-featpreproc-sel}
-        \begin{sitemize}
-            \item{methods of feature selection}
-            \item{some maths}
-            The degree of dimensional reduction is determined by iterating these algorithms using a random forest. The random forest classifier many times faster than the SVM and also performs considerabley better than the naive Bayes classifier. Using the feature importance attribute, RFE iterates and removes features of least importance etc...
+        The quality and reliability of predictions using traditional classifiers rely heavily on the input features. One intuitive approach is to generate a large set of intrinsic features, such as those listed in table \ref{tbl:pl-feats-audio-feattbl}, and use them all. Problems with this approach include slower training and classification time as well as reduced performance in some cases, compared to using single features in isolation due to uninformative features and information redundancy. The selection of salient features is therefore an important step preceding classification. 
+        
+        \begin{listing}[ht]
+            \begin{minted}[frame=single,framesep=2mm, bgcolor=black!2, fontsize=\footnotesize, linenos]{python}
+import numpy as np
+def rfe(featmat_trn, featmat_tst, truth_trn, truth_tst, stepsize, classifier):
+    n_feats, scores = featmat_trn.size[1], []
+    steps = np.arange(1,n_feats,stepsize)[::-1]             # linear decreasing steps
+    for n in steps:          
+        classifier.fit(featmat_trn,truth_trn)               # fit classifier object
+        classifier.predict(featmat_tst)                     # generate predictions
+        scores.append(calc_score(featmat_tst,truth_tst))    # test predictions and store score
+        feat_imprt = classifier.feature_importances         # get feature importances
+        min_imprt = \                                 # get indices of least important features
+            [feat_imprt.index(minval) for minval in reversed(sorted(feat_imprt))[0:stepsize]] 
+        featmat_trn = np.delete(featmat_trn,min_imprt,axis=1) 
+        featmat_tst = np.delete(featmat_tst,min_imprt,axis=1)
+    return steps, scores
+            \end{minted}
+            \caption{Recursive Feature Elimination}
+            \label{code:pl-featpreproc-sel-rfe}
+        \end{listing}
+        
+        Two methods of feature selection are explored in this report; recursive feature elimination, \textit{RFE}; and feature-space truncation using principal component analysis, \textit{PCA}. Recursive feature elimination is a method that can be used with any classifier that reveals how it has used each feature to make a decision, i.e. how important it decides each feature is. Of the six implemented classifiers, two classifier implementations include attributes of this nature: the SVM with a linear kernel \cite{Guyon2002}, and the random forest \cite{Granitto2006}. Each iteration of RFE requires results from the previous iteration, meaning the process cant be parallelised. This limits RFE to the random forest only, as the training and prediction times for the linear SVM are too high to be practical. Random forest RFE is first described by \textcite{Granitto2006} and outlined in listing \ref{code:pl-featpreproc-sel-rfe} in simplified Python. MozzPy actually implements scikit-learn's function \code{RFE\_CV} \cite{Pedregosa2012}, which includes cross-validation code, this greatly simplifies code at the cost of being limited to optimise in regards to only one scoring metric. The reduced feature matrix that gives the best results is then chosen and the indices for features to be removed are saved.
+        
+        
+        Dimensional reduction using PCA is the second implemented feature selection algorithm. PCA can be seen as a way of transforming the feature matrices by projecting them onto their principal axes. Given a centered feature matrix $X\in\mathbb{R}^{n\times d}$ of dimensions, the first step is to compute the covariance or correlation (normalised covariance) matrix, given by
+        \begin{align}
+            \matr{C} = \matr{X}^\text{T}\matr{X}/(n-1).
+        \end{align}
+        % As this is a symmetric matrix, it can be diagonalised using singular value decomposition:
+        Performing singular value decomposition on the feature matrix gives
+        \begin{align}
+            \matr{X} = \matr{USV}^\text{T},
+        \end{align}
+        where $\matr{S}$ is the diagonal matrix of singular values, $\matr{U}$ consists of the $d$ orthonormal eigenvectors (left singular vectors) of $\matr{AA}^\text{T}$ corresponding to the $d$ largest eigenvalues; similarly, $\matr{V}$ consists of the orthonormal eigenvectors (right singular vectors) of $\matr{A}^\text{T}\matr{A}$. By substituting this into the covariance matrix,
+        \begin{align}
+            \matr{C} &= \matr{VSU}^\text{T}\matr{USV}^\text{T}/(n-1)\\
+              &= \matr{V}\frac{\matr{S}^2}{(n-1)}\matr{V}^\text{T}.
+        \end{align}
+        As $S^2$ is diagonal, this means the right singular vectors, $V$, are principal components of the covariance matrix and the eigenvalues are given by $\lambda_i = s^2_i/(n-1)$. The principal components are then calculated,
+        \begin{align}
             
-            done own implementation rather than sklearn so can graph output and svm too slow on this dataset
-            for svm to be reasonable it has to take steps of 30ish features at a time, rf performance muchbeyyer also other methods wont give much more performance improvement, 
-            %Granitto2006 - original RF-RFE
-            %Guyon2002 - original SVM-RFE, more traditional
-        \end{sitemize}
+        \end{align}
+        % {
+        % \singlespacing
+        %     \begin{algorithm}[H]
+        %         \KwData{\code{classifier,featman\_trn, featmat\_tst, truth\_trn, truth\_tst, step}}
+        %         \KwResult{Reduced feature set.}
+        %         \code{n\_feats = featmat\_trn.size[1]}\;
+        %         \for{\code{n} \in \{\code{n_cols,n_cols-step, ..., 1\}}}{
+        %             \code{classifier.fit(featmat\_trn, truth\_trn)}\;
+        %             \code{res = classifier.predict(featmat\_tst, truth\_tst)}
+                    
+        %         }
+                
+        %         % initialization\;
+        %         % \While{While condition}{
+        %         %     instructions\;
+        %         %     \eIf{condition}{
+        %         %         instructions1\;
+        %         %         instructions2\;
+        %         %     }{
+        %         %         instructions3\;
+        %         %     }
+        %         % }
+        %         \caption{Recursive Feature Elimination}
+        %         \label{alg:pl-featpreproc-sel-rfe}
+        %     \end{algorithm}
+        % }
+    
+        % \begin{sitemize}
+        %     \item{methods of feature selection}
+        %     \item{some maths}
+        %     The degree of dimensional reduction is determined by iterating these algorithms using a random forest. The random forest classifier many times faster than the SVM and also performs considerabley better than the naive Bayes classifier. Using the feature importance attribute, RFE iterates and removes features of least importance etc...
+            
+        %     done own implementation rather than sklearn so can graph output and svm too slow on this dataset
+        %     for svm to be reasonable it has to take steps of 30ish features at a time, rf performance muchbeyyer also other methods wont give much more performance improvement, 
+        %     %Granitto2006 - original RF-RFE
+        %     %Guyon2002 - original SVM-RFE, more traditional
+        % \end{sitemize}
         
     
     \subsection{Balancing Classes}

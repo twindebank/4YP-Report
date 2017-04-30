@@ -34,7 +34,14 @@
 \usepackage[toc,page]{appendix}     % appendix
 \usepackage{pdflscape}               % sideways table
 \usepackage[11pt]{moresize}         % ssmall font size
-
+% \usepackage[ruled,linesnumbered]{algorithm2e}  % algorithm typesetting
+\usepackage{minted}
+% [frame=lines,
+% framesep=2mm,
+% baselinestretch=1.2,
+% bgcolor=LightGray,
+% fontsize=\footnotesize,
+% linenos]
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
@@ -75,6 +82,9 @@ BoldItalicFont = *_Bold_Italic%
 
 % table padding
 \renewcommand{\arraystretch}{1.2}
+
+% algebra formatting
+\newcommand{\matr}[1]{\mathbf{#1}}
 
 %----------------------------------------------------------------------------------------
 %	DIAGRAM FORMATS
