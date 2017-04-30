@@ -2,25 +2,233 @@
 \label{sec:pl-feats}
     \subsection{Feature Definition}
     \label{subsec:pl-feats-def}
-        \begin{sitemize}
-            \item{explain what a feature is and why needed}
-        \end{sitemize}
+        When using traditional classifiers, it is important that the input data for training and testing classifiers is descriptive of the classification problem being solved. The success of traditional machine learning algorithms depend upon the predictive attributes of the input features; a feature being something that describes a measurable property of a phenomenon being observed \cite{Bishop2006}. Given a time-series signal, a large set of features may be generated to describe and highlight characteristics of the data. The Culex \textit{q.} dataset is comprised of audio signals and labels only, so features must be extracted from the audio signals. These are derived from the signal, so are termed as \textit{intrinsic} features, \textit{extrinsic} features may also be used such as the time of recording, age of mosquito and location of recording; but, they are unavailable for this dataset.
         
     \subsection{Audio Features}
     \label{subsec:pl-feats-audio}
-        \begin{sitemize}
-            \item{list the implemented features with short descriptions}
-            \item{emphasise important ones eg spectrogram, mfcc, etc}
-            \item{some maths}
-        \end{sitemize}
+        \begin{table}[ht]
+            \ssmall
+            \singlespacing
+            \centering
+            % \scalebox{0.8}{
+                \begin{tabular}{|l|l|l|c|c|c|} 
+                    \hline
+                    Name & Description & Default Parameters & Type & Dim. & \specialcell{Code\\Source}\\
+                    \hline
+                    \hline
+                        \specialcell{
+                            Hertz-Magnitude\\ Spectrum
+                        }&\specialcell{
+                            The magnitude of a frequency-domain signal\\
+                            representation based on an efficient implementation of \\
+                            the Discrete Fourier Transform (DFT), the Fast Fourier \\
+                            Transform (FFT). More detail in section \ref{subsec:bg-litreview-mozz}.\\
+                        }&\specialcell{
+                            \code{winlen} $=0.025$: size of feature \\windows (s)\\
+                            \code{winstep} $=0.01$: step size between \\windows (s)\\
+                            \code{nfft} $=512$: length of FFT to use
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{257}$
+                        }&\specialcell{
+                            \cite{Lyons}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Mel-Magnitude\\
+                            Spectrum
+                        }&\specialcell{
+                            Frequency-domain signal representation corresponding\\
+                            to the subjective human perception of pitch \cite{Stevens1937}.\\
+                            The hertz spectrum iss mapped to the\\
+                            mel-spectrum using the (non-unique) relationship\\
+                                $m = 2595\log_{10}(1+f/700)$ \cite{OShaughnessy1987}.\\
+                        }&\specialcell{
+                            \code{low\_frq} $=0$: lower frequency bound \\(Hz)\\
+                            \code{n\_flt} $=26$: number of mel filterbank \\fitlers\\
+                            \code{delta} $=0$: spectral slicing parameter\\
+                            \code{a\_min} $=-100$: limit for min amplitude\\
+                            \code{a\_max} $=100$: limit for max amplitude\\
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{26}$
+                        }&\specialcell{
+                            \cite{Zilli2016,Lyons}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Mel-Frequency\\
+                            Cepstral\\Coefficients
+                        }&\specialcell{
+                            Mel-scale frequencies converted back into a psuedo-time \\
+                            domain (cepstrum) by taking the discrete cosine transform\\
+                            of the logarithm of each mel-frequency, where amplitudes\\
+                            are taken as coefficients.
+                        }&\specialcell{
+                            \code{nmfccs} $=13$: number of coefficients\\ to generate\\
+                            \code{a\_min} $=-100$\\
+                            \code{a\_max} $=100$\\
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{13}$
+                        }&\specialcell{
+                            \cite{Zilli2016,Lyons}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Zero-Crossing\\
+                            Rate
+                        }&\specialcell{
+                            Rate at which the raw audio signal changes sign:\\
+                            $zcr = \frac{1}{T-1}\sum^{T-1}_{t=1}1_{\mathbb{R}_{<0}}(s_t,s_{t-1})$ \cite{Chen1988}.
+                        }&\specialcell{
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Temporal
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Energy
+                        }&\specialcell{
+                            Window-normalised sum of squares of raw signal values:\\
+                            $E=\frac{1}{T}\sum_{t=0}^{T-1}s_t^{2}$.
+                        }&\specialcell{
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Temporal
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Entropy of\\
+                            Energy
+                        }&\specialcell{
+                            Measure of abrupt changes in signal energy over \\
+                            sub-windows: $H_E = -\sum_{sw}E_{sw}\times\log_2{E_{sw}}$
+                        }&\specialcell{
+                            \code{n\_subwins} $=10$\\
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Temporal
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Spectral Centroid\\
+                            and Spread
+                        }&\specialcell{
+                            The spectral centroid characterises the 'centre of mass'\\
+                            of the spectrum by taking the mean of the frequencies\\
+                            weighted by their magnitudes: $SC = \frac{\sum_{n}f(n)S(n)}{\sum_{n}S(n)}$ \cite{Grey1978}.\\
+                            The spectral spread is a measure of signal bandwidth: \\
+                            $SS = \frac{\sum_{n}(f(n) - SC)^2S(n)}{\sum_{n}S(n)}$ \cite{Grey1978}.
+                        }&\specialcell{
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{2}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Spectral Entropy
+                        }&\specialcell{
+                            Entropy of the normalised spectral energies for a set of \\
+                            sub-frames: $H_S = -\sum_{sw}\frac{S_{sw}^2}{\sum_{n}S(n)^2}\times\log_2{\frac{S_{sw}^2}{\sum_{n}S(n)^2}}$
+                        }&\specialcell{
+                            \code{n\_subwins} $=10$\\
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Spectral Flux
+                        }&\specialcell{
+                            Squared difference of the normalised spectra magnitudes \\
+                            for two successive frames: \\
+                            $\phi = \sum_{m}(\frac{S_w(m)}{\sum_{n}S_w(n)} - \frac{S_{w-1}(m)}{\sum_{n}S_{w-1}(n)})^2 $
+                        }&\specialcell{
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$\\
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                        \specialcell{
+                            Spectral Rolloff
+                        }&\specialcell{
+                            The frequency at which $90\%$ of the spectral magnitude\\
+                            distribution lies below: $SR=K$,\\
+                            where $\sum_{f=0}^{K} E_K= 0.9\sum_{f=0}^{f_{MAX}}$
+                        }&\specialcell{
+                            \code{winlen} $=0.025$\\
+                            \code{winstep} $=0.01$\\
+                            \code{ratio} $=0.01$: ratio of magnitude \\distribution
+                        }&\specialcell{
+                            Spectral
+                        }&\specialcell{
+                            $\mathbb{R}^{1}$
+                        }&\specialcell{
+                            \cite{Giannakopoulos2015}
+                        }\\
+                    \hline
+                \end{tabular}
+            % }
+            \caption{Summary of features implemented in MozzPy.}
+            \label{tbl:pl-feats-audio-feattbl}
+        \end{table}
+        \twN{need to make equations more consistent and define terms}
+        Ten features are selected to be used for this application, giving a feature matrix of dimension $\mathbb{R}^{304}$. Features have been selected based on a number of sources; a similar study with pseudo-acoustic sensors \cite{Silva2013}, previous research in generic species identification \cite{Zilli2016} and the features available in both the 'pyAudioAnalysis' \cite{Giannakopoulos2015} and 'python\_speech\_features' \cite{Lyons} libraries. Each feature calculated on a window-by window basis, determined by the parameters \code{winlen} and \code{winstep} which dictate the size of the window in seconds and the size of distance between each window in seconds respectively. 
+        The chosen features are summarised in table \ref{tbl:pl-feats-audio-feattbl}, where the name, description, type, dimension and source is given for each feature. These have been adapted from existing code to integrate within the MozzPy framework.
+        % \begin{sitemize}
+        %     \item{list the implemented features with short descriptions}
+        %     \item{emphasise important ones eg spectrogram, mfcc, etc}
+        %     \item{some maths}
+        % \end{sitemize}
         
     \subsection{Software Implementation}
     \label{subsec:pl-feats-software}
-        \begin{sitemize}
-            \item{modularity}
-            \item{how features are stored}
-            \item{default values, from davs code and that site list}
-        \end{sitemize}
+        Feature extractors can be added to MozzPy with ease. The interface is depicted in figure X, with the inputs and expected outputs shown.
+        Extracted features are stored in \code{Feature} objects which are in turn stored in a \code{FeatureSet} object. \code{Feature} objects contain individual feature attributes as well as methods to split, merge and sort; whereas a \code{FeatureSet} object provides methods and attributes to aid in management of the entire feature-space. At this stage, the features are not ready for use in classification.  
+        % \begin{sitemize}
+        %     \item{interface}
+        %     \item{modularity}
+        %     \item{how features are stored}
+        %     % \item{default values, from davs code and that site list}
+        % \end{sitemize}
         
         % defaults: https://github.com/jameslyons/python_speech_features
   
