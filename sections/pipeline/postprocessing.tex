@@ -1,17 +1,14 @@
 \section{Post-Processing}
 \label{sec:pl-postproc}
-
-    \subsection{Median Filter}
-    \label{subsec:pl-postproc-med}
-        \begin{sitemize}
-            \item{explain how median filtering of labels can help}
-        \end{sitemize}
+    % This section discusses the post-processing techniques available in the 'MozzPy' package, specifics of the techniques in relation to mosquito detection are explored in section \ref{sec:exp-postproc}.
+    \subsection{Filtering}
+    \label{subsec:pl-postproc-filt}
+    \twN{fig here}
+        Figure X shows a sample output from an X classifier. This is a time series of votes on whether a mosquito is present in each sample or not. Because predictions are made on a sample-by-sample basis, results are contain high levels of noise. This is not the way a human predicts things, rather they label in much longer pulses due to the prior knowledge that the mosquito exists in physical space and must travel in and out of range of the microphone. From this prior it can be inferred that a $0$ prediction is much more likely to be preceded by $0$s, and a $1$ prediction will be much more likely to be preceded by $1$s; it is only the edge cases of the pulses where this is not true. 
         
-    \subsection{Moving Average Filter}
-    \label{subsec:pl-postproc-avg}
-        \begin{sitemize}
-            \item{explain how moving average filtering of probabilities can help}
-        \end{sitemize}
+        This prior can be exploited in the form of a moving average filter. A simple rolling median filter could be applied to the output predictions, essentially taking the a majority vote at each window as it rolls across the signal, but then the probabilities associated with the predictions are disjointed, meaning rejection can no longer be applied and metrics that require probabilities are unable to be calculated. Instead, a moving average filter is applied over the probabilities and the labels are recalculated by thresholding at a decision boundary of $0.5$.
+        
+        Two filters are implemented, a median filter and a mean filter. Coded to deal with nan values. bbla bla
         
     \subsection{Asymmetrical Rejection}
     \label{subsec:pl-postproc-rej}
