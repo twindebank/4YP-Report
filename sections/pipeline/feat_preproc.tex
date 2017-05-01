@@ -85,12 +85,5 @@ def pca_reduce(featmat_trn, featmat_tst, truth_trn, truth_tst, steps, classifier
     \subsection{Software Implementation}
     \label{subsec:pl-featpreproc-software}
         Feature pre-processers are modular; inputs are the feature matrix, pre-processing arguments, feature information such as names and lengths, and any previous pre-processing data such as a fitted PCA object or normalisation constants from the training data.
-        Once audio files, features and labels are imported and stored into a \code{DataSet} object, a \code{ClassiSet} object is initialised and subsequently trained using a split \code{DataSet}. On calling of the \code{train()} method, selected features are taken from the \code{FeatureSet} and pre-processed according to the input arguments, where the final form passed to the classifier is a numpy array with rows corresponding to samples and columns corresponding to features. 
-        
-       
-        \begin{sitemize}
-            \item{called at classification time, takes selected feature objects, preprocesses and stores in feature matrix which is passsed to classiset}
-            \item{modularity}
-            \item{how preprocessed features stored}
-        \end{sitemize}
+        Once audio files, features and labels are imported and stored into a \code{DataSet} object, a \code{ClassiSet} object is initialised and subsequently trained using a split \code{DataSet}. On calling of the \code{train()} method, selected features are taken from the \code{FeatureSet} and pre-processed according to the input arguments, where the final form passed to the classifier is a numpy array with rows corresponding to samples and columns corresponding to features. Every random operation including and subsequent to this stage is seeded with the same random seed to ensure results are repeatable.
     

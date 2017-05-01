@@ -3,14 +3,41 @@
 
     \subsection{Supervised Machine Learning}
     \label{subsec:pl-clf-sup}
-        \begin{sitemize}
-            \item{big section here, introduce and justify the algorithms used as well as other options that have not been used}
-            \item{justify no NN because they v data hungry  (Moore et al. 1986; Moore and Miller 2002; Li et al. 2009) [Flying Insect Classification with Inexpensive}
-            \item{compare unsupervised machine learning and why havent used}
-            \item{talk about native/none native multiclass handling}
-            \item{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1397873/ - good svm}
-            \item{many implemented but only 3 used, reasons in sec XXX}
-        \end{sitemize}
+        The nature of this problem, desiring labels from data given labelled data, presents itself to the vast area of supervised machine learning. Machine learning is a data-driven approach which differs to classical algorithms. Instead of, for example, an algorithm that runs peak detection over a frequency representation of a signal looking for peaks in a particular place, a supervised data-driven approach will learn a function, $f$ that maps inputs, $X_i, i\in\{1,...,d\}$, where \textit{d} is the dimension of the feature-space, to the desired class labels, $y_k,k\in\in\{1,...,C\}$. Supervised machine learning is a subset of machine learning in which requires labelled examples; whereas, unsupervised learning draws inferences from data to learn latent structures and relationships within the data.
+        
+        Nine classification configurations are tested in section X, three are chosen to develop for the mosquito detection pipeline. Supervised classification models can be divided into discriminative and generative models.  The first, and simplest both conceptually and computationally, is the  Gaussian naive Bayes (NB) classifier. The GNB classifier is a generative model which learns the joint distribution of the input data and labels, $P(X1,...,X_d,Y)$. From the joint distribution, the probability of a label given the data, i.e. the posterior $P(Y=y_k|X_1,...,X_d)$, can be calculated using Bayes' rule:
+        \begin{align}
+            P(Y=y_k|X_1,...,X_d) = \frac{P(X_1,...,X_n,Y=y_k)}{P(X_1,...,X_d)} = \frac{P(X_1,...,X_d|y_k)P(y_k)}{\sum^{C}_{k=1}P(X_1,...,X_d|y_k)P(Y=y_k)},
+            \label{eq:pl-clf-sup-bay}
+        \end{align}
+        where $P(X_1,...,X_d)$ is the \textit{evidence} and $P(Y=y_k)$ is the class \textit{prior}. Conversely, $P(X_1,...,X_d|Y=y_k)$ may also be calculated be and used to generate likely training pairs $(X_1,...,X_d,y_k)$, hence the name \textit{generative}. The NB classifier operates by first calculating class priors, $P(Y=y_k)$, for all $k\in\{1,...,C\}$: $P(Y=y_k) = \frac{N_{y_k}}{N}$.
+        An expression for the likelihood, $P(X_1,...,X_d|Y=y_k)$, is then required; two assumptions are made. First, the probability of $\{X_1,...,X_d\}$ simplified under the assumption that the $X_i$'s are conditionally independent over $Y$,
+        \begin{align}
+            P(X_1,...,X_d|Y=y_k) = \prod_iP(X_i|Y=y_k).
+        \end{align}
+        This is to say that each $X_i$ can be \textit{independently} estimated from the joint probability. This decouples the likelihood computation, greatly reducing complexity at the expense of making an incorrect assumption, hence the 'naive' descriptor. In practise, surprisingly good performance can be achieved \cite{Friedman1997}. As each $X_i$ is continuous, a distribution must be assumed for the likelihood -- this is termed the \textit{event model} of the classifier. A Gaussian event model is commonly assumed, with parameter estimates using a maximum likelihood estimate (MLE); but others are also used such as the multinomial and Bernoulli distributions.
+        Utilising said assumptions in equation \ref{eq:pl-clf-sup-bay} gives the final expression for the posterior,
+        \begin{align}
+            P(Y=y_k|X_1,...,X_d) = \frac{P(Y=y_k)\prod_iP(X_i|y_k)}{\sum^{C}_{k=1}P(Y=y_k)\prod_iP(X_i|y_k)}.
+        \end{align}
+        This probabilistic expression is combined with a maximum a posteriori (MAP) decision rule in which the most probable hypothesis is chosen,
+        \begin{align}
+            \hat{y} = \argmax_{y_k}P(Y=y_k|X_1,...,X_d),
+        \end{align}
+        giving the classification rule for a Gaussian naive Bayes classifier.
+        
+        The second classifier is a support vector machine (SVM).
+        
+        % explain how discriminative not probabilistyic but probaility can still be found
+    
+        % \begin{sitemize}
+        %     \item{big section here, introduce and justify the algorithms used as well as other options that have not been used}
+        %     \item{justify no NN because they v data hungry  (Moore et al. 1986; Moore and Miller 2002; Li et al. 2009) [Flying Insect Classification with Inexpensive}
+        %     \item{compare unsupervised machine learning and why havent used}
+        %     \item{talk about native/none native multiclass handling}
+        %     \item{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1397873/ - good svm}
+        %     \item{many implemented but only 3 used, reasons in sec XXX}
+        % \end{sitemize}
     
     \subsection{Auto-Regressive Detection}
     \label{subsec:pl-clf-ar}

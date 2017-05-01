@@ -221,7 +221,6 @@
         
     \subsection{Software Implementation}
     \label{subsec:pl-feats-software}
-        Feature extractors can be added to MozzPy with ease. The interface is depicted in figure X, with the inputs and expected outputs shown.
         Extracted features are stored in \code{Feature} objects which are in turn stored in a \code{FeatureSet} object. \code{Feature} objects contain individual feature attributes as well as methods to split, merge and sort; whereas a \code{FeatureSet} object provides methods and attributes to aid in management of the entire feature-space. On generation of features, both the features and the associated configuration dictionary are saved to individual files. Subsequent executions will then check the configuration directory before processing and load a previous \code{FeatureSet} if the configurations match. At this stage, the features are not ready for use in classification.  
         % \begin{sitemize}
         %     \item{interface}
