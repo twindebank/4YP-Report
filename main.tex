@@ -76,16 +76,36 @@ BoldItalicFont = *_Bold_Italic%
 \titlespacing{\subsection}{0pt}{4pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 \titlespacing{\subsubsection}{0pt}{2pt plus 2pt minus 2pt}{0pt plus 2pt minus 2pt}[0pt]
 
+% single space box
+\newcommand{\singlespacebox}[1]{
+
+\noindent
+\vspace{-\baselineskip}
+    {\singlespacing
+        #1
+    }
+}
+
+% less padding for equations
+\NewEnviron{talign}{
+    \singlespacebox{
+        \begin{align}
+            \BODY\
+        \end{align}
+    }\hspace{-5pt}
+}
+
 % figs
-\setlength{\textfloatsep}{5.0pt plus 2.0pt minus 4.0pt}
-\setlength{\intextsep}{5.0pt plus 2.0pt minus 2.0pt}
+\setlength{\textfloatsep}{4.0pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{4.0pt plus 2.0pt minus 2.0pt}
 
 % table padding
 \renewcommand{\arraystretch}{1.2}
 
 % algebra formatting
 \newcommand{\matr}[1]{\mathbf{#1}}
-\newcommand{\argmax}{\arg\!\max} % AlfC
+\newcommand{\argmax}{\arg\!\max}
+\newcommand{\argmin}{\arg\!\min}
 
 %----------------------------------------------------------------------------------------
 %	DIAGRAM FORMATS
@@ -143,7 +163,7 @@ BoldItalicFont = *_Bold_Italic%
     \setlength{\parsep}{0pt}     }
 { \end{itemize}                  }
 
-\usepackage{wrapfig}
+
 \NewEnviron{tikzfig}[3]{
 \begin{figure}[ht]
     \linespread{\singlespaceheight}

@@ -39,23 +39,23 @@ def rfe(featmat_trn, featmat_tst, truth_trn, truth_tst, stepsize, classifier):
         
         
         Dimensional reduction using PCA is the second implemented feature selection algorithm. PCA can be seen as a way of transforming the feature matrices by projecting them onto their principal axes \cite{Klema1980}. Given a centred feature matrix $X\in\mathbb{R}^{n\times d}$, the first step is to compute the covariance or correlation (normalised covariance) matrix, given by
-        \begin{align}
+        \begin{talign}
             \matr{C} = \matr{X}^\text{T}\matr{X}/(n-1).
-        \end{align}
+        \end{talign}
         % As this is a symmetric matrix, it can be diagonalised using singular value decomposition:
         Performing singular value decomposition on the feature matrix gives
-        \begin{align}
+        \begin{talign}
             \matr{X} = \matr{USV}^\text{T},
-        \end{align}
+        \end{talign}
         where $\matr{S}$ is the diagonal matrix of singular values, $\matr{U}$ consists of the $d$ orthonormal eigenvectors (left singular vectors) of $\matr{AA}^\text{T}$ corresponding to the $d$ largest eigenvalues; similarly, $\matr{V}$ consists of the orthonormal eigenvectors (right singular vectors) of $\matr{A}^\text{T}\matr{A}$. By substituting this into the covariance matrix,
-        \begin{align}
+        \begin{talign}
             \matr{C} &= \matr{VSU}^\text{T}\matr{USV}^\text{T}/(n-1)\\
               &= \matr{V}\frac{\matr{S}^2}{(n-1)}\matr{V}^\text{T}.
-        \end{align}
+        \end{talign}
         As $\matr{S}^2$ is diagonal, this means the right singular vectors, $V$, are principal components of the covariance matrix and the eigenvalues are given by $\lambda_i = s^2_i/(n-1)$. The principal components are then calculated as $\matr{P} = \matr{XV}$.
-        % \begin{align}
+        % \begin{talign}
         %     \matr{XV} = \matr{USV}^\text{T}\matr{V} = \matr{US}.
-        % \end{align}
+        % \end{talign}
         These principal components are a mapping of the original feature-space onto axes in which the data varies the most. Over a range of values, the principal components are then truncated in given step sizes. This implemented algorithm is outlined in listing \ref{code:pl-featpreproc-sel-pca}, where PCA is performed with a scikit-learn implementation \cite{Pedregosa2012} and parallelised as reduction at each step is an independent operation of previous reductions. Again, it is emphasised that the same transformation applied on the training data must be applied on the testing data, so $\matr{V}$ used to transform the training data is also used to transform the test data.
         
         \begin{listing}[ht]
