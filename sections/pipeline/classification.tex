@@ -5,7 +5,7 @@
     \label{subsec:pl-clf-sup}
         The nature of this problem, desiring labels from data given labelled data, presents itself to the vast area of supervised machine learning. Machine learning is a data-driven approach which differs to classical algorithms. Instead of, for example, an algorithm that runs peak detection over a frequency representation of a signal looking for peaks in a particular place, a supervised data-driven approach will learn a function, $f$ that maps inputs, $X_i, i\in\{1,...,d\}$, where \textit{d} is the dimension of the feature-space, to the desired class labels, $y_k,k\in\in\{1,...,C\}$. Supervised machine learning is a subset of machine learning in which requires labelled examples; whereas, unsupervised learning draws inferences from data to learn latent structures and relationships within the data.
         
-        Nine classification configurations are tested in section X, three are chosen to develop for the mosquito detection pipeline. Supervised classification models can be divided into discriminative and generative models.  The first, and simplest both conceptually and computationally, is the  Gaussian naive Bayes (NB) classifier. The GNB classifier is a generative model which learns the joint distribution of the input data and labels, $P(X1,...,X_d,Y)$. From the joint distribution, the probability of a label given the data, i.e. the posterior $P(Y=y_k|X_1,...,X_d)$, can be calculated using Bayes' rule:
+        Nine classification configurations are tested in section X, three are chosen to develop for the mosquito detection pipeline. Supervised classification models can be divided into discriminative and generative models.  The first, and simplest both conceptually and computationally, is the  Gaussian naive Bayes (NB) classifier. The GNB classifier is a generative model which explicitly learns the joint distribution of the input data and labels, $P(X1,...,X_d,Y)$. From the joint distribution, the probability of a label given the data, i.e. the posterior $P(Y=y_k|X_1,...,X_d)$, can be calculated using Bayes' rule:
         \begin{align}
             P(Y=y_k|X_1,...,X_d) = \frac{P(X_1,...,X_n,Y=y_k)}{P(X_1,...,X_d)} = \frac{P(X_1,...,X_d|y_k)P(y_k)}{\sum^{C}_{k=1}P(X_1,...,X_d|y_k)P(Y=y_k)},
             \label{eq:pl-clf-sup-bay}
@@ -15,7 +15,7 @@
         \begin{align}
             P(X_1,...,X_d|Y=y_k) = \prod_iP(X_i|Y=y_k).
         \end{align}
-        This is to say that each $X_i$ can be \textit{independently} estimated from the joint probability. This decouples the likelihood computation, greatly reducing complexity at the expense of making an incorrect assumption, hence the 'naive' descriptor. In practise, surprisingly good performance can be achieved \cite{Friedman1997}. As each $X_i$ is continuous, a distribution must be assumed for the likelihood -- this is termed the \textit{event model} of the classifier. A Gaussian event model is commonly assumed, with parameter estimates using a maximum likelihood estimate (MLE); but others are also used such as the multinomial and Bernoulli distributions.
+        This is to say that each $X_i$ can be \textit{independently} estimated from the joint probability. This decouples the likelihood computation, greatly reducing complexity at the expense of making an incorrect assumption, hence the 'naive' descriptor. In practise, surprisingly good performance can be achieved \cite{Friedman1997}. As each $X_i$ is continuous, a distribution must be assumed for the likelihood -- this is termed the \textit{event model} of the classifier\cite{Mccallum}. A Gaussian event model is commonly assumed, with generative parameters estimated using a maximum likelihood estimate (MLE); but others are also used such as the multinomial and Bernoulli distributions.
         Utilising said assumptions in equation \ref{eq:pl-clf-sup-bay} gives the final expression for the posterior,
         \begin{align}
             P(Y=y_k|X_1,...,X_d) = \frac{P(Y=y_k)\prod_iP(X_i|y_k)}{\sum^{C}_{k=1}P(Y=y_k)\prod_iP(X_i|y_k)}.
@@ -26,7 +26,28 @@
         \end{align}
         giving the classification rule for a Gaussian naive Bayes classifier.
         
-        The second classifier is a support vector machine (SVM).
+        % http://www.ic.unicamp.br/~rocha/teaching/2011s1/mc906/aulas/naive-bayes.pdf
+        % http://www.cs.cmu.edu/~epxing/Class/10701-10s/Lecture/lecture5.pdf
+        The second classifier is a random forest (RF) \cite{Breiman2001}. The RF classifier is a discriminative algorithm that only cares to learn the distribution of $Y$ conditioned on the input features $\{X_1,...,X_d\}$, the most likely class is chosen considering the $X_i$s only; in the feature-space this maps to learning a \textit{decision boundary}. The RF is an ensemble method, it combines many weak learners, \textit{decision trees}, into a single strong learner. A decision tree is a greedy approach that 'grows' top down, splitting the data by a single attribute at each node in a way that locally minimises entropy, given by
+        \begin{align}
+            H[X] = -\sum^n_{j=1}p(x_j)\log_2p(x_j).
+        \end{align}
+        At every node, the entropy of the parent node is calculated and a series of potential splits are made. The weighted combinations of the entropy of the child nodes are calculated for each split and the split that maximises information gain,
+        \begin{align}
+            I[X] = H[X]_{\text{parent}} - (\frac{N_{\text{childA}}}{N_{\text{parent}}}\times H[X_{\text{childA}}] - \frac{N_{\text{childB}}}{N_{\text{parent}}}\times H[X_{\text{childB}}]),
+        \end{align}
+        is chosen. The process is repeated recursively on nodes down the tree until a node contains data from only a single class -- a terminal node. Decision trees are prone to overfitting data; random forests, however, are not. RFs are a collection of unbound decision trees that accept a random subset of data, usually around 66\% with replacement \cite{Breiman2001}. For classification, each tree then 'votes' and the majority vote is accepted as the output of the random forest. in addition to predicted labels, associated probability values can also be generated based on the proportion of votes per class.
+        
+        The last classifier, a support vector machine (SVM) \cite{Vapnik1998}, is also a discriminative classifier. If each row of the feature matrix $X\in\mathbb{R}^{n\times d}$ is treated as a coordinate, then the data can be visualised in the feature-space over $d$ dimensions. SVMs operate to find a hyperplane separating the points in the feature-space that best divides the dataset into two classes. The simplified case of two dimensions is shown in figure X, where a hyperplane $\vec{w}\cdot\vec{x_i}-b=0$
+        divides the two dimensional feature set. The points closest to the hyperplane define where it lies, these are called the support vectors; the distance between the support vectors and the hyperplane is defined as the margin.
+        
+
+        
+        
+        
+        
+        based on margin maximisatino.
+
         
         % explain how discriminative not probabilistyic but probaility can still be found
     
@@ -54,7 +75,8 @@
     \subsection{Software Implementation}
     \label{subsec:pl-clf-software}
         \begin{sitemize}
+            \item{all done with sklearn, multiclass handling too with native/ovr/ovo, every result passed to postproc to make same binary format}
+            \item{default params}
             \item{modularity}
-            \item{multiclass vs single class representation of problem}
             \item{how results stored}
         \end{sitemize}
