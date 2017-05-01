@@ -38,11 +38,11 @@
         \end{talign}
         is chosen. The process is repeated recursively on nodes down the tree until a node contains data from only a single class -- a terminal node. Decision trees are prone to overfitting data; random forests, however, are not. RFs are a collection of unbound decision trees that accept a random subset of data, usually around 66\% with replacement \cite{Breiman2001}. For classification, each tree then 'votes' and the majority vote is accepted as the output of the random forest. in addition to predicted labels, associated probability values can also be generated based on the proportion of votes per class.
         
-        The last classifier, a support vector machine (SVM) \cite{Vapnik1998}, is also a discriminative classifier. If each row of the feature matrix $X\in\mathbb{R}^{n\times d}$ is treated as a coordinate, then the data can be visualised in the feature-space over $d$ dimensions. SVMs operate to find a hyperplane separating the points in the feature-space that best divides the dataset into two classes. The simplified case of two dimensions is shown in figure X, where a hyperplane 
+        The last classifier, a support vector machine (SVM) \cite{Vapnik1998}, is also a discriminative classifier. If each row of the feature matrix $X\in\mathbb{R}^{n\times d}$ is treated as a coordinate, then the data can be visualised in the feature-space over $d$ dimensions. SVMs operate to find a hyperplane,
         \begin{talign}
-            \vec{w}\cdot\vec{x}-b=0    
+            \vec{w}\cdot\vec{x}-b=0, 
         \end{talign}
-        divides the two dimensional feature-space. The points closest to the hyperplane determine its direction and intercept, these are called the support vectors; the distance between the support vectors and the hyperplane is defined as the margin, bounded by the hyperplanes
+        separating the points in the feature-space that best divides the dataset into two classes. The points closest to the hyperplane determine its direction and intercept, these are called the support vectors; the distance between the support vectors and the hyperplane is defined as the margin, bounded by the hyperplanes
         \begin{talign}
             \vec{w}\cdot\vec{x_1}-b &=1&\\
             \vec{w}\cdot\vec{x_2}-b &=-1,&
@@ -64,9 +64,7 @@
             \argmin_w \frac{1}{n}\sum_{k=1}^n(\max(0,1-y_k(\vec{w}\cdot\vec{x_i}-b)) + \lambda||w||^2)
         \end{talign}
         where the first term is the total hinge loss and the second is regularisation of $\vec{w}$ that controls the width of the margin. If the data is not linearly separable, then the feature-space can be transformed into a higher dimension using any non-linear mapping; popular kernels are the radial basis function kernel and a polynomial function kernel \cite{Scholkopf2002}.
-
-
-        
+   
         % explain how discriminative not probabilistyic but probaility can still be found
     
         % \begin{sitemize}
@@ -78,19 +76,18 @@
         %     \item{many implemented but only 3 used, reasons in sec XXX}
         % \end{sitemize}
     
-    \subsection{Other Algorithms}
-    \label{subsec:pl-clf-alg}
-        \begin{sitemize}
-            \item{summarise shuyus AR detector, not too much detail here}
-            \item{summarise ivans wavelet detector, not too much detail here}
-        \end{sitemize}
-
+    % \subsection{Other Algorithms}
+    % \label{subsec:pl-clf-alg}
+    %     \begin{sitemize}
+    %         \item{summarise shuyus AR detector, not too much detail here}
+    %         \item{summarise ivans wavelet detector, not too much detail here}
+    %     \end{sitemize}
     \subsection{Software Implementation}
     \label{subsec:pl-clf-software}
-    
-        \begin{sitemize}
-            \item{all done with sklearn, multiclass handling too with native/ovr/ovo, every result passed to postproc to make same binary format}
-            \item{default params}
-            \item{modularity}
-            \item{how results stored}
-        \end{sitemize}
+        Three classification algorithms, as well as the others tested in section \ref{subsec:exp-clf-select} are all implemented using scikit-learn \cite{Pedregosa2012}. Each classifier is initialised with the given hyperparameters on \code{ClassiSet} initialisation, where methods \code{train} and \code{apply} can subsequently be called. In the case of the multi-class label aggregation policy, discussed in section \ref{subsec:pl-data-software}, there are slight differences to the binary classification pipeline. First, the classifier must, obviously, support multi-class classification. The SVM implementation does not (natively) and instead a problem transformation is performed. Given that there are $K$ classes, the transform 'One-Vs.-One' trains $K(K-1)/2$ binary classifiers where each receives samples of two classes from he original training set. The 'One-Vs.-Rest' transform trains $K$ classifiers using all the samples from class $k$ as positive examples and the remaining samples as negative. Both of these transformed problems then apply a voting scheme at classification time; all classifiers are run on an unseen sample and the majority vote is taken. As well as classification issues, there are also difficulties with the format of the output. Should the number of label sets be even, then there is a possibility that there will cases in which agreement is split down the middle. This corresponds to predicting sample belonging to class '$0.5$' and can be handles in three ways: accept as a mosquito, accept as no mosquito or reject the prediction completely.
+        % \begin{sitemize}
+        %     \item{all done with sklearn, multiclass handling too with native/ovr/ovo, every result passed to postproc to make same binary format}
+        %     \item{default params}
+        %     \item{modularity}
+        %     \item{how results stored}
+        % \end{sitemize}
