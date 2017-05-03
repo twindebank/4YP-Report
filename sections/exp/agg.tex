@@ -3,7 +3,7 @@
 
     \subsection{Over Classifiers}
     \label{subsec:exp-agg-clf}
-        To increase predictive performance further, the classifiers are combined using simple methods to aggregate results across the respective output probabilities, detailed further in REF. Three methods, \code{max}, \code{mean}, and \code{median}, are trialed, with results shown in appendix \ref{sec:appdx-agg}. Of the three methods tested, taking the mean probabilities over the the three sets of probabilities provides the best results, with resultant performance of the aggregated classifiers on par with the performance of the SVM before any post-processing. 
+        To increase predictive performance further, the classifiers are combined using simple methods to aggregate results across the respective output probabilities, detailed further in REF. Four methods, \code{max}, \code{mean}, \code{median}, and \code{mode} are trailed, with results shown in appendix \ref{sec:appdx-agg}. Of the four methods tested, taking the mean probabilities over the the three sets of probabilities provides the best results, with resultant performance of the aggregated classifiers on par with the performance of the SVM before any post-processing. 
     
     \subsection{Over Time and Classifiers}
     \label{subsec:exp-agg-time}
@@ -11,5 +11,6 @@
         
     \subsection{Over Time and Classifiers with Rejection}
     \label{subsec:exp-agg-rej} 
-        Up to now, aggregation has shown no real advantage over using the SVM alone. However, performing rejection of uncertain results on the aggregated set of predictions, after combining over time, substantially outperforms the rejection on the classifiers in isolation. Performing rejection individually then combining the results does not provide any gains. In order to meet accuracy specifications, the rejection threshold has exceeded specifications I and II by $2.9\%$ and $5.7\%$ respectively. Scope exists for more advanced classifier combination methods, an overview of which is given by \textcite{Suen2000}. 
-  \twN{probably need citations for existing combination classifiers - use the similar paper which also combines\\can show how smoothed rejection differs to unsmoothed, big chunks etc}
+        Up to now, aggregation has shown no real advantage over using the SVM alone. However, performing rejection of uncertain results on the aggregated set of predictions, after combining over time, substantially outperforms the rejection on the classifiers in isolation. Performing rejection individually then combining the results does not provide any gains. In order to meet accuracy specifications, the rejection threshold has exceeded specifications \textbf{I} and \textbf{II} by $2.9\%$ and $5.7\%$ respectively. 
+        
+    \twN{could show plots of how median and rejection (large rejected chunks) looks very different to rejection alone (noisy)}

@@ -94,6 +94,13 @@ BoldItalicFont = *_Bold_Italic%
         \end{align}
     }\hspace{-5pt}
 }
+\NewEnviron{tgather}{
+    \singlespacebox{
+        \begin{gather}
+            \BODY\
+        \end{gather}
+    }\hspace{-5pt}
+}
 
 % figs
 \setlength{\textfloatsep}{4.0pt plus 2.0pt minus 2.0pt}
@@ -275,7 +282,7 @@ BoldItalicFont = *_Bold_Italic%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%% SEC3: EXPERIMENTS  %%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \part{Experiments}
+    \part{Experimental Design and Testing}
     \label{part:exp}
         \addsubsec{exp}{overview}
         \addsubsec{exp}{specs}
@@ -301,14 +308,15 @@ BoldItalicFont = *_Bold_Italic%
 	\label{part:conc}
 	    \addsubsec{conc}{further}
 	    \addsubsec{conc}{conclusion}
-
+	
+	\linespread{1.0}
+	\twN{ok to single space bib?}
+	\printbibliography
+	
 	\begin{appendices}
 	\label{part:appdx}
 	    \addsubsec{}{appendix}
 	\end{appendices}
 
-	\linespread{1.0}
-	\twN{ok to single space bib?}
-	\printbibliography
 	
 \end{document}

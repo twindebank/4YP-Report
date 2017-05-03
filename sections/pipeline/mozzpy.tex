@@ -1,6 +1,6 @@
 \section{MozzPy}
 \label{sec:pl-mozzpy}
-    
+    \twN{this section needs finishing, independant of rest of report so can fill in later}
     \subsection{Purpose}
     \label{subsec:pl-mozzpy-purp}
         \begin{sitemize}
@@ -11,13 +11,13 @@
     \subsection{Structure}
     \label{subsec:pl-mozzpy-struc}
         \input{sections/pipeline/figs/dataflow.tex}
-        
+        \twN{need to fix diagram, slight misalignment}
         Figure \ref{fig:pl-mozzpy-struc-dataflow} depicts how data is passed through the MozzPy package. Two classification pipelines are shown in this simplified example, in which they both use different sets of features and labels combined using different methods described in section \ref{subsec:pl-data-software}. The diagram is simplified for the purpose of clarity, the composition/inheritance relationship is shown in figure \ref{fig:pl-mozzpy-struc-inhercomp}.
         
         \input{sections/pipeline/figs/structure.tex}
         
   
-        \twN{need to fix diagram, slight misalignment}
+        
     
     \subsection{Usage}
     \label{subsec:pl-mozzpy-usage}
@@ -27,10 +27,6 @@
             \item{saving and laoding with file locking}
         \end{sitemize}
    
-    \subsection{Cross-Validation and Parallel processing}
-    \label{subsec:pl-mozzpy-xval}
-        explain how each stage is wrapped in multiproc cross-val code omitted for clarity, tested in exp sec
-    
     \subsection{Limitations}
     \label{subsec:pl-mozzpy-limit}
         \begin{sitemize}

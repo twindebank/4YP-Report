@@ -9,7 +9,7 @@
         \begin{figure}[ht]
             \centering
             \includegraphics[width=0.9\textwidth]{meanfilt}
-            \caption{F$_{1}$ scores as moving average filter kernel sizes are varied.}
+            \caption{$F_{1}$ scores as moving average filter kernel sizes are varied.}
             \label{fig:exp-postproc-filt}
         \end{figure}
         Kernel sizes, $K_{med}$ and $K_{mean}$, are tested over an exponential scale, decreasing from $1001$ samples (\SI{1/8}{\second}) to $3$ samples (\SI{0.375}{\milli\second}) through multiplying by powers of $0.65$. This reflects the expectation of smaller kernel sizes being more susceptible to noise and therefore producing more varied outputs. An example output graph is shown in figure \ref{fig:exp-postproc-filt}, where similar graphs have been generated for the median filter and for the metrics established previously. The best method and kernel size for filtering is chosen for each classifier. All the classifiers satisfy rejection and time resolution criteria, however, only the SVM reaches the minimum true negative rate required for specification I. All other metrics are unsatisfied, driving the need for more work on improving accuracy.
@@ -19,10 +19,10 @@
         \begin{figure}[ht]
             \centering
             \includegraphics[width=\textwidth]{asymm_rej}
-            \caption{From left to right shows a binary asymmetrical rejection matrix for the true negative rate, true positive rate and the $F_1$ score. On the $x$ axis are thresholds for the positive class, and on the $y$ are thresholds for the negative class. Under each threshold the percentage of the respective class rejected is shown.}
+            \caption{From left to right shows a binary asymmetrical rejection matrix, detailed in section \ref{subsec:pl-test-less} for the true negative rate, true positive rate and the $F_1$ score.}
             \label{fig:exp-postproc-asymrej}
         \end{figure}
-        Accuracy can also be increased through post-processing by rejecting predictions the classifier is less certain about. Metrics can be tuned at this stage due to the two degrees of freedom asymmetrical rejection offers. Figure \ref{fig:exp-postproc-asymrej} shows three metric-rejection grids for the SVM classifier, explained in section X, with bounds overlaid corresponding to the rejection criteria of the design specifications. The red bound indicates where rejection increases beyond $30\%$, and the green indicates where $10\%$ is surpassed. This means for specifications \textbf{I} and II, any pair of thresholds within the the red and green regions, respectively, can be chosen. This allows visual navigation of the asymmetrical performance-rejection space and enables straightforward hand-tuning of the classifier output. The chosen pairs are highlighted on each grid. Results indicate that although rejection alone improves performance, it is not enough to bring the true positive rates up to the specifications required.
+        Accuracy can also be increased through post-processing by rejecting predictions the classifier is less certain about. Metrics can be tuned at this stage due to the two degrees of freedom asymmetrical rejection offers. Without assymetry, rejection is restricted to the diagonals of the metric-rejection grids. Figure \ref{fig:exp-postproc-asymrej} shows three metric-rejection grids for the SVM classifier, explained in section X, with bounds overlaid corresponding to the rejection criteria of the design specifications. The red bound indicates where rejection increases beyond $30\%$, and the green indicates where $10\%$ is surpassed. This means for specifications \textbf{I} and \textbf{II}, any pair of thresholds within the the red and green regions, respectively, can be chosen. This allows visual navigation of the asymmetrical performance-rejection space and enables straightforward hand-tuning of the classifier output. The chosen pairs are highlighted on each grid. Results indicate that although rejection alone improves performance, it is not enough to bring the true positive rates up to the specifications required.
     
     \subsection{Filtering and Rejection}
     \label{subsec:exp-postproc-filtrej}
@@ -34,3 +34,5 @@
             \label{fig:exp-postproc-rejfilt}
         \end{figure}
         Figure \ref{fig:exp-postproc-rejfilt} shows the sharp decline as the kernel size increases, followed by a gradual increase at the same rate as the results with no rejection. This indicates that these techniques are effective at removing noise in the predictions as the same results removed by rejecting probabilities are also smoothed out by a median filter. However, applied in a different order, results significantly improve. Repeating the filtering post-processing with the methods and thresholds determined in section \ref{subsec:exp-postproc-filt} and running through the same rejection-space analysis the results begin to approach the design requirements. The only classifier to fully meet specification is the naive Bayes classifier for specification I. The random forest comes close to meeting requirements but requirements are not quite satisfied. 
+        
+    \twN{can say rejects at edges of pulses because when mos comiing in and out of frame, different headphones will cause labelers to label at different times,, show fuig}

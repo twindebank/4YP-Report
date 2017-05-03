@@ -1,21 +1,21 @@
 \section{Aggregation}
 \label{sec:pl-agg}
-    
-    \subsection{Jenson's Inequality}
-    \label{subsec:pl-agg-jenson}
-        \begin{sitemize}
-            \item{go into theory of combining classifiers etc - more reading needed for this part}
-        \end{sitemize}
+    % \subsection{Jenson's Inequality}
+    % \label{subsec:pl-agg-jenson}
+    %     \begin{sitemize}
+    %         \item{go into theory of combining classifiers etc - more reading needed for this part}
+    %     \end{sitemize}
     
     \subsection{Methods}
     \label{subsec:pl-agg-methods}
+        Combining classifiers to create a multi-classifier system is based on the idea that improved predictive performance can be gained through combining a series of weaker learners. Many combination strategies exist, an overview of which is given by \textcite{Suen2000}. For this problem, four aggregation policies are tested: 'mean', 'median', 'max', and 'mode':
         \begin{sitemize}
-            \item{list each implemented method: avg, max}
-            \item{list further methods and explain why havent used: using a second classifier}
+            \item\textbf{'mean'}: averages probabilities for each classifier and thresholds at $0.5$ to generate labels. 
+            \item\textbf{'median'}: operates in a similarly 'mean' but instead takes the median of the probabilities. 
+            \item\textbf{'max'}: chooses the prediction with the highest certainty.
+            \item\textbf{'mode'}: takes the majority vote, then averages the probabilities of the associated majority labels. Extra level of complexity to handle votes when there is no majority, can handle as positive, negative, or reject.
         \end{sitemize}
         
     \subsection{Software Implementation}
     \label{subsec:pl-agg-software}
-        \begin{sitemize}
-            \item{both aggset and classiset class inherit from predset, means when testing and plotting can treat them the same (ie polymorhpism)}
-        \end{sitemize}
+        Results are aggregated through instantiation of an \code{AggSet} object with a arbitrary number of \code{ClassiSet} objects. In the event of results having different window sizes, signals created with larger windows are resampled to contain the same number of samples as the smaller-windowed signal. Both the \code{AggSet} and \code{Classiset} objects inherit from the \code{PredSet} class containing methods for handling common actions including testing and plotting. Abstract base classes are also implemented for information retrieval as data structures within the two inheriting classes differ from one another.
