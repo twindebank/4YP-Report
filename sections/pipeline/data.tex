@@ -23,17 +23,17 @@
              \hline
              Method & Description & Rejection\\ 
              \hline
-             "0\_5\_ignore" & \specialcell{Exclude labels in which\\ positives/negatives are 50/50.} & \checkmark\\ 
+             `0\_5\_ignore` & \specialcell{Exclude labels in which\\ positives/negatives are 50/50.} & \checkmark\\ 
              \hline
-             "conf" & \specialcell{Exclude labels where there\\ is any disagreement.} & \checkmark\\ 
+             `conf` & \specialcell{Exclude labels where there\\ is any disagreement.} & \checkmark\\ 
              \hline
-             \specialcell{"0\_5\_ismozz"} & \specialcell{Positive when agreement\\ is 50/50.}  &\\ 
+             \specialcell{`0\_5\_ismozz`} & \specialcell{Positive when agreement\\ is 50/50.}  &\\ 
              \hline
-             \specialcell{"0\_5\_notmozz"} & \specialcell{Negative when agreement\\ is 50/50.} &\\ 
+             \specialcell{`0\_5\_notmozz`} & \specialcell{Negative when agreement\\ is 50/50.} &\\ 
              \hline
-             "multiclass" & \specialcell{Treat each level of \\agreement as a class e.g.\\ $[0/4, 1/4, 2/4, 3/4, 4/4]$ maps\\ to classes $[0,1,2,3,4]$} &\\ 
+             `multiclass` & \specialcell{Treat each level of \\agreement as a class e.g.\\ $[0/4, 1/4, 2/4, 3/4, 4/4]$ maps\\ to classes $[0,1,2,3,4]$} &\\ 
              \hline
-             "sensitive" & \specialcell{If at least one positive then\\ treat as positive.} &\\ 
+             `sensitive` & \specialcell{If at least one positive then\\ treat as positive.} &\\ 
              \hline
             \end{tabular}
             \caption{Techniques for utilising multiple label sets for a single set of signals, where positive indicates mosquito presence and negative indicates no mosquito presence.}
@@ -44,5 +44,3 @@
         % A uniform prior is assumed over each persons labels, giving them equal importance for classification purposes, therefore it makes sense to label sections by consensus.
         
         Labels with rejected samples can only be used for training classifiers, for testing a classifier there must be a complete set of labels. With multi-class labels the same applies, they can not be used for testing and evaluation purposes. Although it is possible to use metrics for evaluation of a multi-class output, in this context it is not sensible as performance of pipelines must be assessed and optimised for a binary positive/negative output. The classifier output will contain 5 classes which must then be converted back to a binary output; if the classifier predicts a sample as belonging to class 2, i.e. maximal disagreement of $2/4$ people believing there is a mosquito, then a decision must be made on how to then map this value into the binary domain of $0$ or $1$. There are three choices, treat is as a positive sample, treat it as a negative sample, or reject it completely; these options are explored in section \ref{subsubsec:exp-clf-opt-label}. 
-        
-        \twN{possibly move prediction parts to classification subsection}

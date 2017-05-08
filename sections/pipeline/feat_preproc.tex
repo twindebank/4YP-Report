@@ -5,10 +5,9 @@
     \subsection{Normalisation}
     \label{subsec:pl-featpreproc-norm}
         Normalisation, also known as feature (re)scaling or standardisation, can be carried out in a range of ways. It is important for some classification algorithms that make decisions based on a distance metric in the feature domain; if one feature is on a larger scale to another, then the smaller-scale feature may have less influence in classification decisions, depending on the classifier.     
-        The simplest and most common method is to apply an affine transform which 'centres' and 'whitens' each column of the feature matrix, meaning the mean is transformed to zero and the variance is scaled to unit variance.
+        The simplest and most common method is to apply an affine transform which `centres` and `whitens` each column of the feature matrix, meaning the mean is transformed to zero and the variance is scaled to unit variance.
         
         This process comes with a caveat; if the whole feature matrix is normalised, then split into training and testing sets, then information from the test set 'leaks' into the training set. Applying the scaling individually to the training and test set is also incorrect as the transformations applied to each matrix will be different, depending on the data, leading to high sensitivity of outliers. Instead, the training feature matrix should be normalised, then the means and variances reused for the test set, meaning the same transformation is applied and scaling is correct.
-        \twN{Need to show algorithm/maths?}
 
     \subsection{Feature Selection}
     \label{subsec:pl-featpreproc-sel}
@@ -56,7 +55,7 @@ def rfe(featmat_trn, featmat_tst, truth_trn, truth_tst, stepsize, classifier):
         % \begin{talign}
         %     \matr{XV} = \matr{USV}^\text{T}\matr{V} = \matr{US}.
         % \end{talign}
-        These principal components are a mapping of the original feature-space onto axes in which the data varies the most. Over a range of values, the principal components are then truncated in given step sizes. This implemented algorithm is outlined in listing \ref{code:pl-featpreproc-sel-pca}, where PCA is performed with a scikit-learn implementation \cite{Pedregosa2012} and parallelised as reduction at each step is an independent operation of previous reductions. Again, it is emphasised that the same transformation applied on the training data must be applied on the testing data, so $\matr{V}$ used to transform the training data is also used to transform the test data.
+        These principal components are a mapping of the original feature-space onto axes in which the data varies the most. Over a range of values, the principal components are then truncated in given step sizes. This algorithm is outlined in listing \ref{code:pl-featpreproc-sel-pca}, where PCA is performed with a scikit-learn implementation \cite{Pedregosa2012} and parallelised as reduction at each step is an independent operation of previous reductions. Again, it is emphasised that the same transformation applied on the training data must be applied on the testing data, so $\matr{V}$ used to transform the training data is also used to transform the test data.
         
         \begin{listing}[ht]
             \begin{minted}[frame=single,framesep=2mm, bgcolor=black!2, fontsize=\footnotesize, linenos]{python}
@@ -74,13 +73,13 @@ def pca_reduce(featmat_trn, featmat_tst, truth_trn, truth_tst, steps, classifier
         scores.append(calc_score(pred,truth_tst))   # test predictions and store score
     return scores
             \end{minted}
-            \caption{Principal Component Dimensional Reduction}
+            \caption{Principal Component Dimension Reduction}
             \label{code:pl-featpreproc-sel-pca}
         \end{listing} 
     
     \subsection{Balancing Classes}
     \label{subsec:pl-featpreproc-bal}
-        Balancing classes is a simple method to combat imbalanced training data. Imbalanced classes, i.e. more samples of 'no mosquito' than there is 'mosquito', can cause the dominant class to be over-represented in the predictions the classifier makes. To balance the data, samples are removed at random from the over-represented class along with the corresponding labels. As discussed in section \ref{subsubsec:exp-clf-opt-class}, there are other techniques available to deal with imbalanced classes but it is found that this random undersampling is sufficient for this context.
+        Imbalanced classes, i.e. more samples of 'no mosquito' than there is 'mosquito', can cause the dominant class to be over-represented in the predictions the classifier makes. To balance the data, samples are removed at random from the over-represented class along with the corresponding labels. As discussed in section \ref{subsubsec:exp-clf-opt-class}, there are other techniques available to deal with imbalanced classes but it is found that this random undersampling is sufficient for this context.
     
     \subsection{Software Implementation}
     \label{subsec:pl-featpreproc-software}

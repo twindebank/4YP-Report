@@ -45,8 +45,16 @@
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-\usepackage[backend=biber,citestyle=numeric,bibstyle=ieee,sorting=none,doi=false,isbn=false,url=false]{biblatex}
+\usepackage[backend=biber,citestyle=numeric,bibstyle=ieee,sorting=none,doi=false,isbn=false,url=false,mincitenames=1,maxcitenames=2]{biblatex}
 \addbibresource{mendeley.bib}
+% preserve case of titles
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+       \step[fieldsource=title, match=\regexp{([A-Z]{1,})}, replace={{}{$1}}]
+    }
+  }
+}
 
 %----------------------------------------------------------------------------------------
 %	FORMATTING
@@ -113,6 +121,7 @@ BoldItalicFont = *_Bold_Italic%
 \newcommand{\matr}[1]{\mathbf{#1}}
 \newcommand{\argmax}{\arg\!\max}
 \newcommand{\argmin}{\arg\!\min}
+
 
 %----------------------------------------------------------------------------------------
 %	DIAGRAM FORMATS
@@ -310,7 +319,6 @@ BoldItalicFont = *_Bold_Italic%
 	    \addsubsec{conc}{conclusion}
 	
 	\linespread{1.0}
-	\twN{ok to single space bib?}
 	\printbibliography
 	
 	\begin{appendices}

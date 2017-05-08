@@ -8,12 +8,12 @@
     
     \subsection{Methods}
     \label{subsec:pl-agg-methods}
-        Combining classifiers to create a multi-classifier system is based on the idea that improved predictive performance can be gained through combining a series of weaker learners. Many combination strategies exist, an overview of which is given by \textcite{Suen2000}. For this problem, four aggregation policies are tested: 'mean', 'median', 'max', and 'mode':
+        Combining classifiers to create a multi-classifier system is based on the idea that improved predictive performance can be gained through combining a series of weaker learners. Many combination strategies exist, an overview of which is given by \textcite{Suen2000}. For this problem, four aggregation policies are tested: `mean`, `median`, `max`, and `mode`:
         \begin{sitemize}
-            \item\textbf{'mean'}: averages probabilities for each classifier and thresholds at $0.5$ to generate labels. 
-            \item\textbf{'median'}: operates in a similarly 'mean' but instead takes the median of the probabilities. 
-            \item\textbf{'max'}: chooses the prediction with the highest certainty.
-            \item\textbf{'mode'}: takes the majority vote, then averages the probabilities of the associated majority labels. Extra level of complexity to handle votes when there is no majority, can handle as positive, negative, or reject.
+            \item\textbf{`mean`}: averages probabilities for each classifier and thresholds at $0.5$ to generate labels. 
+            \item\textbf{`median`}: operates in a similarly 'mean' but instead takes the median of the probabilities. 
+            \item\textbf{`max`}: chooses the prediction with the highest certainty.
+            \item\textbf{`mode`}: takes the majority vote, then averages the probabilities of the associated majority labels. Extra level of complexity to handle votes when there is no majority, can handle as positive, negative, or reject.
         \end{sitemize}
         
     \subsection{Software Implementation}

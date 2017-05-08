@@ -4,7 +4,7 @@
     \subsection{Mosquito Wingbeat}
     \label{subsec:bg-litreview-mozz}
         
-        Early research carried out by \textcite{Landois1866} in 1866 concluded that the flight tone of an insect was due to the number of wing strokes per second, otherwise known as the fundamental frequency or wingbeat of a flying insect. This set the basis for standard practises of determining flight tone by matching a tuning fork to the wingbeat by ear, a method lacking accuracy and objectivity. Only when \textcite{Williams1950} came along was it understood that the frequency components of an insect's wingbeat are of a more complex nature than a single tone and in fact are arranged in a harmonic structure. In a study conducted by \textcite{Belton1979} in 1979 on thirteen species of Canadian mosquito, it was found that wingbeat frequencies of each species overlapped but were distinct to at least five other species, and three species were distinct from nine others. However, there was no presence of an overlap between a female and male of the same species. 
+        Early research carried out by \textcite{Landois1866} in 1866 concluded that the flight tone of an insect was due to the number of wing strokes per second, otherwise known as the fundamental frequency or wingbeat of a flying insect. This set the basis for standard practices of determining flight tone by matching a tuning fork to the wingbeat by ear, a method lacking accuracy and objectivity. Only when \textcite{Williams1950} published their work was it understood that the frequency components of an insect's wingbeat are of a more complex nature than a single tone and in fact are arranged in a harmonic structure. In a study conducted by \textcite{Belton1979} in 1979 on thirteen species of Canadian mosquito, it was found that wingbeat frequencies of each species overlapped but were distinct to at least five other species, and three species were distinct from nine others. However, there was no presence of an overlap between a female and male of the same species. 
         
         Recent research suggests that wingbeat alone, as a scalar, is not adequate to differentiate between mosquito species as there are more than 3,500 species of mosquito with wingbeats mostly in the range of 100-1000Hz \cite{Chen2014}. That range leaves 900Hz to describe 3,500 species, or 0.26Hz per species. This is not sufficient considering wingbeats per species can vary as much as 80Hz either way \cite{Arthur2014}. The use of audio features beyond that of the location of the first harmonic, as well as continuous audio capture of individual species, leads to high volumes of data which substantial information can be extracted from, aiding in this difficult challenge. Figure \ref{fig:bg-litreview-mozz-fft} shows the spectral components of the wingbeat of four species of mosquito, where both male and female specimens have been included for one species. The figure shows clear spectral overlap between classes, making species and gender classification a difficult challenge. The primary focus of this report is to detect mosquitoes over background noise with inexpensive sensors, although species discrimination of the resultant detection pipeline is also be tested using other sets of data.
         %  concern - each sample treated as i.i.d so training over continuous flight of a mosquito will make the classifier broadly detect over lots of frequencies, need to test first     
@@ -16,11 +16,15 @@
             \label{fig:bg-litreview-mozz-fft}
         \end{figure}
     
-        \twN{more stuff on fft and specgram here}
+
 
     
     \subsection{Current Algorithms and Research}
     \label{subsec:bg-litreview-currentalgs}
+        Mosquito detection is an active area of research
+        
+        Other data-capture methods have been used in this context, based on pseudo-acoustic optical sensors \cite{Chen2014}. Higher signal-to-noise ratios (SNRs) are attained using sensors of this type, at the expense of a complex experimental setup requiring mosquitoes to directly intercept optical beams, drastically limiting the versatility of the detector as well as limiting recordings to snippets of around 100ms, with no capability to capture continuous flight. 
+        
         \begin{sitemize}
             \item{come back to this later}
             \item{algorithms already applied in this context}

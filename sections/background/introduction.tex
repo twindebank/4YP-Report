@@ -17,7 +17,7 @@
         \end{sitemize}
         Implications of these use cases on the detector design will be discussed in section \ref{sec:exp-spec}. Based on these cases, it is clear there is a need for both a hardware solution and accompanying algorithms, capable of detecting mosquitoes within the local vicinity. This report will focus on algorithm design, results of which improve with the amount of data available. Microphones, being inexpensive and versatile, provide a suitable method for capturing mosquito characteristics that are usable for detection and identification purposes, discussed further in section \ref{subsec:bg-litreview-mozz}. Many difficulties arise in the detection and classification of mosquitoes using audio, the most prominent being that mosquitoes are naturally quiet insects, the sounds of which vary with many intrinsic and environmental factors.
         
-        Other data-capture methods have been used in this context, based on pseudo-acoustic optical sensors \cite{Chen2014}. Higher signal-to-noise ratios (SNRs) are attained using sensors of this type, at the expense of a complex experimental setup requiring mosquitoes to directly intercept optical beams, drastically limiting the versatility of the detector as well as limiting recordings to snippets of around 100ms, with no capability to capture continuous flight. 
+        
         
         % In 2015, malaria accounted for $\sim$212 million of these mosquito-borne infections, and lead to $\sim$429,000 deaths.
         
@@ -29,10 +29,5 @@
   
     \subsection{Report Structure}
     \label{subsec:bg-intro-structure}
-        % The report is organised into a structure designed to present the findings of this report in a 
-        \twN{update this later, currently outdated}
-        The report is divided into three sections. Section \textbf{II} details each stage of the general mosquito detection pipeline, first going into the underlying theory then discussing details of software implementation. Section \textbf{III} describes how the pipeline is optimised to find parameters that give near-optimal performance.
-        % performance is improved from base results by optimisation at each stage of the general pipeline, with some iteration. Optimising locally at each stage makes this a \textit{'greedy'} pipeline i.e. it doesn't necessarily converge to the global minimum where performance is best. Finding the global minimum would require a grid-search over the entire parameter space across the whole pipeline. Using a random forest only, \textit{without any post-processing of results considered}, this would require training and testing the random forest tens of millions of times, requiring thousands of days of compute time if done in serial. 
-        % random forest decisions [normalise [4], labels [6], features[47], pca/rfe [100], normalise[4], ntrees [20], backend [2], ]
-        %For this problem, the locally optimised pipeline should be sufficient. 
-        Section \textbf{IV} presents the best performing configuration for each use case. Finally, section \textbf{V} concludes the the report and highlights further potential of this research as well as uses for other applications. 
+        \twN{new}
+        The report is divided into four sections. Section \textbf{I} sets the background of the project, detailing the research motivations and current related work. Section \textbf{II} formalises the proposed solution in the form of a generalised pipeline, where for each stage within the pipeline underlying mathematical theory and details of software implementation are discussed. In section \textbf{III}, the established framework is utilised to select, develop, tune and evaluate predictive models. Finally, section \textbf{IV} concludes the the report and highlights further potential of this research as well as uses for other applications.
