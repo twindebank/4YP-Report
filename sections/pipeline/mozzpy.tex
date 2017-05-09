@@ -1,35 +1,58 @@
 \section{MozzPy}
 \label{sec:pl-mozzpy}
-    \twN{this section needs finishing, independant of rest of report so can fill in later}
+    \twN{new section}
     \subsection{Purpose}
     \label{subsec:pl-mozzpy-purp}
-        \begin{sitemize}
-            \item{have detailed the steps of the pipeline, this package provides a framework to now carry out research}
-            \item{advantages of it are: easy to configure new experiments to run, easy to tweak any details within the pipeline from the config file, etc}
-        \end{sitemize}
+        Given the pipeline established in figure \ref{fig:pl-overview-general-diag}, experiments must be designed and executed to gather results. Many scripts could be written to achieve this; however, to fully conform to the established pipeline and significantly speed up the process, `MozzPy` is built. This package provides a modular framework in which code, conforming to a specified interface, can be added at any stage of the pipeline leading to the easy design and running of new experiments.
     
     \subsection{Structure}
     \label{subsec:pl-mozzpy-struc}
         \input{sections/pipeline/figs/dataflow.tex}
-        \twN{need to fix diagram, slight misalignment}
-        Figure \ref{fig:pl-mozzpy-struc-dataflow} depicts how data is passed through the MozzPy package. Two classification pipelines are shown in this simplified example, in which they both use different sets of features and labels combined using different methods described in section \ref{subsec:pl-data-software}. The diagram is simplified for the purpose of clarity, the composition/inheritance relationship is shown in figure \ref{fig:pl-mozzpy-struc-inhercomp}.
-        
         \input{sections/pipeline/figs/structure.tex}
-        
+        Figure \ref{fig:pl-mozzpy-struc-dataflow} depicts how data is passed through the MozzPy package. Two classification pipelines are shown in this simplified example, in which they both use different sets of features and labels combined using different methods, explained further in section \ref{subsec:pl-data-software}. The diagram is simplified for the purpose of clarity, the composition/inheritance relationship is shown in figure \ref{fig:pl-mozzpy-struc-inhercomp}. This section will follow the flow of the data-flow diagram, detailing both theory and how the data is handled through each stage.
   
         
     
     \subsection{Usage}
     \label{subsec:pl-mozzpy-usage}
-        \begin{sitemize}
-            \item{show code snippet of how to run a exp and explain how will be detailed in this section}
-            \item{explain how to configure a pipeline and how simple it is to run multiple experiments}
-            \item{saving and laoding with file locking}
-        \end{sitemize}
+        Usage of the code-base is based around the user following conventions, although this is not a necessity for it to function. Code is separated into two files, an execution script and a configuration file. The configuration file contains nested dictionaries within a \code{Settings} instance; this class defines the data members that hold preferences such as file directories, classifiers to use, tests to run and graphs to plot as well as methods to update values and copy a configuration. When passing configurations to modules it is only necessary to specify arguments that stray from the default values which are specified in the modules, saving time and increasing readability. Settings files are imported into an execution script, an example of which is shown in listing \ref{code:pl-mozzpy-usage-exec}.
+
+        \begin{listing}[ht]
+            \begin{minted}[frame=single,framesep=2mm, bgcolor=black!2, fontsize=\footnotesize, linenos]{python}
+from MozzPy.utils import WavSet, FeatureSet, ClassiSet, AggSet, ResultSet   
+from MozzPy.scripts.conf.example import conf        # import configuration file
+wavs = WavSet.fromfiles(**conf.wavs)                # import wav files
+wavs.preproc(**conf.wav_preproc)                    # process wav files (resample, normalise, etc)
+lbls = LabelSet.fromfiles(wavs,**conf.labels)       # import label files and organise wrt wav files
+feats = FeatureSet.fromwavset(wavs,**conf.features) # generate features from wav files
+dataset = DataSet(wavs,feats,lbls)                  # collect the data into one object
+ds_trn,ds_tst = dataset.discretesplit()         # split randomly, keeping samples grouped by wav
+classisets = []                                 # list to fill with ClassiSet objects
+for clf_id in conf.clf_init.keys():             # for each classifier config defined in config file
+    cs = ClassiSet(**conf.clf_init[clf_id])     # initialise classifier object eg RF with 100 trees
+    cs.train(ds_trn,**conf.clf_trn[clf_id])     # train on half the data
+    cs.apply(ds_tst,**conf.clf_apply[clf_id])   # generate predictions from the other half
+    cs.postproc(**conf.res_postproc[clf_id])    # post-process predictions
+    cs.test(**conf.clf_tst[clf_id])             # apply tests to any predictions eg f1 score, ROC
+    classisets.append(cs)                       # append to list
+aggsets = []                                    # list to fill with aggregated results
+for agg_id in conf.aggregate.keys():            # for each aggregation method defined in config
+    aggset = AggSet(agg_id, conf.aggregate[agg_id], *classisets)    # aggregate results
+    aggset.postproc(**conf.agg_postproc[agg_id])                    # post-process agg`d results
+    aggset.test(**conf.agg_tst[agg_id])         # test aggregated results
+    aggsets.append(aggset)                      # append to list
+predsets = classisets + aggsets                 # gather all predictions together
+rs = ResultSet(*predsets)                       # put into ResultSet object
+rs.plot(**conf.resultset_plot)                  # plot graphs specified in config
+rs.json_exprt(**conf.json)                      # export info to json file
+rs.mongo_exprt(**conf.mongo)                    # export info to mongo database
+            \end{minted}
+            \caption{Example MozzPy execution script.}
+            \label{code:pl-mozzpy-usage-exec}
+        \end{listing} 
+    
+        During both feature generation and classifier training, the program first checks to see if the same configuration has been run previously. If it has, then the previous data is loaded, reducing runtimes for repeated experiments dramatically. Parallel implementations are safe during saving/loading as the directory is locked when it is being read or written to.
    
     \subsection{Limitations}
     \label{subsec:pl-mozzpy-limit}
-        \begin{sitemize}
-            \item{current limitations: written in 2.7 not 3.5 - can be ported, wrote tailored to mozz problem so limited for use in other contexts to binary time series classification, functionality could be extended with some refactoring}
-        \end{sitemize}
-
+        MozzPy is written in Python 2.7, this is considered a limitation as many shortcomings of 2.7 have been fixed in the more current Python 3.5. The older version was chosen to ease integration as existing code within the HumBug project using Python 2.5. The package is coded completely tailored to the problem of mosquito classification with .wav files and labels. This is an unnecessary limitation as there may be potential uses of this utility outside of the mosquito-detection domain. These limitations are not overly inhibiting and are able to be solved with some degree of refactoring.

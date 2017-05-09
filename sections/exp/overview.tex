@@ -1,20 +1,12 @@
 \section{Contributions of this Section}
 \label{sec:exp-overview}
-
-    
+    \twN{new}
     \subsection{Design of a Pipeline that Maximises Detector Performance}
     \label{subsec:exp-overview-detect}
-        \begin{sitemize}
-            \item{resultant process that performs very well for this problem and with this data, also adaptable to different contexts ie phone detector vs sound trap detector}
-            \item{greedy optimisation at each element of pipeline - only realisable solution compared to grid search}
-            \item{split into three sections, pre-clf, post-clf and agg [remove greeedy part from intro on structure and expand here - could remove whole part all together]}
-        \end{sitemize}
+        In this section of a report, a detection model is produced through rigorous experimental procedures. The results are two models, tuned slightly differently, that perform very well in the task of mosquito detection. The section is divided into three sections. The first section focuses on cross-validated tuning of sets of parameters; once suitable classifiers are produced, then post-processing is trailed and finally the results are aggregated to produce two high-performance classifiers. Parameters are optimised in stages to ensure feasible compute-time.
     
     \subsection{Novel Research in Asymmetrical Rejection and Aggregation}
     \label{subsec:exp-overview-novel}
-        \begin{sitemize}
-            \item{have used methods not currently used in other publications (need to triple check)}
-            \item{has resulted in substantial performance improvements over that set by the baseline results of the unprocessed classifier outputs}
-        \end{sitemize}
+        Post-processing methods that are not currently present in other literature are tested in this section. Asymmetrical rejection is applied and new ways of visualising the rejection-space are trailed and used to tune two different classifiers. Results of this show substantial performance gains over symmetrical rejection.
     
   

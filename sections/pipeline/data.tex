@@ -3,7 +3,7 @@
 
     \subsection{Audio and Labels}
     \label{subsec:pl-data-audiolbls}
-        Microphones are versatile and inexpensive, allowing large amounts of data of many different species to be collected. A database of recordings and labels for over 20 species of mosquito has been collated by Kew(???) in partnership with the HumBug project, providing the ideal foundation for this research. All 22 sets of data are labelled to varying degrees of accuracy, two of which have multiple labels from more than one person. Of these two sets, the Culex \textit{quinquefasciatus} is the largest collection of recordings, totalling $\sim$1 hour with labels from four people. Pipeline development throughout the report will be based on results from this set of recordings and labels.
+        Microphones are versatile and inexpensive, allowing large amounts of data of many different species to be collected. A database of recordings and labels for over 20 species of mosquito has been collated by the HumBug project, a Google funded joint venture between Oxford University and Kew Gardens, providing the ideal foundation for this research. All 22 sets of data are labelled to varying degrees of accuracy, two of which have multiple labels from more than one person. Of these two sets, the Culex \textit{quinquefasciatus} is the largest collection of recordings, totalling $\sim$1 hour with labels from four people. Pipeline development throughout the report will be based on results from this set of recordings and labels.
         
     \subsection{Software Implementation}
     \label{subsec:pl-data-software}
@@ -13,7 +13,7 @@
         
         Usage of these objects is shown in the code snippet in section \ref{subsec:pl-mozzpy-usage}. The WavSet object is initialised by specifying the directory of \code{.wav} files to import and optional file indices if only a subset of files is desired. The signals can then be preprocessed using any of the implemented modules. At the time of writing, there is a \code{normalise} module which normalises the signal to zero mean by subtraction and unit variance by division, and a \code{resample} module that resamples the signal using the \code{resampy} package \cite{BrianMcFee}, other options being \code{scipy.signal.resample} \cite{ScipyCommunity} which leaves a high frequency artifact near the cutoff frequency and \code{scikit.samplerate} \cite{DavidCournapeau} which performs the best but requires installation of an external library, increasing the complexity of using MozzPy on different operating systems \cite{Thiemann}. 
         
-        \twN{In usage section later need to include code snippet of how experiemnts are run. IF TIME HERE THEN DO RESAMPLING EXPERIMENT SELF ON CDC AUDIO SIGNALS}
+        % \twN{In usage section later need to include code snippet of how experiemnts are run. IF TIME HERE THEN DO RESAMPLING EXPERIMENT SELF ON CDC AUDIO SIGNALS}
         
         \begin{wraptable}{r}{0.52\textwidth}
             \scriptsize

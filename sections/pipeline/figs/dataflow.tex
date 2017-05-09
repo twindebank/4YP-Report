@@ -118,14 +118,15 @@
     \draw [arrow] (labelset1.east) -| (5,-2) |- (ds1-labelset.west);
     \draw [arrow] (ds1.east) -|  node[midway,above]{split\hspace*{0.6cm}} (7.7,-0.5) |- (ds2.west);
     \draw [arrow] (ds1.east) -|  (7.7,-1.5) |- (ds3.west);
-    \draw [arrow] (ds2.north) |-  (8.5,3.69) node[near end,above]{pre-process features} -- (rf-featureset.west);
-    \draw [arrow] (ds2.north) |-  (8.5,2.45) node[near end,above]{resample lables} -- (rf-labelset.west);
+    \draw [arrow] (ds2.north) |-  node[near end,above]{\hspace{-1cm}pre-process features} (rf-featureset.west);
+    \draw [arrow] (ds2.north) |-  node[near end,above]{\hspace{-3cm}resample lables} (rf-labelset.west);
     \draw [arrow] (rf-featureset.east) -|  (12,2.3) node[near start,above]{\hspace*{1cm} train classifier} |- (rf-clf.east);
     \draw [arrow] (rf-labelset.east) -|  (12,2.3)  |- (rf-clf.east);
     \draw [arrow] (rf-clf) -- (rf-output);
     \draw [arrow] (rf-output) -- (rf-results);
     \draw[arrow] (rf-output.east) -| (11.7,0.5) |- (as-output1);
     \draw [arrow] (ds3.east) -| (9,1) |- node[midway,above]{\hspace{1mm} test classifier}  (rf-clf);
+     \draw [arrow] (ds3.east) -| (9,-2) |- (svm-clf);
     \draw [arrow] (ds2.east) -| (9.3,-2) |- (svm-labelset.west);
     \draw [arrow] (ds2.east) -| (9.3,-2) |- (svm-featureset.west);
     \draw[arrow] (svm-featureset.east) -| (11.4,-3) |- (svm-clf.east);
@@ -133,11 +134,11 @@
     \draw[arrow] (svm-clf) -- (svm-output);
     \draw[arrow] (svm-output) -- (svm-results);
     \draw[arrow] (svm-output.east) -| (11.7,-3) |- (as-output2);
-    \draw[arrow] (as-output1.east) -| (14,0) |- (as-outputagg.east);
-    \draw[arrow] (as-output2.east) -| (14,0) |- (as-outputagg.east);
+    \draw[arrow] (as-output1.east) -| (14,-0.5) |- (as-outputagg.east);
+    \draw[arrow] (as-output2.east) -| (14,-0.5) |- (as-outputagg.east);
     \draw[arrow] (as-outputagg) -- (as-results);
     \draw[arrow] (rf-results.east) -| (11.4,1) |- (16.4,1) |- (rs-results1);
     \draw[arrow] (svm-results.east) -| (16.4,-2) |- (rs-results2.east);
-    \draw[arrow] (as-results) -| (14,-2.2) |- (rs-resultsagg);
+    \draw[arrow] (as-results) -| (14,-2.5) |- (rs-resultsagg);
     \draw[arrow] (rs) -- (plot);
 \end{tikzfig}
