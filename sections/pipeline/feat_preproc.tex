@@ -51,7 +51,7 @@ def rfe(featmat_trn, featmat_tst, truth_trn, truth_tst, stepsize, classifier):
             \matr{C} &= \matr{VSU}^\text{T}\matr{USV}^\text{T}/(n-1)\\
               &= \matr{V}\frac{\matr{S}^2}{(n-1)}\matr{V}^\text{T}.
         \end{talign}
-        As $\matr{S}^2$ is diagonal, this means the right singular vectors, $V$, are principal components of the covariance matrix and the eigenvalues are given by $\lambda_i = s^2_i/(n-1)$. The principal components are then calculated as $\matr{P} = \matr{XV}$.
+        As $\matr{S}^2$ is diagonal, this means the right singular vectors, $\matr{V}$, are principal components of the covariance matrix and the eigenvalues are given by $\lambda_i = s^2_i/(n-1)$. The principal components are then calculated as $\matr{P} = \matr{XV}$.
         % \begin{talign}
         %     \matr{XV} = \matr{USV}^\text{T}\matr{V} = \matr{US}.
         % \end{talign}
@@ -84,5 +84,5 @@ def pca_reduce(featmat_trn, featmat_tst, truth_trn, truth_tst, steps, classifier
     \subsection{Software Implementation}
     \label{subsec:pl-featpreproc-software}
         Feature pre-processers are modular; inputs are the feature matrix, pre-processing arguments, feature information such as names and lengths, and any previous pre-processing data such as a fitted PCA object or normalisation constants from the training data.
-        Once audio files, features and labels are imported and stored into a \code{DataSet} object, a \code{ClassiSet} object is initialised and subsequently trained using a split \code{DataSet}. On calling of the \code{train()} method, selected features are taken from the \code{FeatureSet} and pre-processed according to the input arguments, where the final form passed to the classifier is a numpy array with rows corresponding to samples and columns corresponding to features. Every random operation including and subsequent to this stage is seeded with the same random seed to ensure results are repeatable.
+        Once audio files, features and labels are imported and stored into a \code{DataSet} object, a \code{ClassiSet} object is initialised and subsequently trained using a split \code{DataSet}. On calling of the \code{train()} method, selected features are taken from the \code{FeatureSet} and pre-processed according to the input arguments, where the final form passed to the classifier is a NumPy array with rows corresponding to samples and columns corresponding to features. Every random operation including and subsequent to this stage is seeded with the same random seed to ensure results are repeatable.
     

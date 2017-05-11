@@ -6,7 +6,7 @@
         \begin{figure}[ht]
             \centering
             \includegraphics[width=0.9\textwidth]{clfoutput}
-            \caption{Raw output of an SVM classifier (above) and median filtered output (below).}
+            \caption{Raw output of an SVM classifier (above) and median filtered output using a kernel of size $279$ samples or \SI{34.9}{\milli\second} (below).}
             \label{fig:epl-postproc-filt-output}
         \end{figure}
         Because predictions are made on a sample-by-sample basis, results are contain high levels of noise. This is not the way a human makes estimates, rather they label over much longer periods due to the prior knowledge that the mosquito exists in physical space and must travel in and out of range of the microphone. From this prior it can be inferred that a $0$ prediction is much more likely to be preceded by $0$s, and a $1$ prediction will be much more likely to be preceded by $1$s; it is only the edge cases of the pulses where this is not true. 

@@ -22,7 +22,7 @@
                             The magnitude of a frequency-domain signal\\
                             representation based on an efficient implementation of \\
                             the Discrete Fourier Transform (DFT), the Fast Fourier \\
-                            Transform (FFT). More detail in section \ref{subsec:bg-litreview-mozz}.\\
+                            Transform (FFT) \cite{Cochran1967}.\\
                         }&\specialcell{
                             \code{winlen} $=0.025$: size of feature \\windows (s)\\
                             \code{winstep} $=0.01$: step size between \\windows (s)\\
@@ -41,9 +41,9 @@
                         }&\specialcell{
                             Frequency-domain signal representation corresponding\\
                             to the subjective human perception of pitch \cite{Stevens1937}.\\
-                            The hertz spectrum iss mapped to the\\
+                            The hertz spectrum is mapped to the\\
                             mel-spectrum using the (non-unique) relationship\\
-                                $m = 2595\log_{10}(1+f/700)$ \cite{OShaughnessy1987}.\\
+                            $m(f) = 2595\log_{10}(1+f/700)$ \cite{OShaughnessy1987}.
                         }&\specialcell{
                             \code{low\_frq} $=0$: lower frequency bound \\(Hz)\\
                             \code{n\_flt} $=26$: number of mel filterbank \\fitlers\\
@@ -87,7 +87,7 @@
                             Rate
                         }&\specialcell{
                             Rate at which the raw audio signal changes sign:\\
-                            $zcr = \frac{1}{T-1}\sum^{T-1}_{t=1}1_{\mathbb{R}_{<0}}(s_t,s_{t-1})$ \cite{Chen1988}.
+                            $zcr = \frac{1}{T-1}\sum^{T-1}_{t=1}1_{\mathbb{R}_{<0}}(s_ts_{t-1})$ \cite{Chen1988}.
                         }&\specialcell{
                             \code{winlen} $=0.025$\\
                             \code{winstep} $=0.01$
@@ -120,7 +120,7 @@
                             Energy
                         }&\specialcell{
                             Measure of abrupt changes in signal energy over \\
-                            sub-windows: $H_E = -\sum_{sw}E_{sw}\times\log_2{E_{sw}}$
+                            sub-windows: $H_E = -\sum_{\text{sw}}E_{\text{sw}}\times\log_2{E_{\text{sw}}}$
                         }&\specialcell{
                             \code{n\_subwins} $=10$\\
                             \code{winlen} $=0.025$\\
@@ -139,9 +139,9 @@
                         }&\specialcell{
                             The spectral centroid characterises the 'centre of mass'\\
                             of the spectrum by taking the mean of the frequencies\\
-                            weighted by their magnitudes: $SC = \frac{\sum_{n}f(n)S(n)}{\sum_{n}S(n)}$ \cite{Grey1978}.\\
+                            weighted by their magnitudes: $SC = \frac{\sum_{f}fS(f)}{\sum_{f}S(f)}$ \cite{Grey1978}.\\
                             The spectral spread is a measure of signal bandwidth: \\
-                            $SS = \frac{\sum_{n}(f(n) - SC)^2S(n)}{\sum_{n}S(n)}$ \cite{Grey1978}.
+                            $SS = \frac{\sum_{f}(f - SC)^2S(f)}{\sum_{f}S(f)}$ \cite{Grey1978}.
                         }&\specialcell{
                             \code{winlen} $=0.025$\\
                             \code{winstep} $=0.01$
@@ -157,7 +157,7 @@
                             Spectral Entropy
                         }&\specialcell{
                             Entropy of the normalised spectral energies for a set of \\
-                            sub-frames: $H_S = -\sum_{sw}\frac{S_{sw}^2}{\sum_{n}S(n)^2}\times\log_2{\frac{S_{sw}^2}{\sum_{n}S(n)^2}}$
+                            sub-frames: $H_S = -\sum_{\text{sw}}\frac{S_{\text{sw}}^2}{\sum_{f}S(f)^2}\times\log_2{\frac{S_{\text{sw}}^2}{\sum_{f}S(f)^2}}$
                         }&\specialcell{
                             \code{n\_subwins} $=10$\\
                             \code{winlen} $=0.025$\\
@@ -175,7 +175,7 @@
                         }&\specialcell{
                             Squared difference of the normalised spectra magnitudes \\
                             for two successive frames: \\
-                            $\phi = \sum_{m}(\frac{S_w(m)}{\sum_{n}S_w(n)} - \frac{S_{w-1}(m)}{\sum_{n}S_{w-1}(n)})^2 $
+                            $\phi = \sum_{f}(\frac{S_w(f)}{\sum_{f`}S_w(f`)} - \frac{S_{w-1}(f)}{\sum_{f`}S_{w-1}(f`)})^2 $
                         }&\specialcell{
                             \code{winlen} $=0.025$\\
                             \code{winstep} $=0.01$\\
@@ -205,12 +205,28 @@
                             \cite{Giannakopoulos2015}
                         }\\
                     \hline
+                    \hline
+                        Terms&\multicolumn{5}{|l|}{\specialcell{
+                        In order of usage: 
+                        $f$ - frequency in Hertz; 
+                        $m(f)$ - magnitude of mel-spectrum at $f$; 
+                        $T$ - length of signal (samples); 
+                        $t$ - sample index;\\
+                        $1_{\mathbb{R}_{<0}}(a)$ - indicator function, 1 if $a<0$, $0$ otherwise; 
+                        $s_t$ - value of signal at index $t$; 
+                        $E$ - energy; 
+                        $H$ - entropy; 
+                        sw - subwindow index; \\
+                        $S(f)$ = magnitude of Hertz spectrum at $f$; 
+                        $w$ - window index; 
+                        $K$ - spectral rolloff frequency (Hz).
+                        }}\cr
+                    \hline
                 \end{tabular}
             % }
             \caption{Summary of features implemented in MozzPy.}
             \label{tbl:pl-feats-audio-feattbl}
         \end{table}
-        \twN{need to make equations more consistent and define terms}
         Ten features are selected to be used for this application, giving a feature matrix of dimension $\mathbb{R}^{304}$. Features have been selected based on a number of sources; a similar study with pseudo-acoustic sensors \cite{Silva2013}, previous research in generic species identification \cite{Zilli2016} and the features available in both the 'pyAudioAnalysis' \cite{Giannakopoulos2015} and 'python\_speech\_features' \cite{Lyons} libraries. Each feature calculated on a window-by window basis, determined by the parameters \code{winlen} and \code{winstep} which dictate the size of the window in seconds and the size of distance between each window in seconds respectively. 
         The chosen features are summarised in table \ref{tbl:pl-feats-audio-feattbl}, where the name, description, type, dimension and source is given for each feature. These have been adapted from existing code to integrate within the MozzPy framework.
         % \begin{sitemize}

@@ -1,6 +1,5 @@
 \section{MozzPy}
 \label{sec:pl-mozzpy}
-    \twN{new section}
     \subsection{Purpose}
     \label{subsec:pl-mozzpy-purp}
         Given the pipeline established in figure \ref{fig:pl-overview-general-diag}, experiments must be designed and executed to gather results. Many scripts could be written to achieve this; however, to fully conform to the established pipeline and significantly speed up the process, `MozzPy` is built. This package provides a modular framework in which code, conforming to a specified interface, can be added at any stage of the pipeline leading to the easy design and running of new experiments.
@@ -53,6 +52,6 @@ rs.mongo_exprt(**conf.mongo)                    # export info to mongo database
     
         During both feature generation and classifier training, the program first checks to see if the same configuration has been run previously. If it has, then the previous data is loaded, reducing runtimes for repeated experiments dramatically. Parallel implementations are safe during saving/loading as the directory is locked when it is being read or written to.
    
-    \subsection{Limitations}
-    \label{subsec:pl-mozzpy-limit}
-        MozzPy is written in Python 2.7, this is considered a limitation as many shortcomings of 2.7 have been fixed in the more current Python 3.5. The older version was chosen to ease integration as existing code within the HumBug project using Python 2.5. The package is coded completely tailored to the problem of mosquito classification with .wav files and labels. This is an unnecessary limitation as there may be potential uses of this utility outside of the mosquito-detection domain. These limitations are not overly inhibiting and are able to be solved with some degree of refactoring.
+    % \subsection{Limitations}
+    % \label{subsec:pl-mozzpy-limit}
+    %     MozzPy is written in Python 2.7, this is considered a limitation as many shortcomings of 2.7 have been fixed in the more current Python 3.5. The older version was chosen to ease integration as existing code within the HumBug project using Python 2.5. The package is coded completely tailored to the problem of mosquito classification with .wav files and labels. This is an unnecessary limitation as there may be potential uses of this utility outside of the mosquito-detection domain. These limitations are not overly inhibiting and are able to be solved with some degree of refactoring.

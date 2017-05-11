@@ -18,7 +18,7 @@
 \usepackage{bold-extra}
 \usepackage{titlesec}
 \usepackage{titletoc}
-\usepackage{blindtext}              % lorem ipsum
+%\usepackage{blindtext}              % lorem ipsum
 \usepackage{tikz}
 \usepackage{environ}
 \usepackage{fontspec}
@@ -70,9 +70,11 @@ BoldItalicFont = *_Bold_Italic%
 ]{Arial}
 
 % general doc stuff
-\def \doublespaceheight {2.0}
+\def \doublespaceheight {1.97}
 \def \singlespaceheight {1.0}
 \linespread{\doublespaceheight}
+\renewcommand{\doublespacing}{\renewcommand{\baselinestretch}{\doublespaceheight}\normalsize}
+
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4}
 \renewcommand{\thepart}{\textbf{Section \Roman{part}:}\ }
@@ -111,8 +113,8 @@ BoldItalicFont = *_Bold_Italic%
 }
 
 % figs
-\setlength{\textfloatsep}{4.0pt plus 2.0pt minus 2.0pt}
-\setlength{\intextsep}{4.0pt plus 2.0pt minus 2.0pt}
+\setlength{\textfloatsep}{6.0pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{6.0pt plus 2.0pt minus 2.0pt}
 
 % table padding
 \renewcommand{\arraystretch}{1.2}
@@ -316,10 +318,9 @@ BoldItalicFont = *_Bold_Italic%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\part{Further Work and Conclusions}
 	\label{part:conc}
-	    \twN{new section}
 	    \addsubsec{conc}{further}
 	    \addsubsec{conc}{conclusion}
-	
+	\\
 	\linespread{1.0}
 	\printbibliography
 	

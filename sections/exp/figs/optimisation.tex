@@ -10,19 +10,78 @@
 \def\dist{0.3cm}
 \begin{tikzfig}{fig:exp-clf-overview-opt}{Optimisation and iteration of pre-classification pipeline.}{\tiny}
     
-    \optnode{feats}{choose features}{balance classes\\normalise audio\\training labels\\classifier params}{normalise features\\feature parameters\\testing label}{}
-    \optnode{balance}{balance classes}{normalise audio\\training labels\\classifier params}{normalise features\\feature parameters\\testing label\\chosen features}{, right=\dist of feats-find}
-    \optnode{normaud}{normalise audio}{training labels\\classifier params}{normalise features\\feature parameters\\testing label\\chosen features\\balance classes}{, right=\dist of balance-find}
-    \optnode{labels}{choose train labels}{classifier params}{normalise features\\feature parameters\\testing label\\chosen features\\balance classes\\normalise audio}{, right=\dist of normaud-find}
-    \optnode{clf}{classifier params}{none}{normalise features\\feature parameters\\testing label\\chosen features\\balance classes\\normalise audio\\chosen train labels}{, right=\dist of labels-find}
-    \optnode{done}{none}{none}{normalise features\\feature parameters\\testing label\\chosen features\\balance classes\\normalise audio\\chosen train labels\\classifier params}{, right=\dist of clf-find}
+    \optnode{feats}{choose features}{
+        classifier params\\
+        balance classes\\
+        normalise audio\\
+        training labels\\
+        
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label
+    }{}
+    \optnode{clf}{classifier params}{
+        balance classes\\
+        normalise audio\\
+        training labels\\
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label\\
+        chosen features
+    }{, right=\dist of feats-find}
+    \optnode{balance}{balance classes}{
+        normalise audio\\
+        training labels\\
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label\\
+        chosen features\\
+        classifier params
+    }{, right=\dist of clf-find}
+    \optnode{normaud}{normalise audio}{
+        training labels\\
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label\\
+        chosen features\\
+        classifier params\\
+        balance classes\\
+    }{, right=\dist of balance-find}
+    \optnode{labels}{choose train labels}{
+        none
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label\\
+        chosen features\\
+        classifier params\\
+        balance classes\\
+        normalise audio
+    }{, right=\dist of normaud-find}
     
-    \optnode{key}{optimising}{assumed}{chosen/estimated}{, left=3cm of balance-find}
+    \optnode{done}{none}{
+        none
+    }{
+        normalise features\\
+        feature parameters\\
+        testing label\\
+        chosen features\\
+        classifier params\\
+        balance classes\\
+        normalise audio\\
+        training labels
+    }{, right=\dist of labels-find}
+    
+    \optnode{key}{optimising}{assumed}{chosen/estimated}{, left=0.7cm of feats-find}
 
-    \draw[arrow](feats)--(balance);
+    \draw[arrow](feats)--(clf);
+    \draw[arrow](clf)--(balance);
     \draw[arrow](balance)--(normaud);
     \draw[arrow](normaud)--(labels);
-    \draw[arrow](labels)--(clf);
-    \draw[arrow](clf)--(done);
+    \draw[arrow](labels)--(done);
 
 \end{tikzfig}
