@@ -5,7 +5,7 @@
         \input{sections/exp/figs/optimisation.tex}
         In this section, parameters that alter the training set of data and those which affect the training process itself will be experimentally optimised to increase classification performance. An exhaustive grid search for the parameters discussed here would require training and testing of each classifier hundreds of thousands of times, taking tens of thousands of days of computing time. Instead, an sequential approach will be taken, depicted in figure \ref{fig:exp-clf-overview-opt}. 
     
-        For each stage, one parameter/set of parameters is locally optimised whilst making initial assumptions about the others. This approach reduces the required number of train/test cycles by several orders of magnitude, making optimisation of this pipeline computationally feasible. Cross-validation is used for every stage in the pipeline; the model with the highest performing hyperparameter combination is chosen and then tested on `unseen` data, results of which are presented in table \ref{sec:appdx-xvalres}. Model selection decisions will \textit{not} be influenced by test results on unseen data for reasons discussed in section \ref{subsec:exp-clf-xval}. This section is strongly linked with sections \ref{sec:pl-data} to \ref{sec:pl-clf}, which detail the mathematics and implementation specifics of the procedures highlighted here.
+        For each stage, one parameter/set of parameters is locally optimised whilst making initial assumptions about the others. This approach reduces the required number of train/test cycles by several orders of magnitude, making optimisation of this pipeline computationally feasible. Cross-validation is used for every stage in the pipeline; the model with the highest performing hyperparameter combination is chosen and then tested on `unseen' data, results of which are presented in table \ref{sec:appdx-xvalres}. Model selection decisions will \textit{not} be influenced by test results on unseen data for reasons discussed in section \ref{subsec:exp-clf-xval}. This section is strongly linked with sections \ref{sec:pl-data} to \ref{sec:pl-clf}, which detail the mathematics and implementation specifics of the procedures highlighted here.
         
         Performance will be evaluated over each of the chosen classifiers using the metrics $F_{1}$ score, area under the receiver-operator curve (AUC-ROC), area under the precision-recall curve (AUC-PR), true positive rate (TPR), and the true negative (TNR) rate. These metrics have been chosen as they represent important classifier characteristics in a compact form, convenient for comparing many results. More details regarding metrics can be found in section \ref{sec:pl-test}. 
 
@@ -18,7 +18,7 @@
         
         Results are shown in the first row of appendix \ref{sec:appdx-xvalres}. The decision tree classifier performs poorly relative to other classifiers, but is significantly improved by using many together, i.e. a random forest classifier, which substantially reduces overfit through random subsampling of features; for this reason the decision tree is dropped in favour of the random forest. The lowest scoring predictor is the Gaussian mixture model classifier; this is discarded in favour of the naive Bayes classifier which shares some similarities, but at reduced complexity and increased speed and performance. The $k$-Nearest-Neighbours algorithm has a somewhat satisfactory $F_1$ score, but is severely unbalanced in terms of class predictions and suffers from slow classification time, so will not be used further. Testing an SVM with three kernels reveals that both the linear and polynomial kernels are slow and perform worse than the radial basis function kernel; this kernel with the SVM produces the best results so is selected for further use.
 
-        Deep learning methods, such as artificial neural networks (ANNs), convolutional neural networks (CNNs) and multi-layer perceptrons (MLPs), are not considered for use in this project. These techniques, although implementable in MozzPy, behave fundamentally differently to traditional classifiers. Instead of `hand-crafting` features, features are learned from the raw input which is often a frequency representation of the signal. This approach requires a different pipeline to that which is explored in this project; hence, deep learning techniques are explored parallel to this research by \textcite{Kiskin} as part of the HumBug team.
+        Deep learning methods, such as artificial neural networks (ANNs), convolutional neural networks (CNNs) and multi-layer perceptrons (MLPs), are not considered for use in this project. These techniques, although implementable in MozzPy, behave fundamentally differently to traditional classifiers. Instead of `hand-crafting' features, features are learned from the raw input which is often a frequency representation of the signal. This approach requires a different pipeline to that which is explored in this project; hence, deep learning techniques are explored parallel to this research by \textcite{Kiskin} as part of the HumBug team.
         
         
         % red for bad green for blue in table
@@ -33,11 +33,11 @@
        
     \subsection{Cross Validation}
     \label{subsec:exp-clf-xval}
-        In tuning a model for mosquito detection, it is imperative that the predictive model is generalisable to unseen data. Given the set of Culex. \textit{q.} data, it would be possible to train a classifier over the whole set of data; this would give a near-perfect score if tested on the same data but obviously gives no information regarding generalisation ability of the model. By splitting the data into a testing and training set, a classifier can be trained on one set of data and tested on another. As the hyperparameters of the pipeline are tweaked to optimise classifier performance over the test set, information from the test set `leaks` into the model selection process, leading to overfit and a no-longer generalisable model. A further split of the training set can be made, giving a validation set. With this, the model is trained, evaluated and optimised over these two sets, then tested on the `unseen` test set. Results of the tests can then be generalised to any unseen data; this is called `hold-out` validation. In practise, this method is often only used when simplicity of implementation and low computational complexity are favoured because information in the training set is not utilised fully, resulting in a bias towards underestimating performance.
+        In tuning a model for mosquito detection, it is imperative that the predictive model is generalisable to unseen data. Given the set of Culex. \textit{q.} data, it would be possible to train a classifier over the whole set of data; this would give a near-perfect score if tested on the same data but obviously gives no information regarding generalisation ability of the model. By splitting the data into a testing and training set, a classifier can be trained on one set of data and tested on another. As the hyperparameters of the pipeline are tweaked to optimise classifier performance over the test set, information from the test set `leaks' into the model selection process, leading to overfit and a no-longer generalisable model. A further split of the training set can be made, giving a validation set. With this, the model is trained, evaluated and optimised over these two sets, then tested on the `unseen' test set. Results of the tests can then be generalised to any unseen data; this is called `hold-out' validation. In practise, this method is often only used when simplicity of implementation and low computational complexity are favoured because information in the training set is not utilised fully, resulting in a bias towards underestimating performance.
      
         Instead, the preferred method is to split data is split into two then perform $k$-fold cross-validation over the training set, removing the need for a validation set. By including all the samples in both training and testing, bias is reduced. Generally, a higher choice of $k$ reduces the bias as the contents of the training folds begin to approach that of the total dataset. This comes at the expense of increasing both the computational load and the variability of the results over each fold due to the smaller test set sizes being more sensitive to outliers. The Culex \textit{q.} data, split into windows of length \SI{0.0125}{\second} and step \SI{0.01}{\second}, contains $299095$ samples. With this medium to large sized data set, the choice of $k$ becomes less significant \cite{Kohavi1995}. 
         
-        Another method, `leave one out` cross-validation, is the extreme of $k$-fold validation with $k$ equal to the number of samples. This method produces the theoretically lowest bias at the cost of very high variance due to predictions being made over one sample at a time as well as extreme computational load, hence it will not be used for this pipeline.
+        Another method, `leave one out' cross-validation, is the extreme of $k$-fold validation with $k$ equal to the number of samples. This method produces the theoretically lowest bias at the cost of very high variance due to predictions being made over one sample at a time as well as extreme computational load, hence it will not be used for this pipeline.
 
         Initially, the data will be split into two equal, randomly sampled sets. An equal split provides a large enough set of data to test on and give a sufficient idea of the models validity and generalisability to unseen data. For reasonable performance whilst utilising the benefits of $k$-fold cross validation, $k=5$ is used with the addition stratification to preserve original mosquito/no-mosquito class proportions. Cross-validated parameters are summarised in appendix \ref{sec:appdx-xvalres} and details of algorithm implementation and methodology are provided in section \ref{subsec:pl-test-xval}. Time dependency of the data will be ignored in this section and each sample will be treated as independently and identically distributed; this is a weak assumption but greatly simplifies the optimisation process. More sophisticated cross-validation techniques can be employed as outlined in the research by \textcite{Yang2001}; however, time-dependency will be exploited during post-processing in section \ref{sec:exp-postproc}.
         
@@ -79,7 +79,7 @@
             
         \subsubsection{Feature Parameters}
         \label{subsubsec:exp-clf-known-featparam}
-            Each feature is generated using a number of parameters. To cross-validate over a grid of possible parameters would be impractical. Instead, defaults will be used, defined in section \ref{subsec:pl-feats-software}. The only parameters varied will be \code{`winlen`} and \code{`winstep`} as this is universal across all features and feasible to optimise.
+            Each feature is generated using a number of parameters. To cross-validate over a grid of possible parameters would be impractical. Instead, defaults will be used, defined in section \ref{subsec:pl-feats-software}. The only parameters varied will be \code{'winlen'} and \code{'winstep'} as this is universal across all features and feasible to optimise.
         
         \subsubsection{Testing Labels}
         \label{subsubsec:exp-clf-known-tstlbls}
@@ -89,7 +89,7 @@
                 \caption{An example of noise where there is $50/50$ disagreement between labellers.}
                 \label{fig:exp-clf-known-tstlbls-exmp}
             \end{wrapfigure}
-            All the possible training/testing pairs are shown in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl}; details of which are given in section \ref{subsec:pl-data-software}. Although there are $24$ aggregation policies in total, it would be incorrect to optimise the pipeline by varying the test labels as this introduces a bias of being able to choose how correct a set of predictions are. Instead, a universal test label should be chosen that reflects the actual data as close as possible. For these experiments, `05\_notmozz` will be selected, representing a majority vote where at least 3/4 of votes are needed for a positive label. This is based on inspection of many areas of the recordings in which there is irregular noise, such as talking over the sound of a mosquito. Often, two people will class this as positive and two negative, as shown in figure \ref{fig:exp-clf-known-tstlbls-exmp}. In terms of classification, it is desirable to treat this as a negative example to prevent voices being classed as positive; hence, a majority voting policy will be employed.
+            All the possible training/testing pairs are shown in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl}; details of which are given in section \ref{subsec:pl-data-software}. Although there are $24$ aggregation policies in total, it would be incorrect to optimise the pipeline by varying the test labels as this introduces a bias of being able to choose how correct a set of predictions are. Instead, a universal test label should be chosen that reflects the actual data as close as possible. For these experiments, `05\_notmozz' will be selected, representing a majority vote where at least 3/4 of votes are needed for a positive label. This is based on inspection of many areas of the recordings in which there is irregular noise, such as talking over the sound of a mosquito. Often, two people will class this as positive and two negative, as shown in figure \ref{fig:exp-clf-known-tstlbls-exmp}. In terms of classification, it is desirable to treat this as a negative example to prevent voices being classed as positive; hence, a majority voting policy will be employed.
 
             \begin{table}
                 \scriptsize
@@ -100,21 +100,21 @@
                         \hline
                         Train Label & Test Label & Use\\
                         \hline
-                        `0\_5\_notmozz`&`0\_5\_notmozz`& \checkmark \\
-                        `0\_5\_notmozz`&`0\_5\_ismozz`& \xmark\\
-                        `0\_5\_notmozz`&`sensitive`& \xmark\\
-                        `0\_5\_ismozz`&`0\_5\_ismozz`& \xmark \\
-                        `0\_5\_ismozz`&`0\_5\_notmozz`& \checkmark\\
-                        `0\_5\_ismozz`&`sensitive`& \xmark\\
-                        `sensitive`&`sensitive`& \xmark\\
-                        `sensitive`&`0\_5\_notmozz`& \checkmark \\
-                        `sensitive`&`0\_5\_ismozz`& \xmark\\
-                        `conf`&`0\_5\_notmozz`& \checkmark \\
-                        `conf`&`0\_5\_ismozz`& \xmark\\
-                        `conf`&`sensitive`& \xmark\\
-                        `0\_5\_ignore`&`0\_5\_notmozz`& \checkmark \\
-                        `0\_5\_ignore`&`0\_5\_ismozz`& \xmark\\
-                        `0\_5\_ignore`&`sensitive`& \xmark\\
+                        `0\_5\_notmozz'&`0\_5\_notmozz'& \checkmark \\
+                        `0\_5\_notmozz'&`0\_5\_ismozz'& \xmark\\
+                        `0\_5\_notmozz'&`sensitive'& \xmark\\
+                        `0\_5\_ismozz'&`0\_5\_ismozz'& \xmark \\
+                        `0\_5\_ismozz'&`0\_5\_notmozz'& \checkmark\\
+                        `0\_5\_ismozz'&`sensitive'& \xmark\\
+                        `sensitive'&`sensitive'& \xmark\\
+                        `sensitive'&`0\_5\_notmozz'& \checkmark \\
+                        `sensitive'&`0\_5\_ismozz'& \xmark\\
+                        `conf'&`0\_5\_notmozz'& \checkmark \\
+                        `conf'&`0\_5\_ismozz'& \xmark\\
+                        `conf'&`sensitive'& \xmark\\
+                        `0\_5\_ignore`&`0\_5\_notmozz'& \checkmark \\
+                        `0\_5\_ignore`&`0\_5\_ismozz'& \xmark\\
+                        `0\_5\_ignore`&`sensitive'& \xmark\\
                         \hline
                     \end{tabular}
                     % \caption{Training and testing label pairing for binary labels.}
@@ -126,15 +126,15 @@
                         \hline
                         Train Label & Test Label & Uncertain Votes & Use\\
                         \hline
-                        `multiclass`&`0\_5\_notmozz`& `ismozz` &\checkmark \\
-                        `multiclass`&`0\_5\_ismozz`&`ismozz`& \xmark\\
-                        `multiclass`&`sensitive` & `ismozz` & \xmark\\
-                        `multiclass`&`0\_5\_notmozz` & `notmozz` &  \checkmark \\
-                        `multiclass`&`0\_5\_ismozz`& `notmozz` & \xmark\\
-                        `multiclass`&`sensitive`& `notmozz` & \xmark\\
-                        `multiclass`&`0\_5\_notmozz`& `reject` &  \checkmark \\
-                        `multiclass`&`0\_5\_ismozz`& `reject` & \xmark\\
-                        `multiclass`&`sensitive`& `reject` & \xmark\\
+                        `multiclass'&`0\_5\_notmozz'& `ismozz' &\checkmark \\
+                        `multiclass'&`0\_5\_ismozz'&`ismozz'& \xmark\\
+                        `multiclass'&`sensitive' & `ismozz' & \xmark\\
+                        `multiclass'&`0\_5\_notmozz' & `notmozz' &  \checkmark \\
+                        `multiclass'&`0\_5\_ismozz'& `notmozz' & \xmark\\
+                        `multiclass'&`sensitive'& `notmozz' & \xmark\\
+                        `multiclass'&`0\_5\_notmozz'& `reject` &  \checkmark \\
+                        `multiclass'&`0\_5\_ismozz'& `reject` & \xmark\\
+                        `multiclass'&`sensitive'& `reject` & \xmark\\
                         \hline
                     \end{tabular}
                     % \caption{Training and testing label pairing for multi-class labels.}
@@ -156,7 +156,7 @@
     \label{subsec:exp-clf-ass}
         \subsubsection{Class Balancing}
         \label{subsubsec:exp-clf-ass-bal}
-            Firstly, classes of the training data are balanced to contain the same number of samples in each class. For the Culex \textit{q.} dataset, after splitting the data into a training and test set and using the `conf` label aggregation policy (explained in section \ref{subsec:pl-data-software}), the training data begins with $80024$ and $24695$ samples for classes $0$ and $1$ respectively; both classes are balanced to contain $24695$ samples. Initial experiments have shown this is a sufficient sample size and often leads to better performance and dramatically faster classification times; however, more thorough experimentation will be carried out later in this section to assure this.
+            Firstly, classes of the training data are balanced to contain the same number of samples in each class. For the Culex \textit{q.} dataset, after splitting the data into a training and test set and using the `conf' label aggregation policy (explained in section \ref{subsec:pl-data-software}), the training data begins with $80024$ and $24695$ samples for classes $0$ and $1$ respectively; both classes are balanced to contain $24695$ samples. Initial experiments have shown this is a sufficient sample size and often leads to better performance and dramatically faster classification times; however, more thorough experimentation will be carried out later in this section to assure this.
     
         \subsubsection{Audio Normalisation}
         \label{subsubsec:exp-clf-ass-aud}
@@ -167,7 +167,7 @@
                 \caption{An example of a particularly noisy signal from the Culex. recordings where people are talking in the vicinity of the microphone.}
                 \label{fig:exp-clf-audio-noisy}
             \end{figure}
-            Normalising on a signal-by-signal basis can be considered bad practise for many audio-based machine learning problems due to the time-dependency of the signal, as its using information that is `from the future` for classification, leading to unpredictable consequences. However, this is acceptable in some cases in which the classifier will be used on many samples at a time rather than on a live, sample-by-sample, basis. These acceptable situations include an automated tagging system, a logger with a buffer or swarm tracking; these use cases are detailed in section \ref{subsec:bg-intro-resinterests}. For on-line applications such as a solar lamp or smartphone, there is scope for use of more sophisticated algorithms to achieve normalisation such as Automatic Gain Control (AGC), which has been shown to improve robustness and performance of speech recognition with deep neural networks \cite{Prabhavalkar2015}. However, this will be left for further research due to the complexities of implementation. No audio normalisation will be assumed at first, then the best performing combination of `unit-variance` and `zero-mean` transforms will be determined experimentally. Regarding the on-line case, where normalising signal-by-signal is incorrect, it will be assumed that a similar level performance could be achieved using more sophisticated algorithms, should normalisation in this way provide better performance than no normalisation.
+            Normalising on a signal-by-signal basis can be considered bad practise for many audio-based machine learning problems due to the time-dependency of the signal, as its using information that is `from the future' for classification, leading to unpredictable consequences. However, this is acceptable in some cases in which the classifier will be used on many samples at a time rather than on a live, sample-by-sample, basis. These acceptable situations include an automated tagging system, a logger with a buffer or swarm tracking; these use cases are detailed in section \ref{subsec:bg-intro-resinterests}. For on-line applications such as a solar lamp or smartphone, there is scope for use of more sophisticated algorithms to achieve normalisation such as Automatic Gain Control (AGC), which has been shown to improve robustness and performance of speech recognition with deep neural networks \cite{Prabhavalkar2015}. However, this will be left for further research due to the complexities of implementation. No audio normalisation will be assumed at first, then the best performing combination of \code{'unit-variance'} and \code{'zero-mean'} transforms will be determined experimentally. Regarding the on-line case, where normalising signal-by-signal is incorrect, it will be assumed that a similar level performance could be achieved using more sophisticated algorithms, should normalisation in this way provide better performance than no normalisation.
 
         \subsubsection{Training Labels}
         \label{subsubsec:exp-clf-ass-trnlabel}
@@ -187,11 +187,11 @@
             \end{wraptable}
             Analysis of the given labels, shown in table \ref{fig:exp-clf-ass-label-agree}, emphasises the difficulty of this problem. Of the four people labelling the data, there is only complete agreement $77\%$ of the time, the rest of the time there is at least one person who disagrees with the others. Without knowing the details of each persons labelling methodology, a uniform prior must be applied to assign them equal importance for classification use. Therefore, it can be reasoned that it is most appropriate to take a consensus vote to use information from all sets of labels. 
             
-            As discussed in section \ref{subsec:pl-data-software}, there are six methods to create a binary consensus label. The \code{`conf`} label aggregation policy will be assumed initially because it is the least likely to contain miss-labelled samples; for a sample to be miss-labelled all four people must label incorrectly. 
+            As discussed in section \ref{subsec:pl-data-software}, there are six methods to create a binary consensus label. The \code{'conf'} label aggregation policy will be assumed initially because it is the least likely to contain miss-labelled samples; for a sample to be miss-labelled all four people must label incorrectly. 
             
         \subsubsection{Classifier Hyperparameters}
         \label{subsubsec:exp-clf-ass-param}
-            Classifiers have internal parameters that determine certain aspects of their behaviour; a more in depth breakdown is given in section \ref{subsec:pl-clf-sup}. An intuition derived from the data and experiments on the data provide a basis for determining these parameters. At this stage, there is minimal intuition developed so parameters will be left at the default settings, with the exception of the \code{`n\_estimators`} parameter that defines the number of decision trees that make up the random forest classifier. The default value of $10$ trees is only adequate for very small sets of data, a value of $150$ trees will instead be assumed based on the research by \textcite{Oshiro2012a}. Overfitting is not a concern as this \textit{rarely} occurs with a random forest \cite{Breiman2001}.
+            Classifiers have internal parameters that determine certain aspects of their behaviour; a more in depth breakdown is given in section \ref{subsec:pl-clf-sup}. An intuition derived from the data and experiments on the data provide a basis for determining these parameters. At this stage, there is minimal intuition developed so parameters will be left at the default settings, with the exception of the \code{'n\_estimators'} parameter that defines the number of decision trees that make up the random forest classifier. The default value of $10$ trees is only adequate for very small sets of data, a value of $150$ trees will instead be assumed based on the research by \textcite{Oshiro2012a}. Overfitting is not a concern as this \textit{rarely} occurs with a random forest \cite{Breiman2001}.
         
     \subsection{Optimisation}
     \label{subsec:exp-clf-opt}
@@ -298,7 +298,7 @@
                 \label{fig:exp-clf-opt-hyp}
             \end{figure}
             
-            Cross-validated grid search over the classifier hyperparameters must first be done \textit{very} coarsely, then refined in areas where performance is promising. For example, the \code{`max\_features`} parameter, describing the number of features to consider when splitting samples at a node of a random forest, can take an integer anywhere between $1$ and the dimension of the feature matrix, $X_{10} \in \mathbb{R}^{304}$; many of these parameters exist so combinations can reach into the millions. Grid search is executed three times over the random forest and twice over the SVM, where each iteration refines the bounds of the search. Results show straying from default parameters, which often involved restricting a previously unbound value, such as \code{`max\_depth`} of the random forest, negated performance. An example cross-validated hyperparameter search output is shown in figure \ref{fig:exp-clf-opt-hyp}, where the experiment is the second grid-search over the random forest. On the $x$ axis lies each possible combination of hyperparameters in the defined grid, where the number corresponds to a particular combination. There are clear trends within the data corresponding to particularly influential parameters such as \code{`n\_estimators`}, which is the only parameter to be updated in this section; the rest remain unchanged for both the random forest and the SVM. 
+            Cross-validated grid search over the classifier hyperparameters must first be done \textit{very} coarsely, then refined in areas where performance is promising. For example, the \code{'max\_features'} parameter, describing the number of features to consider when splitting samples at a node of a random forest, can take an integer anywhere between $1$ and the dimension of the feature matrix, $X_{10} \in \mathbb{R}^{304}$; many of these parameters exist so combinations can reach into the millions. Grid search is executed three times over the random forest and twice over the SVM, where each iteration refines the bounds of the search. Results show straying from default parameters, which often involved restricting a previously unbound value, such as \code{'max\_depth'} of the random forest, negated performance. An example cross-validated hyperparameter search output is shown in figure \ref{fig:exp-clf-opt-hyp}, where the experiment is the second grid-search over the random forest. On the $x$ axis lies each possible combination of hyperparameters in the defined grid, where the number corresponds to a particular combination. There are clear trends within the data corresponding to particularly influential parameters such as \code{'n\_estimators'}, which is the only parameter to be updated in this section; the rest remain unchanged for both the random forest and the SVM. 
             
             % In the first round, the classifier is trained/tested $192$ times for each fold. Results show that increasing any of the parameters \code{max\_samples\_split}, \code{min\_samples\_leaf}, \code{max\_leaf\_nodes} resulted in poor metrics; these will be left at default. Use of the decision criterion \code{"entropy"} showed consistently better performance over \code{"gini"}. The rest of the hyperparameters had more subtle effects so they are searched over a more comprehensive space. 
             % \twN{More details on parameters - provide in implementation section}
@@ -358,10 +358,10 @@
             %     \caption{Comparing predictive performance with and without audio normalisation.}
             %     \label{tbl:exp-clf-opt-normaud-res}
             % \end{wraptable}
-            Running cross-validated tests over features generated from audio signals with combinations of \code{`zero-mean`} and \code{`unit-var`} applied shows that predictions made by both the random forest and and SVM classifiers are unaffected by audio normalisation; the naive Bayes classifier, however, performs better without any audio normalisation. The audio signals will continue not being normalised, circumventing the issues discussed in \ref{subsubsec:exp-clf-ass-aud}.
+            Running cross-validated tests over features generated from audio signals with combinations of \code{'zero-mean'} and \code{'unit-var'} applied shows that predictions made by both the random forest and and SVM classifiers are unaffected by audio normalisation; the naive Bayes classifier, however, performs better without any audio normalisation. The audio signals will continue not being normalised, circumventing the issues discussed in \ref{subsubsec:exp-clf-ass-aud}.
         \subsubsection{Label Selection}
         \label{subsubsec:exp-clf-opt-label}
-            For each classifier, all selected label aggregation policies in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl} are tested. For the multi-class labelling scheme, the `one vs. rest` transformation strategy is tested as well as the classifiers native multi-class implementation for the random forest and SVM classifiers. Top performing combinations are chosen based on cross-validation tests. Multi-class label aggregation provides the best performance across all three classifiers. Although, increase of prediction quality for the SVM only marginal and at the cost of 5\% rejection of predictions and increased computing time, so the \code{`conf`} labelling scheme is kept in place.
+            For each classifier, all selected label aggregation policies in tables \ref{tbl:exp-clf-known-tstlbls-bintbl} and \ref{tbl:exp-clf-known-tstlbls-multitbl} are tested. For the multi-class labelling scheme, the `one vs. rest' transformation strategy is tested as well as the classifiers native multi-class implementation for the random forest and SVM classifiers. Top performing combinations are chosen based on cross-validation tests. Multi-class label aggregation provides the best performance across all three classifiers. Although, increase of prediction quality for the SVM only marginal and at the cost of 5\% rejection of predictions and increased computing time, so the \code{'conf'} labelling scheme is kept in place.
 
     \subsection{Summary}
     \label{subsec:exp-clf-summary}

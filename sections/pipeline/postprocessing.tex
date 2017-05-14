@@ -1,6 +1,6 @@
 \section{Post-Processing}
 \label{sec:pl-postproc}
-    % This section discusses the post-processing techniques available in the 'MozzPy' package, specifics of the techniques in relation to mosquito detection are explored in section \ref{sec:exp-postproc}.
+    % This section discusses the post-processing techniques available in the `MozzPy' package, specifics of the techniques in relation to mosquito detection are explored in section \ref{sec:exp-postproc}.
     \subsection{Filtering}
     \label{subsec:pl-postproc-filt}
         \begin{figure}[ht]
@@ -17,7 +17,7 @@
         
     \subsection{Asymmetrical Rejection}
     \label{subsec:pl-postproc-rej}
-        Rejecting low-confidence classifier outputs was first introduced by \textcite{Chow1970}, only recently has it been explored in depth \cite{SajjadAhmedNadeem,Condessa2017}. Rejection is an emerging field of research and has been applied in contexts such as biomedical imaging, optical character recognition and scene identification \cite{Condessa2017}. The reject option is helpful in two cases, one where the sample does not belong to any class (distance rejection) and the other when the sample is very close to the decision boundary (confusion rejection). In the context of mosquito detection, distance rejection does not apply as all samples belong to either the 'no mosquito' or 'mosquito' class. This report extends on previous work and introduces asymmetrical rejection, outlined in algorithm \ref{code:pl-postproc-rej}.
+        Rejecting low-confidence classifier outputs was first introduced by \textcite{Chow1970}, only recently has it been explored in depth \cite{SajjadAhmedNadeem,Condessa2017}. Rejection is an emerging field of research and has been applied in contexts such as biomedical imaging, optical character recognition and scene identification \cite{Condessa2017}. The reject option is helpful in two cases, one where the sample does not belong to any class (distance rejection) and the other when the sample is very close to the decision boundary (confusion rejection). In the context of mosquito detection, distance rejection does not apply as all samples belong to either the `no mosquito' or `mosquito' class. This report extends on previous work and introduces asymmetrical rejection, outlined in algorithm \ref{code:pl-postproc-rej}.
         \begin{listing}[ht]
             \begin{minted}[frame=single,framesep=2mm, bgcolor=black!2, fontsize=\footnotesize, linenos]{python}
 def apply_rejection(probs):
@@ -34,7 +34,7 @@ def apply_rejection(probs):
             \caption{Asymmertical rejection algorithm.}
             \label{code:pl-postproc-rej}
         \end{listing} 
-        Existing research rejects based a single threshold, here rejection will be determined by two thresholds, one for each class. This is beneficial for cases where the classifier may be better at predicting one class over another so, for example, if the classifier performs well at predicting mosquito presence but poorly in determining when there is not a mosquito, i.e. high true positive rate and low true negative rate, then more aggressive rejection can be applied to the 'no mosquito' class predictions without affecting the positive classification performance.
+        Existing research rejects based a single threshold, here rejection will be determined by two thresholds, one for each class. This is beneficial for cases where the classifier may be better at predicting one class over another so, for example, if the classifier performs well at predicting mosquito presence but poorly in determining when there is not a mosquito, i.e. high true positive rate and low true negative rate, then more aggressive rejection can be applied to the `no mosquito' class predictions without affecting the positive classification performance.
         
     \subsection{Software Implementation}
     \label{subsec:pl-postproc-software}

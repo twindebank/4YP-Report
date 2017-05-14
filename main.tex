@@ -250,7 +250,7 @@ BoldItalicFont = *_Bold_Italic%
     %%%%%% DECLARATION %%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%
     \pagenumbering{roman}
-	\addsubsec{}{declaration}
+	\includepdf[pages={1}]{sections/declaration.pdf}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%% ABSTRACT+ACK %%%%%%
@@ -320,14 +320,26 @@ BoldItalicFont = *_Bold_Italic%
 	\label{part:conc}
 	    \addsubsec{conc}{further}
 	    \addsubsec{conc}{conclusion}
-	\\
+	    
+	%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%% BIBLIOGRAPHY %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%
 	\linespread{1.0}
 	\printbibliography
 	
+	%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%% APPENDIX %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%
 	\begin{appendices}
 	\label{part:appdx}
 	    \addsubsec{}{appendix}
 	\end{appendices}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%% RISK ASSESSMENT %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \pagenumbering{roman}
+	\includepdf[pages={-}]{sections/risk_assesment.pdf}
 
 	
 \end{document}
