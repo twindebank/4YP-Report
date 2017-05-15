@@ -227,7 +227,7 @@
             \caption{Summary of features implemented in MozzPy.}
             \label{tbl:pl-feats-audio-feattbl}
         \end{table}
-        Ten features are selected to be used for this application, giving a feature matrix of dimension $\mathbb{R}^{304}$. Features have been selected based on a number of sources; a similar study with pseudo-acoustic sensors \cite{Silva2013}, previous research in generic species identification \cite{Zilli2016} and the features available in both the `pyAudioAnalysis' \cite{Giannakopoulos2015} and `python\_speech\_features' \cite{Lyons} libraries. Each feature calculated on a window-by window basis, determined by the parameters \code{winlen} and \code{winstep} which dictate the size of the window in seconds and the size of distance between each window in seconds respectively. 
+        Ten features are selected to be used for this application, giving a feature matrix of dimension $\mathbb{R}^{304}$. Features have been selected based on a number of sources; a similar study with pseudo-acoustic sensors \cite{Silva2013}, previous research in generic species identification \cite{Zilli2016} and the features available in both the `pyAudioAnalysis' \cite{Giannakopoulos2015} and `python\_speech\_features' \cite{Lyons} libraries. Each feature calculated on a window-by-window basis, determined by the parameters \code{winlen} and \code{winstep} which dictate the size of the window in seconds and the size of distance between each window in seconds respectively. 
         The chosen features are summarised in table \ref{tbl:pl-feats-audio-feattbl}, where the name, description, type, dimension and source is given for each feature. These have been adapted from existing code to integrate within the MozzPy framework.
         % \begin{sitemize}
         %     \item{list the implemented features with short descriptions}
@@ -237,7 +237,7 @@
         
     \subsection{Software Implementation}
     \label{subsec:pl-feats-software}
-        Extracted features are stored in \code{Feature} objects which are in turn stored in a \code{FeatureSet} object. \code{Feature} objects contain individual feature attributes as well as methods to split, merge and sort; whereas a \code{FeatureSet} object provides methods and attributes to aid in management of the entire feature-space. On generation of features, both the features and the associated configuration dictionary are saved to individual files. Subsequent executions will then check the configuration directory before processing and load a previous \code{FeatureSet} if the configurations match. At this stage, the features are not ready for use in classification.  
+        Extracted features are stored in \code{Feature} objects which are in turn stored in a \code{FeatureSet} object. \code{Feature} objects contain individual feature attributes as well as methods to split, merge and sort the feature data. A \code{FeatureSet} object provides methods and attributes to aid in management of the entire feature-space. On generation of features, both the features and the associated configuration dictionary are saved to individual files. Subsequent executions will then check the configuration directory before processing and load a previous \code{FeatureSet} if the configurations match. At this stage, the features are not ready for use in classification.  
         % \begin{sitemize}
         %     \item{interface}
         %     \item{modularity}

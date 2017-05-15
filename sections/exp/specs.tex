@@ -1,7 +1,7 @@
 \section{Detector Performance Specification}
 \label{sec:exp-spec}
     The use-cases of an audio-based mosquito detection algorithm given in section \ref{subsec:bg-intro-resinterests} can be broken down and grouped into two broad categories. Numerical specifications are shown in tables \ref{tbl:exp-spec-hirej-tbl} and \ref{tbl:exp-spec-lowrej-tbl}. Power usage is not included in specification design as the primary focus of this report is development of detection algorithms. 
-    \subsection{Specification I: High Accuracy - High Rejection}
+    \subsection{Specification I: High Accuracy -- High Rejection}
     \label{subsec:exp-spec-hirej}
         \begin{wraptable}{r}{0.3\textwidth}
             \scriptsize
@@ -21,9 +21,9 @@
             \caption{High accuracy - high rejection specifications.}
             \label{tbl:exp-spec-hirej-tbl}
         \end{wraptable}
-        There are some cases where accuracy is more important than the proportion of signals labelled. For example, given a task where the goal is to label a large set of recordings, an automated solution would be of great use if it could classify a majority proportion of the signals with very low uncertainty, and leave the remaining small proportion of the data for manual labelling. Due to the difficult nature of this problem, a classifier is unlikely to ever achieve $100\%$ accuracy based on the fact that four separate label sets for the same signals only agree $77\%$ of the time, this is discussed further in section \ref{subsubsec:exp-clf-ass-trnlabel}. From this, a loose estimate is made that approximately $30\%$ of the predictions from the classifier will be incorrect. If the remaining $70\%$ of the data is classified with a very high certainty, then this reduces the labelling job and therefore the time dedicated to it by $70\%$. Swarm-tracking and data-logging may also benefit from this scheme if chunks of \SI{30}{\second} were recorded onto a cyclic buffer then analysed for a for mosquito presence, if a high-certainty positive sample is contained within the window then data-logging, alerts, or physical trapping mechanisms could be activated. The minimum time resolution required is set to \SI{0.1}{\second} as this is the resolution the labels were provided at.  
+        There are some cases where accuracy is more important than the proportion of signals labelled. For example, given a task where the goal is to label a large set of recordings, an automated solution would be of great use if it could classify a majority proportion of the signals with very low uncertainty, and leave the remaining small proportion of the data for manual labelling. Due to the difficult nature of this problem, a classifier is unlikely to ever achieve 100\% accuracy based on the fact that four separate label sets for the same signals only agree 77\% of the time, this is discussed further in section \ref{subsubsec:exp-clf-ass-trnlabel}. From this, a loose estimate is made that approximately 30\% of the predictions from the classifier will be incorrect. If the remaining 70\% of the data is classified with a very high certainty, then this reduces the labelling job and therefore the time dedicated to it by 70\%. Swarm-tracking and data-logging may also benefit from this scheme if chunks of \SI{30}{\second} were recorded onto a cyclic buffer then analysed for a for mosquito presence, if a high-certainty positive sample is contained within the window then data-logging, alerts, or physical trapping mechanisms could be activated. The minimum time resolution required is set to \SI{0.1}{\second} as this is the resolution the labels were provided at.  
         
-    \subsection{Specification II: Good Accuracy - Low Rejection}
+    \subsection{Specification II: Good Accuracy -- Low Rejection}
     \label{subsec:exp-spec-lowrej}
         \begin{wraptable}{r}{0.3\textwidth}
             \scriptsize
@@ -43,7 +43,7 @@
             \caption{Good accuracy - low rejection specifications.}
             \label{tbl:exp-spec-lowrej-tbl}
         \end{wraptable} 
-        In the case of the smartphone and solar lamp detection implementations, it is desirable to minimise false positives to preserve user patience. False negatives are also a concern as an undetected mosquito could be dangerous depending on the level of trust placed onto the device by the user. Very high accuracies are not capable low levels of rejection, therefore both the desired true positive rate and true negative rate will be set at $0.90$, and rejection at $<10\%$. Rejected samples could be indicated on the device to warn the user that mosquito presence is uncertain and urge them to be in a higher state of awareness. Time resolution should be half a second at the minimum, any less and the delay becomes noticeable and reduces the usefulness of the device.
+        In the case of the smartphone and solar lamp detection implementations, it is desirable to minimise false positives to preserve user patience. False negatives are also a concern as an undetected mosquito could be dangerous depending on the level of trust placed onto the device by the user. Very high accuracies are not capable low levels of rejection, therefore both the desired true positive rate and true negative rate will be set at 0.90, and rejection at less than 10\%. Rejected samples could be indicated on the device to warn the user that mosquito presence is uncertain and urge them to be in a higher state of awareness. Time resolution should be half a second at the minimum, any less and the delay becomes noticeable and reduces the usefulness of the device.
     % \label{subsec:exp-spec-trap}
     %     \begin{sitemize}
     %         \item{purpose to get recordings of mozz when it comes close to trap}

@@ -22,11 +22,8 @@
 \usepackage{tikz}
 \usepackage{environ}
 \usepackage{fontspec}
-\usepackage{siunitx}
-\sisetup{
-    mode = math,
-    math-rm=\mathsf
-  }               % sans serif font
+\usepackage{siunitx}      
+\sisetup{detect-all}                % use main body font for units
 \usepackage{pifont}                 % ticks and crosses
 \usepackage{amsmath}
 \usepackage{amssymb}                % maths symbols
@@ -55,6 +52,8 @@
     }
   }
 }
+% no spacing in multicite
+\renewcommand*{\multicitedelim}{\addcomma}
 
 %----------------------------------------------------------------------------------------
 %	FORMATTING
@@ -68,6 +67,14 @@ BoldFont = *_Bold,%
 ItalicFont = *_Italic,%
 BoldItalicFont = *_Bold_Italic%
 ]{Arial}
+\let\oldtext\text
+\renewcommand{\text}[1]{\oldtext{\fontfamily{cmr}\selectfont #1}} % use math font in text
+\DeclareSymbolFont{sfoperators}{OT1}{cmr}{m}{n}    % math operator font (log,argmax, etc.)
+\DeclareSymbolFontAlphabet{\mathsf}{sfoperators}
+\makeatletter
+\def\operator@font{\mathgroup\symsfoperators}
+\makeatother
+
 
 % general doc stuff
 \def \doublespaceheight {1.97}
